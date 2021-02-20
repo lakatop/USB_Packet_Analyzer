@@ -1,11 +1,12 @@
 #include "ItemManager.hpp"
 
-ItemManager::ItemManager(QListWidget* listWidget)
+ItemManager::ItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent)
 {
 	this->stopButtonClicked = false;
 	this->pauseButtonClicked = false;
 	this->atBottomOfList = false;
 	this->listWidget = listWidget;
+	this->parent = parent;
 }
 void ItemManager::ProcessFile(QString filename, bool liveReading)
 {
@@ -24,7 +25,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 					}
 				}
 
-				listWidget->update();
+				parent->Refresh();
 
 				if (!atBottomOfList)
 				{
@@ -35,6 +36,10 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 				{
 					Sleep(50);
 				}
+				else
+				{
+					return;
+				}
 			}
 		}
 	}
@@ -42,5 +47,4 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 }
 void ItemManager::ProcessPacket(QByteArray packetData)
 {
-
 }

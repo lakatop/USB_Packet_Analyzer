@@ -30,11 +30,19 @@ void FileReader::ReadFile(bool live)
 	//file.close();
 }
 
-QByteArray& FileReader::GetPacket()
+QByteArray FileReader::GetPacket()
 {
 	QByteArray packetData;
+	//read .pcap packet header data
+	pcap_pkthdr packetHeader;
+	qint64 bytesRead = file.read((char*)&packetHeader, sizeof(struct pcap_pkthdr));
+	if (bytesRead != sizeof(struct pcap_pkthdr))
+	{
+		return QByteArray();
+	}
+	//read usbpcap packet header data
 	USBPCAP_BUFFER_PACKET_HEADER usbh;
-	qint64 bytesRead = file.read((char*)&usbh, sizeof(USBPCAP_BUFFER_PACKET_HEADER));
+	bytesRead = file.read((char*)&usbh, sizeof(USBPCAP_BUFFER_PACKET_HEADER));
 	if (bytesRead != sizeof(USBPCAP_BUFFER_PACKET_HEADER))
 	{
 		return QByteArray();
@@ -43,6 +51,7 @@ QByteArray& FileReader::GetPacket()
 	{
 		return QByteArray();
 	}
+
 	packetData.resize(usbh.dataLength + usbh.headerLen);
 	bytesRead = file.read(packetData.data(), usbh.dataLength + usbh.headerLen);
 	if (bytesRead != usbh.dataLength + usbh.headerLen)
@@ -60,6 +69,8 @@ bool FileReader::ReadFileHeader()
 		qint64 bytesRead = file.read((char*)&gheader, sizeof(struct pcap_file_header));
 		return (bytesRead == sizeof(struct pcap_file_header));
 	}
+
+	return false;
 }
 
 bool FileReader::EndOfFile()
@@ -68,6 +79,8 @@ bool FileReader::EndOfFile()
 	{
 		return file.atEnd();
 	}
+
+	return true;
 }
 
 bool FileReader::OpenNewFile(QString filename)

@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QWidget>
 #include "ui_USB_Packet_Analyzer.h"
+#include "ItemManager.hpp"
 
 class USB_Packet_Analyzer : public QWidget
 {
@@ -9,6 +10,7 @@ class USB_Packet_Analyzer : public QWidget
 
 public:
     USB_Packet_Analyzer(QWidget *parent = Q_NULLPTR);
+    void Refresh();
 
 private:
     Ui::USB_Packet_AnalyzerClass ui;

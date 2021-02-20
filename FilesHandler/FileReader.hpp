@@ -2,7 +2,6 @@
 #define FILEREADER_HPP
 
 #include "../DefinedStructs/PacketExternStructs.hpp"
-#include"../DefinedStructs/USBPcapStructs.hpp"
 #include <qfile.h>
 
 #include <fstream>
@@ -14,7 +13,7 @@ public:
 	FileReader() {}
 	~FileReader();
 	void ReadFile(bool live);
-	QByteArray& GetPacket();
+	QByteArray GetPacket();
 	bool ReadFileHeader();
 	bool EndOfFile();
 	bool OpenNewFile(QString filename);

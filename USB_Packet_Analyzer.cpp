@@ -11,23 +11,25 @@ USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
 void USB_Packet_Analyzer::Init()
 {
     ui.OpenButton->setText("Open");
-    //ui.pushButton->setObjectName("OpenButton");
-    ui.pushButton_2->setText("Start");
-    ui.pushButton_2->setObjectName("StartButton");
-    ui.pushButton_3->setText("Clear");
-    ui.pushButton_3->setObjectName("ClearButton");
-    ui.pushButton_4->setText("Stop");
-    ui.pushButton_4->setObjectName("StopButton");
-    ui.pushButton_5->setText("Pause");
-    ui.pushButton_5->setObjectName("PauseButton");
+    ui.StartButton->setText("Start");
+    ui.ClearButton->setText("Clear");
+    ui.StopButton->setText("Stop");
+    ui.PauseButton->setText("Pause");
 
-    ui.radioButton->setText("Live Capture");
-    ui.radioButton_2->setText("File Capture");
-    ui.radioButton_2->setChecked(true);
-    ui.checkBox->setText("Data Highlight");
+    ui.liveCaptureRadioButton->setText("Live Capture");
+    ui.fileCaptureRadioButton->setText("File Capture");
+    ui.fileCaptureRadioButton->setChecked(true);
+    ui.dataHighlightCheckBox->setText("Data Highlight");
+}
+
+void USB_Packet_Analyzer::Refresh()
+{
+    QCoreApplication::processEvents();
 }
 
 void USB_Packet_Analyzer::on_OpenButton_clicked()
 {
     QString fil = QFileDialog::getOpenFileName(this, "Select source file", ".", "Pcap files (*.pcap)");
+    ItemManager manager(ui.listWidget, this);
+    manager.ProcessFile(fil, ui.liveCaptureRadioButton->isChecked());
 }
