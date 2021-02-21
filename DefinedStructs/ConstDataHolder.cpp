@@ -1,0 +1,421 @@
+#include "ConstDataHolder.hpp"
+
+DataHolder* DataHolder::holder = nullptr;
+
+DataHolder* DataHolder::GetDataHolder()
+{
+	if (holder == nullptr)
+	{
+		holder = new DataHolder;
+	}
+
+	return holder;
+}
+
+DataHolder::DataHolder()
+{
+	FillDataColorsMap();
+	BYTES_ON_ROW = 16;
+	TRANSFER_LEFTOVER_DATA = 15;
+	TRANSFER_OPTIONAL_HEADER = 16;
+	USBPCAP_HEADER_DATA = 17;
+	REPORT_DESC_TREE_INDEX = 18;
+}
+
+void DataHolder::FillDataColorsMap()
+{
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(INTERR_TRANSFER, { 255,0,0,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(ISOCHRO_TRANSFER, { 255,255,0,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(BULK_TRANSFER, { 128,128,128,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER, { 0,205,0,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_RESPONSE, { 255,165,0,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_DEVICE_DESC, { 0,0,153,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_CONFIG_DESC, { 0,153,153,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_STRING_DESC, { 64,64,64,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_INTERF_DESC, { 153,0,153,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_ENDPOI_DESC, { 153,0,0,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_HID_DESC, { 153,153,0,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_SETUP, { 0,0,0,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_UNSPEC_DESC, { 255,153,255,128 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_HID_REPORT_DESC, { 153,0,76,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(ADDITIONAL_HEADER_DATA, { 0,128,255,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(HEADER_DATA, { 255,0,255,255 }));
+}
+
+
+std::string DataHolder::GetDescriptorType(BYTE type)
+{
+	switch (type)
+	{
+	case DEVICE_DESCRIPTOR:
+	{
+		return std::string("DEVICE_DESCRIPTOR");
+	}
+	case CONFIGURATION_DESCRIPTOR:
+	{
+		return std::string("CONFIGURATION_DESCRIPTOR");
+	}
+	case STRING_DESCRIPTOR:
+	{
+		return std::string("STRING_DESCRIPTOR");
+	}
+	case INTERFACE_DESCRIPTOR:
+	{
+		return std::string("INTERFACE_DESCRIPTOR");
+	}
+	case ENDPOINT_DESCRIPTOR:
+	{
+		return std::string("ENDPOINT_DESCRIPTOR");
+	}
+	case DEVICE_QUALIFIER:
+	{
+		return std::string("DEVICE_QUALIFIER");
+	}
+	case OTHER_SPEED_CONFIGURATION:
+	{
+		return std::string("OTHER_SPEED_CONFIGURATION");
+	}
+	case HID_DESCRIPTOR_ENUM:
+	{
+		return std::string("HID_DESCRIPTOR");
+	}
+	case HID_REPORT_DESCRIPTOR:
+	{
+		return std::string("HID_REPORT_DESCRIPTOR");
+	}
+	}
+}
+std::string DataHolder::GetSetupPacketRequest(BYTE request)
+{
+	switch (request)
+	{
+	case GET_STATUS:
+	{
+		return std::string("GET_STATUS");
+	}
+	case CLEAR_FEATURE:
+	{
+		return std::string("CLEAR_FEATURE");
+	}
+	case SET_FEATURE:
+	{
+		return std::string("SET_FEATURE");
+	}
+	case SET_ADDRESS:
+	{
+		return std::string("SET_ADDRESS");
+	}
+	case GET_DESCRIPTOR:
+	{
+		return std::string("GET_DESCRIPTOR");
+	}
+	case SET_DESCRIPTOR:
+	{
+		return std::string("SET_DESCRIPTOR");
+	}
+	case GET_CONFIGURATION:
+	{
+		return std::string("GET_CONFIGURATION");
+	}
+	case SET_CONFIGURATION:
+	{
+		return std::string("SET_CONFIGURATION");
+	}
+	case GET_INTERFACE:
+	{
+		return std::string("GET_INTERFACE");
+	}
+	case SET_INTERFACE:
+	{
+		return std::string("SET_INTERFACE");
+	}
+	case SYNCH_FRAME:
+	{
+		return std::string("SYNCH_FRAME");
+	}
+	}
+}
+
+std::string DataHolder::GetUSBTestSelector(BYTE selector)
+{
+	switch (selector)
+	{
+	case TEST_J:
+	{
+		return std::string("TEST_J");
+	}
+	case TEST_K:
+	{
+		return std::string("TEST_K");
+	}
+	case TEST_SE0_NAK:
+	{
+		return std::string("TEST_SE0_NAK");
+	}
+	case TEST_PACKET:
+	{
+		return std::string("TEST_PACKET");
+	}
+	case TEST_FORCE_ENABLE:
+	{
+		return std::string("TEST_FORCE_ENABLE");
+	}
+	default:
+		return std::string("Reserved");
+	}
+}
+
+std::string DataHolder::GetReportItemType(BYTE type)
+{
+	switch (type)
+	{
+	case MAIN:
+	{
+		return std::string("MAIN");
+	}
+	case GLOBAL:
+	{
+		return std::string("GLOBAL");
+	}
+	case LOCAL:
+	{
+		return std::string("LOCAL");
+	}
+	}
+}
+
+std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
+{
+	switch (type)
+	{
+	case MAIN:
+	{
+		switch (tag)
+		{
+		case MAIN_INPUT:
+			return std::string("INPUT");
+		case OUTPUT:
+			return std::string("OUTPUT");
+		case COLLECTION:
+			return std::string("COLLECTION");
+		case FEATURE:
+			return std::string("FEATURE");
+		case END_COLLECTION:
+			return std::string("END_COLLECTION");
+		}
+	}
+	case GLOBAL:
+	{
+		switch (tag)
+		{
+		case USAGE_PAGE:
+			return std::string("USAGE_PAGE");
+		case LOGICAL_MINIMUM:
+			return std::string("LOGICAL_MINIMUM");
+		case LOGICAL_MAXIMUM:
+			return std::string("LOGICAL_MAXIMUM");
+		case PHYSICAL_MINIMUM:
+			return std::string("PSHYSICAL_MINIMUM");
+		case PHYSICAL_MAXIMUM:
+			return std::string("PHYSICAL_MAXIMUM");
+		case UNIT_EXPONENT:
+			return std::string("UNIT_EXPONENT");
+		case UNIT:
+			return std::string("UNIT");
+		case REPORT_SIZE:
+			return std::string("REPORT_SIZE");
+		case REPORT_ID:
+			return std::string("REPORT_ID");
+		case REPORT_COUNT:
+			return std::string("REPORT_COUNT");
+		case PUSH:
+			return std::string("PUSH");
+		case POP:
+			return std::string("POP");
+		}
+	}
+	case LOCAL:
+	{
+		switch (tag)
+		{
+		case USAGE:
+			return std::string("USAGE");
+		case USAGE_MINIMUM:
+			return std::string("USAGE_MINIMUM");
+		case USAGE_MAXIMUM:
+			return std::string("USAGE_MAXIMUM");
+		case DESIGNATOR_INDEX:
+			return std::string("DESIGNATOR_INDEX");
+		case DESIGNATOR_MINIMUM:
+			return std::string("DESIGNATOR_MINIMUM");
+		case DESIGNATOR_MAXIMUM:
+			return std::string("DESIGNATOR_MAXIMUM");
+		case STRING_INDEX:
+			return std::string("STRING_INDEX");
+		case STRING_MINIMUM:
+			return std::string("STRING_MINIMUM");
+		case STRING_MAXIMUM:
+			return std::string("STRING_MAXIMUM");
+		case DELIMITER:
+			return std::string("DELIMITER");
+		}
+	}
+	}
+}
+
+std::string DataHolder::GetReportCollectionType(BYTE collection)
+{
+	switch (collection)
+	{
+	case PHYSICAL:
+	{
+		return std::string("PHYSICAL");
+	}
+	case APPLICATION:
+	{
+		return std::string("APPLICATION");
+	}
+	case LOGICAL:
+	{
+		return std::string("LOGICAL");
+	}
+	case REPORT:
+	{
+		return std::string("REPORT");
+	}
+	case NAMED_ARRAY:
+	{
+		return std::string("NAMED_ARRAY");
+	}
+	case USAGE_SWITCH:
+	{
+		return std::string("USAGE_SWITCH");
+	}
+	case USAGE_MODIFIER:
+	{
+		return std::string("USAGE_MODIFIER");
+	}
+	default:
+		if (collection >= 0x07 && collection <= 0x7F)
+		{
+			return std::string("RESERVED");
+		}
+		else
+		{
+			return std::string("VENDOR-DEFINED");
+		}
+		break;
+	}
+}
+
+std::string DataHolder::GetGlobalUsagePage(BYTE value)
+{
+	switch (value)
+	{
+	case GENERIC_DESKTOP_PAGE:
+	{
+		return std::string("GENERIC_DESKTOP (0x01)");
+	}
+	case KEYBOARD_PAGE:
+	{
+		return std::string("KEYBOARD (0x07)");
+	}
+	case LED_PAGE:
+	{
+		return std::string("LED (0x08)");
+	}
+	case BUTTON_PAGE:
+	{
+		return std::string("BUTTON (0x09)");
+	}
+	default:
+		return std::string(std::to_string(value));
+	}
+}
+
+std::string DataHolder::GetUsage(BYTE globalUsage, BYTE value)
+{
+	switch (globalUsage)
+	{
+	case GENERIC_DESKTOP_PAGE:
+	{
+		return GetGenericDesktopUsage(value);
+	}
+	default:
+		return std::string(std::to_string(value));
+	}
+}
+
+std::string DataHolder::GetGenericDesktopUsage(BYTE value)
+{
+	switch (value)
+	{
+	case UNDEFINED:
+	{
+		return std::string("UNDEFINED (0x00)");
+	}
+	case POINTER:
+	{
+		return std::string("POINTER (0x01)");
+	}
+	case MOUSE:
+	{
+		return std::string("MOUSE (0x02)");
+	}
+	case RESERVED:
+	{
+		return std::string("RESERVED (0x03)");
+	}
+	case JOYSTICK:
+	{
+		return std::string("JOYSTICK (0x04)");
+	}
+	case GAMEPAD:
+	{
+		return std::string("GAMEPAD (0x05)");
+	}
+	case KEYBOARD:
+	{
+		return std::string("KEYBOARD (0x06)");
+	}
+	case KEYPAD:
+	{
+		return std::string("KEYPAD (0x07)");
+	}
+	case X:
+	{
+		return std::string("X (0x30)");
+	}
+	case Y:
+	{
+		return std::string("Y (0x31)");
+	}
+	case Z:
+	{
+		return std::string("Z (0x32)");
+	}
+	case RX:
+	{
+		return std::string("RX (0x33)");
+	}
+	case RY:
+	{
+		return std::string("RY (0x34)");
+	}
+	case RZ:
+	{
+		return std::string("RZ (0x35)");
+	}
+	case WHEEL:
+	{
+		return std::string("WHEEL (0x38)");
+	}
+	case HAT_SWITCH:
+	{
+		return std::string("HAT_SWITCH (0x39)");
+	}
+	default:
+		return std::string(std::to_string(value));
+		break;
+	}
+}

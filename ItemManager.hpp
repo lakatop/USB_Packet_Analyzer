@@ -5,6 +5,7 @@
 #include <qlistwidget.h>
 
 #include "USB_Packet_Analyzer.h"
+#include "DefinedStructs/ConstDataHolder.hpp"
 
 class USB_Packet_Analyzer; //forward declaration
 
@@ -20,9 +21,12 @@ public:
 	bool pauseButtonClicked;
 	bool atBottomOfList;
 private:
+	void SetItemName(QListWidgetItem* item, PUSBPCAP_BUFFER_PACKET_HEADER usbh);
+
 	FileReader fileReader;
 	QListWidget* listWidget;
 	USB_Packet_Analyzer* parent;
+	DataHolder* dataHolder;
 };
 
 #endif
