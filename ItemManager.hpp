@@ -28,7 +28,6 @@ private:
 	QString SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
 	void FillUpItem(QByteArray packetData);
 	void CheckForSetupPacket(QByteArray packetData);
-	void CreateDevice();
 
 	FileReader fileReader;
 	QListWidget* listWidget;

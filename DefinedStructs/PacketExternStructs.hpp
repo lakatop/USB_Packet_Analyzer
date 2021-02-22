@@ -252,6 +252,17 @@ typedef struct DataTypeColor
 } DataTypeColor;
 
 
+typedef struct HIDDescriptor
+{
+    UCHAR                     bLength;
+    UCHAR                     bDescriptorType;
+    USHORT                    bcdHID;
+    UCHAR                     bCountry;
+    UCHAR                     bNumDescriptors;
+    UCHAR                     bReportType;
+    USHORT                    wReportLength;
+} HIDDescriptor, * PHIDDescriptor;
+
 typedef struct InputValues
 {
     InputValues() : GlobalUsagePage(0), ReportSize(0), ReportCount(0), UsageMinimum(0), UsageMaximum(0),

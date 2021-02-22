@@ -75,7 +75,7 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 
 		if (usbh->dataLength > sizeof(USB_CONFIGURATION_DESCRIPTOR))
 		{
-			CreateDevice();
+			hidDevices->CreateDevice(packetData);
 		}
 
 		representingConfigurationDescriptor = false;
@@ -147,11 +147,6 @@ void ItemManager::CheckForSetupPacket(QByteArray packetData)
 			}
 		}
 	}
-}
-
-void ItemManager::CreateDevice()
-{
-
 }
 
 QString ItemManager::SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet)

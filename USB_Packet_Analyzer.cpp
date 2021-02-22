@@ -44,4 +44,6 @@ void USB_Packet_Analyzer::on_StartButton_clicked()
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
 {
+    HIDDevices* dev = HIDDevices::GetHIDDevices();
+    auto a = 5;
 }
