@@ -4,21 +4,17 @@
 #include "../DefinedStructs/PacketExternStructs.hpp"
 #include <qfile.h>
 
-#include <fstream>
-#include <string>
-
 class FileReader
 {
 public:
-	FileReader() {}
+    FileReader() { gheader.magic_number = 0; gheader.version_major = 0; gheader.version_minor = 0; gheader.thiszone = 0; gheader.sigfigs = 0; gheader.snaplen = 0; gheader.network = 0; }
 	~FileReader();
-	void ReadFile(bool live);
 	QByteArray GetPacket();
 	bool ReadFileHeader();
 	bool EndOfFile();
 	bool OpenNewFile(QString filename);
 private:
-	pcap_file_header gheader;
+	pcap_hdr_t gheader;
 	QFile file;
 };
 

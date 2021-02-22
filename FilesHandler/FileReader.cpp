@@ -8,35 +8,13 @@ FileReader::~FileReader()
 	}
 }
 
-void FileReader::ReadFile(bool live)
-{
-	//std::ifstream ifs(fileName, std::fstream::binary | std::fstream::in, _SH_DENYNO);
-	//if (ifs.is_open())
-	//{
-	//	pcap_file_header gheader;
-	//	ifs.read((char*)&gheader, sizeof(struct pcap_file_header));
-	//	auto a = gheader.linktype;
-	//}
-	//ifs.close();
-	//QFile file(fileName.c_str());
-	//QByteArray arr;
-	//arr.resize(sizeof(struct pcap_file_header));
-	//if (file.open(QIODevice::ReadOnly))
-	//{
-	//	file.read(arr.data(), sizeof(struct pcap_file_header));
-	//	pcap_file_header* gheader2 = (pcap_file_header*)arr.data();
-	//	auto a = gheader2->linktype;
-	//}
-	//file.close();
-}
-
 QByteArray FileReader::GetPacket()
 {
 	QByteArray packetData;
 	//read .pcap packet header data
-	pcap_pkthdr packetHeader;
-	qint64 bytesRead = file.read((char*)&packetHeader, sizeof(struct pcap_pkthdr));
-	if (bytesRead != sizeof(struct pcap_pkthdr))
+	pcaprec_hdr_t packetHeader;
+	qint64 bytesRead = file.read((char*)&packetHeader, sizeof(pcaprec_hdr_t));
+	if (bytesRead != sizeof(pcaprec_hdr_t))
 	{
 		return QByteArray();
 	}
@@ -53,8 +31,8 @@ QByteArray FileReader::GetPacket()
 	}
 
 	packetData.resize(usbh.dataLength + usbh.headerLen);
-	bytesRead = file.read(packetData.data(), usbh.dataLength + usbh.headerLen);
-	if (bytesRead != usbh.dataLength + usbh.headerLen)
+	bytesRead = file.read(packetData.data(), ((qint64)usbh.dataLength) + usbh.headerLen);
+	if (bytesRead != ((qint64)usbh.dataLength) + usbh.headerLen)
 	{
 		return QByteArray();
 	}
@@ -66,8 +44,8 @@ bool FileReader::ReadFileHeader()
 {
 	if (file.isOpen())
 	{
-		qint64 bytesRead = file.read((char*)&gheader, sizeof(struct pcap_file_header));
-		return (bytesRead == sizeof(struct pcap_file_header));
+		qint64 bytesRead = file.read((char*)&gheader, sizeof(pcap_hdr_t));
+		return (bytesRead == sizeof(pcap_hdr_t));
 	}
 
 	return false;

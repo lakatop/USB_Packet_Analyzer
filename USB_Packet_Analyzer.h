@@ -14,12 +14,15 @@ public:
 
 private:
     Ui::USB_Packet_AnalyzerClass ui;
+    QString currentFile;
+
     void Init();
 
 private slots:
-    //void on_Start_Button_clicked();
+    void on_StartButton_clicked();
     void on_OpenButton_clicked();
-    //void on_Clear_Button_clicked();
-    //void on_Stop_Button_clicked();
-    //void on_Pause_Button_clicked();
+    //void on_ClearButton_clicked();
+    //void on_StopButton_clicked();
+    //void on_PauseButton_clicked();
+    void on_listWidget_itemDoubleClicked(QListWidgetItem* item);
 };

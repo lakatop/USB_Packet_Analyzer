@@ -20,6 +20,8 @@ void USB_Packet_Analyzer::Init()
     ui.fileCaptureRadioButton->setText("File Capture");
     ui.fileCaptureRadioButton->setChecked(true);
     ui.dataHighlightCheckBox->setText("Data Highlight");
+
+    ui.openFileLabel->setText("");
 }
 
 void USB_Packet_Analyzer::Refresh()
@@ -29,7 +31,17 @@ void USB_Packet_Analyzer::Refresh()
 
 void USB_Packet_Analyzer::on_OpenButton_clicked()
 {
-    QString fil = QFileDialog::getOpenFileName(this, "Select source file", ".", "Pcap files (*.pcap)");
+    currentFile = QFileDialog::getOpenFileName(this, "Select source file", ".", "Pcap files (*.pcap)");
+    QString fileName = QDir(currentFile).dirName();
+    ui.openFileLabel->setText("Selected file: " + fileName);
+}
+
+void USB_Packet_Analyzer::on_StartButton_clicked()
+{
     ItemManager manager(ui.listWidget, this);
-    manager.ProcessFile(fil, ui.liveCaptureRadioButton->isChecked());
+    manager.ProcessFile(currentFile, ui.liveCaptureRadioButton->isChecked());
+}
+
+void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
+{
 }

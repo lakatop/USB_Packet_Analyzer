@@ -6,6 +6,9 @@
 
 #include "USB_Packet_Analyzer.h"
 #include "DefinedStructs/ConstDataHolder.hpp"
+#include "HID/HIDDevices.hpp"
+
+#include <winusb.h>
 
 class USB_Packet_Analyzer; //forward declaration
 
@@ -15,18 +18,25 @@ public:
 	ItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent);
 	void ProcessFile(QString filename, bool liveReading);
 	void ProcessPacket(QByteArray packetData);
+	void AppendItem();
 
 
 	bool stopButtonClicked;
 	bool pauseButtonClicked;
 	bool atBottomOfList;
 private:
-	void SetItemName(QListWidgetItem* item, PUSBPCAP_BUFFER_PACKET_HEADER usbh);
+	QString SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
+	void FillUpItem(QByteArray packetData);
+	void CheckForSetupPacket(QByteArray packetData);
+	void CreateDevice();
 
 	FileReader fileReader;
 	QListWidget* listWidget;
 	USB_Packet_Analyzer* parent;
 	DataHolder* dataHolder;
+	HIDDevices* hidDevices;
+	bool representingHIDDescriptor;
+	bool representingConfigurationDescriptor;
 };
 
 #endif

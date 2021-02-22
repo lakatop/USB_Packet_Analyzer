@@ -10,6 +10,7 @@ class DataHolder
 public:
 	static DataHolder* GetDataHolder();
 
+	std::string GetTransferType(BYTE transfer);
 	std::string GetDescriptorType(BYTE type);
 	std::string GetSetupPacketRequest(BYTE request);
 	std::string GetUSBTestSelector(BYTE selector);

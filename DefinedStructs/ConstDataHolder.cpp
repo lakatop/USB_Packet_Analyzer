@@ -43,6 +43,24 @@ void DataHolder::FillDataColorsMap()
 }
 
 
+std::string DataHolder::GetTransferType(BYTE transfer)
+{
+	switch (transfer)
+	{
+	case USBPCAP_TRANSFER_BULK:
+		return std::string("BULK TRANSFER");
+	case USBPCAP_TRANSFER_CONTROL:
+		return std::string("CONTROL TRANSFER");
+	case USBPCAP_TRANSFER_INTERRUPT:
+		return std::string("INTERRUPT TRANSFER");
+	case USBPCAP_TRANSFER_ISOCHRONOUS:
+		return std::string("ISOCHRONOUS TRANSFER");
+	default:
+		return std::to_string(transfer);
+		break;
+	}
+}
+
 std::string DataHolder::GetDescriptorType(BYTE type)
 {
 	switch (type)
@@ -83,6 +101,8 @@ std::string DataHolder::GetDescriptorType(BYTE type)
 	{
 		return std::string("HID_REPORT_DESCRIPTOR");
 	}
+	default:
+		return std::to_string(type);
 	}
 }
 std::string DataHolder::GetSetupPacketRequest(BYTE request)
@@ -133,6 +153,8 @@ std::string DataHolder::GetSetupPacketRequest(BYTE request)
 	{
 		return std::string("SYNCH_FRAME");
 	}
+	default:
+		return std::to_string(request);
 	}
 }
 
@@ -181,6 +203,8 @@ std::string DataHolder::GetReportItemType(BYTE type)
 	{
 		return std::string("LOCAL");
 	}
+	default:
+		return std::to_string(type);
 	}
 }
 
@@ -202,6 +226,8 @@ std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
 			return std::string("FEATURE");
 		case END_COLLECTION:
 			return std::string("END_COLLECTION");
+		default:
+			return std::to_string(tag);
 		}
 	}
 	case GLOBAL:
@@ -232,6 +258,8 @@ std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
 			return std::string("PUSH");
 		case POP:
 			return std::string("POP");
+		default:
+			return std::to_string(tag);
 		}
 	}
 	case LOCAL:
@@ -258,8 +286,12 @@ std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
 			return std::string("STRING_MAXIMUM");
 		case DELIMITER:
 			return std::string("DELIMITER");
+		default:
+			return std::to_string(tag);
 		}
 	}
+	default:
+		return std::to_string(type);
 	}
 }
 
@@ -329,7 +361,7 @@ std::string DataHolder::GetGlobalUsagePage(BYTE value)
 		return std::string("BUTTON (0x09)");
 	}
 	default:
-		return std::string(std::to_string(value));
+		return std::to_string(value);
 	}
 }
 
@@ -342,7 +374,7 @@ std::string DataHolder::GetUsage(BYTE globalUsage, BYTE value)
 		return GetGenericDesktopUsage(value);
 	}
 	default:
-		return std::string(std::to_string(value));
+		return std::to_string(value);
 	}
 }
 
@@ -415,7 +447,6 @@ std::string DataHolder::GetGenericDesktopUsage(BYTE value)
 		return std::string("HAT_SWITCH (0x39)");
 	}
 	default:
-		return std::string(std::to_string(value));
-		break;
+		return std::to_string(value);
 	}
 }
