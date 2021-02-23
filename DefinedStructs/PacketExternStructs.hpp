@@ -304,8 +304,8 @@ typedef struct EndpointDevice
 	EndpointDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints() {}
 	USHORT deviceAddress;
 	bool obsolete;
-	std::map<USHORT, std::vector<HIDReportDescriptorInputParse>> inputparser; // <endpointNum, parsers> // parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID
-	std::map<BYTE, std::vector<BYTE>> endpoints; //<interfaceNum, endpoints> endpoints attached to this interface number
+	std::map<BYTE, std::vector<HIDReportDescriptorInputParse>> inputparser; // <endpointNum, parsers> // parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID
+	std::map<BYTE, std::vector<BYTE>> endpoints; //<interfaceNum, endpointsNum> endpoints attached to this interface number
 } EndpointDevice, * PEndpointDevice;
 
 #endif // !EXTERNSTRUCTS_HPP

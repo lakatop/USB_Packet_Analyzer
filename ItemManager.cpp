@@ -29,6 +29,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 			{
 				while (!fileReader.EndOfFile())
 				{
+					atBottomOfList = false;
 					QByteArray packetData = fileReader.GetPacket();
 					if (!pauseButtonClicked)
 					{
@@ -42,6 +43,8 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 				{
 					listWidget->scrollToBottom();
 				}
+
+				atBottomOfList = true;
 
 				if (liveReading)
 				{
@@ -79,6 +82,18 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 		}
 
 		representingConfigurationDescriptor = false;
+	}
+
+	if (representingHIDDescriptor)
+	{
+		QListWidgetItem* previousItem = listWidget->item(listWidget->count() - 1);
+		QByteArray previousLeftoverData = previousItem->data(dataHolder->TRANSFER_LEFTOVER_DATA).toByteArray();
+		unsigned char* previousPacket = (unsigned char*)previousLeftoverData.data();
+		PWINUSB_SETUP_PACKET setupPacket = (PWINUSB_SETUP_PACKET)previousPacket;
+
+		hidDevices->ParseHIDDescriptor(packetData, setupPacket->Index);
+
+		representingHIDDescriptor = false;
 	}
 
 	FillUpItem(packetData);
