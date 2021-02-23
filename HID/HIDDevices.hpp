@@ -11,6 +11,7 @@ public:
 	static HIDDevices* GetHIDDevices();
 	void ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex);
 	void CreateDevice(QByteArray packetData);
+	size_t GetHIDDescriptorSize();
 
 	std::vector<EndpointDevice> devices;
 private:

@@ -17,6 +17,11 @@ HIDDevices::HIDDevices()
 	HIDDescriptorSize = 9; //must be set manually because of padding
 }
 
+size_t HIDDevices::GetHIDDescriptorSize()
+{
+	return HIDDescriptorSize;
+}
+
 void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();

@@ -1,4 +1,4 @@
-#include "USB_Packet_Analyzer.h"
+#include "src/USB_Packet_Analyzer.h"
 #include "stdafx.h"
 #include <QtWidgets/QApplication>
 
