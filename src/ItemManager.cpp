@@ -194,3 +194,84 @@ QString ItemManager::SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsig
 
 	return QString(itemName.c_str());
 }
+
+HeaderDataType ItemManager::GetDataType(QListWidgetItem* currentItem, QListWidgetItem* previousItem)
+{
+	QByteArray usbhArr = currentItem->data(dataHolder->USBPCAP_HEADER_DATA).toByteArray();
+	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)usbhArr.constData();
+
+	switch (usbh->transfer)
+	{
+	case USBPCAP_TRANSFER_BULK:
+	{
+		return BULK_TRANSFER;
+	}
+	case USBPCAP_TRANSFER_ISOCHRONOUS:
+	{
+		return ISOCHRO_TRANSFER;
+	}
+	case USBPCAP_TRANSFER_INTERRUPT:
+	{
+		return INTERR_TRANSFER;
+	}
+	case USBPCAP_TRANSFER_IRP_INFO:
+	{
+		return IRP_INFO_TRANSFER;
+	}
+	case USBPCAP_TRANSFER_UNKNOWN:
+	{
+		return UNKNOWN_TRANSFER;
+	}
+	case USBPCAP_TRANSFER_CONTROL:
+	{
+		if ((usbh->info & 0x01) == 0) //host->device and control transfer ... additional packet data = setup packet
+		{
+			return CONTROL_TRANSFER_SETUP;
+		}
+
+		// device->host and control tranfser ... some descriptor is being sent to the host
+		if (previousItem == nullptr)
+		{
+			return UNKNOWN_TRANSFER;
+		}
+		QByteArray previousData = previousItem->data(dataHolder->TRANSFER_LEFTOVER_DATA).toByteArray();
+		PWINUSB_SETUP_PACKET setupPacket = (PWINUSB_SETUP_PACKET)previousData.constData();
+		BYTE descriptorType = ((setupPacket->Value >> 8) & 0xFF);
+		switch (descriptorType)
+		{
+		case DEVICE_DESCRIPTOR:
+		{
+			return CONTROL_TRANSFER_DEVICE_DESC;
+		}
+		case STRING_DESCRIPTOR:
+		{
+			return CONTROL_TRANSFER_STRING_DESC;
+		}
+		case CONFIGURATION_DESCRIPTOR:
+		{
+			return CONTROL_TRANSFER_CONFIG_DESC;
+		}
+		case DEVICE_QUALIFIER:
+		{
+			return CONTROL_TRANSFER_DEVICE_QUALIFIER_DESC;
+		}
+		case OTHER_SPEED_CONFIGURATION:
+		{
+			return CONTROL_TRANSFER_OTHER_SPEED_CONF_DESC;
+		}
+		case HID_REPORT_DESCRIPTOR:
+		{
+			return CONTROL_TRANSFER_HID_REPORT_DESC;
+		}
+		default:
+		{
+			return CONTROL_TRANSFER_RESPONSE;
+		}
+		}
+	}
+	default:
+	{
+		return UNKNOWN_TRANSFER;
+	}
+	}
+}

@@ -1,6 +1,6 @@
 #include "DataViewerModel.h"
 
-DataViewerModel::DataViewerModel(QListWidgetItem* item, bool hexView, quint8 additionalDataType, QObject *parent)
+DataViewerModel::DataViewerModel(QListWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent)
 	: QAbstractTableModel(parent)
 {
 	this->hexView = hexView;
@@ -23,12 +23,24 @@ int DataViewerModel::rowCount(const QModelIndex& parent) const
 		size += item->data(holder->TRANSFER_OPTIONAL_HEADER).toByteArray().size();
 	}
 
-	return ((size / holder->BYTES_ON_ROW) == 0) ? size / holder->BYTES_ON_ROW : (size / holder->BYTES_ON_ROW) + 1;
+	return ((size % holder->BYTES_ON_ROW) == 0) ? size / holder->BYTES_ON_ROW : (size / holder->BYTES_ON_ROW) + 1;
 }
 
 int DataViewerModel::columnCount(const QModelIndex& parent) const
 {
 	return holder->BYTES_ON_ROW; //16B on one line
+}
+
+QVariant DataViewerModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	if (orientation == Qt::Vertical && role == Qt::DisplayRole)
+	{
+		std::stringstream stream;
+		stream << std::uppercase << std::setw(6) << std::setfill('0') << std::hex << section * 16;
+		return QVariant(stream.str().c_str());
+	}
+
+	return QVariant();
 }
 
 QVariant DataViewerModel::data(const QModelIndex& index, int role) const

@@ -20,6 +20,7 @@ void USB_Packet_Analyzer::Init()
     ui.fileCaptureRadioButton->setText("File Capture");
     ui.fileCaptureRadioButton->setChecked(true);
     ui.dataHighlightCheckBox->setText("Data Highlight");
+    ui.dataHighlightCheckBox->setChecked(true);
 
     ui.openFileLabel->setText("");
 }
@@ -44,9 +45,9 @@ void USB_Packet_Analyzer::on_StartButton_clicked()
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
 {
-    HIDDevices* dev = HIDDevices::GetHIDDevices();
-    auto a = 5;
-
-    dataViewer = std::make_unique<DataViewer>(item, 0, ui.dataHighlightCheckBox->isChecked(), this);
+    ItemManager manager(ui.listWidget, this);
+    int currentRow = ui.listWidget->row(item);
+    QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
+    dataViewer = std::make_unique<DataViewer>(item, manager.GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked(), this);
     dataViewer->show();
 }

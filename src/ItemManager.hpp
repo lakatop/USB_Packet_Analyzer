@@ -19,6 +19,7 @@ public:
 	void ProcessFile(QString filename, bool liveReading);
 	void ProcessPacket(QByteArray packetData);
 	void AppendItem();
+	HeaderDataType GetDataType(QListWidgetItem* currentItem, QListWidgetItem* previousItem);
 
 
 	bool stopButtonClicked;
