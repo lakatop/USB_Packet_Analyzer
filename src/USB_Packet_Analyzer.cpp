@@ -45,7 +45,6 @@ void USB_Packet_Analyzer::on_StartButton_clicked()
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
 {
-    HIDDevices* dev = HIDDevices::GetHIDDevices();
     ItemManager manager(ui.listWidget, this);
     int currentRow = ui.listWidget->row(item);
     QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);

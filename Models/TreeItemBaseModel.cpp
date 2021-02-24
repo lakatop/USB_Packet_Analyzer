@@ -6,10 +6,6 @@ TreeItemBaseModel::TreeItemBaseModel(QObject *parent)
 	holder = DataHolder::GetDataHolder();
 }
 
-TreeItemBaseModel::~TreeItemBaseModel()
-{
-}
-
 QModelIndex TreeItemBaseModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent))
