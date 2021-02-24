@@ -5,6 +5,7 @@
 #include "../DefinedStructs/PacketExternStructs.hpp"
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include "../Models/DataViewerModel.h"
+#include "../Models/ColorMapModel.hpp"
 #include "../Delegates/DataViewerDelegate.h"
 #include <qlistwidget.h>
 #include <qscrollbar.h>
@@ -19,6 +20,7 @@ public:
 
 private:
 	void InitTables(QListWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight);
+	void InitTreeViews();
 	void InitTableViewer(QTableView* table, bool hexViewTable);
 	void AdjustTableSize(QTableView* table, bool hexViewTable);
 
@@ -26,4 +28,5 @@ private:
 	std::unique_ptr<DataViewerModel> byteTableModel;
 	std::unique_ptr<DataViewerModel> hexTableModel;
 	std::unique_ptr<DataViewerDelegate> dataTableDelegate;
+	std::unique_ptr<ColorMapModel> colorMapModel;
 };

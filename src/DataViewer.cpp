@@ -5,6 +5,7 @@ DataViewer::DataViewer(QListWidgetItem* item, HeaderDataType additionalDataType,
 {
 	ui.setupUi(this);
 	InitTables(item, additionalDataType, dataHighlight);
+	InitTreeViews();
 }
 
 DataViewer::~DataViewer()
@@ -25,6 +26,13 @@ void DataViewer::InitTables(QListWidgetItem* item, HeaderDataType additionalData
 
 	InitTableViewer(ui.byteTableView, false);
 	InitTableViewer(ui.hexTableView, true);
+}
+
+void DataViewer::InitTreeViews()
+{
+	colorMapModel = std::make_unique<ColorMapModel>(this);
+	ui.colorMapTreeView->setModel(colorMapModel.get());
+	ui.colorMapTreeView->header()->setVisible(false);
 }
 
 void DataViewer::InitTableViewer(QTableView* table, bool hexViewTable)
