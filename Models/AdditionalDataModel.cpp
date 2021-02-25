@@ -70,6 +70,8 @@ void AdditionalDataModel::CreateSpecifiedModel()
     break;
     case CONTROL_TRANSFER_HID_REPORT_DESC:
     {
+        ReportDescriptorModel reportDescModel(rootItem.get(), item, this);
+        reportDescModel.InterpretReportDescriptor();
     }
     break;
     case CONTROL_TRANSFER_SETUP:

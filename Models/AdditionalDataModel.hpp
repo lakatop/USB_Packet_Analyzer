@@ -3,6 +3,7 @@
 
 #include "TreeItemBaseModel.h"
 #include "FixedDescriptorTreeeModel.hpp"
+#include "ReportDescriptorModel.hpp"
 
 #include <qlistwidget.h>
 

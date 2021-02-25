@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
+#include <qpointer.h>
 #include "ui_USB_Packet_Analyzer.h"
 #include "ItemManager.hpp"
 #include "DataViewer.h"
@@ -16,7 +17,7 @@ public:
 private:
     Ui::USB_Packet_AnalyzerClass ui;
     QString currentFile;
-    std::unique_ptr<DataViewer> dataViewer;
+    QPointer<DataViewer> dataViewer;
 
     void Init();
 

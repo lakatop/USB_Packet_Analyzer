@@ -192,6 +192,8 @@ extern "C" {
 
 #include <vector>
 #include <map>
+#include <qbytearray.h>
+#include <memory>
 
 //ENUMS
 
@@ -252,6 +254,21 @@ typedef struct DataTypeColor
     int alpha;
 } DataTypeColor;
 
+struct ReportDescTreeStruct
+{
+    ReportDescTreeStruct() : tag(0), size(0), itemType(0), root(false), childs(), data(NULL) {}
+    ReportDescTreeStruct(BYTE _tag, BYTE _size, BYTE _itemType, bool _root) :
+        tag(_tag), size(_size), itemType(_itemType), root(_root), childs(), data(NULL)
+    {
+    }
+    BYTE tag;
+    BYTE size;
+    BYTE itemType;
+    QByteArray data;
+    bool root;
+
+    std::vector<std::shared_ptr<ReportDescTreeStruct>> childs;
+};
 
 typedef struct HIDDescriptor
 {

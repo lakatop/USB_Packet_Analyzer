@@ -48,6 +48,13 @@ void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
     ItemManager manager(ui.listWidget, this);
     int currentRow = ui.listWidget->row(item);
     QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
-    dataViewer = std::make_unique<DataViewer>(item, manager.GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked());
+    if (!dataViewer.isNull())
+    {
+        dataViewer->deleteLater();
+    }
+    //using nullptr as parent because otherwise it wont show in task bar
+    dataViewer = QPointer(new DataViewer(item, manager.GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked()));
+    dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
+    connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
     dataViewer->show();
 }
