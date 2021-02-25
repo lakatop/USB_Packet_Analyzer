@@ -5,7 +5,7 @@ DataViewer::DataViewer(QListWidgetItem* item, HeaderDataType additionalDataType,
 {
 	ui.setupUi(this);
 	InitTables(item, additionalDataType, dataHighlight);
-	InitTreeViews(item);
+	InitTreeViews(item, additionalDataType);
 }
 
 DataViewer::~DataViewer()
@@ -28,7 +28,7 @@ void DataViewer::InitTables(QListWidgetItem* item, HeaderDataType additionalData
 	InitTableViewer(ui.hexTableView, true);
 }
 
-void DataViewer::InitTreeViews(QListWidgetItem* item)
+void DataViewer::InitTreeViews(QListWidgetItem* item, HeaderDataType additionalDataType)
 {
 	colorMapModel = std::make_unique<ColorMapModel>(this);
 	ui.colorMapTreeView->setModel(colorMapModel.get());
@@ -38,6 +38,13 @@ void DataViewer::InitTreeViews(QListWidgetItem* item)
 	ui.usbHeaderTreeView->setModel(usbhModel.get());
 	ui.usbHeaderTreeView->resizeColumnToContents(0);
 	ui.usbHeaderTreeView->resizeColumnToContents(1);
+
+	additionalDataModel = std::make_unique<AdditionalDataModel>(item, additionalDataType, this);
+	ui.additionalDataTreeView->setModel(additionalDataModel.get());
+	int columnWidth = (ui.additionalDataTreeView->width() - 100) / 2;
+	ui.additionalDataTreeView->setColumnWidth(0, columnWidth);
+	ui.additionalDataTreeView->setColumnWidth(1, columnWidth);
+	ui.additionalDataTreeView->setColumnWidth(2, 100);
 }
 
 void DataViewer::InitTableViewer(QTableView* table, bool hexViewTable)

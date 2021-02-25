@@ -265,7 +265,7 @@ HeaderDataType ItemManager::GetDataType(QListWidgetItem* currentItem, QListWidge
 		}
 		default:
 		{
-			return CONTROL_TRANSFER_RESPONSE;
+			return CONTROL_TRANSFER_UNSPEC_DESC;
 		}
 		}
 	}

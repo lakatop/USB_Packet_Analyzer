@@ -48,6 +48,6 @@ void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
     ItemManager manager(ui.listWidget, this);
     int currentRow = ui.listWidget->row(item);
     QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
-    dataViewer = std::make_unique<DataViewer>(item, manager.GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked(), this);
+    dataViewer = std::make_unique<DataViewer>(item, manager.GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked());
     dataViewer->show();
 }

@@ -7,6 +7,7 @@
 #include "../Models/DataViewerModel.h"
 #include "../Models/ColorMapModel.hpp"
 #include "../Models/USBPcapHeaderModel.hpp"
+#include "../Models/AdditionalDataModel.hpp"
 #include "../Delegates/DataViewerDelegate.h"
 #include <qlistwidget.h>
 #include <qscrollbar.h>
@@ -21,7 +22,7 @@ public:
 
 private:
 	void InitTables(QListWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight);
-	void InitTreeViews(QListWidgetItem* item);
+	void InitTreeViews(QListWidgetItem* item, HeaderDataType additionalDataType);
 	void InitTableViewer(QTableView* table, bool hexViewTable);
 	void AdjustTableSize(QTableView* table, bool hexViewTable);
 
@@ -31,4 +32,5 @@ private:
 	std::unique_ptr<DataViewerDelegate> dataTableDelegate;
 	std::unique_ptr<ColorMapModel> colorMapModel;
 	std::unique_ptr<USBPcapHeaderModel> usbhModel;
+	std::unique_ptr<AdditionalDataModel> additionalDataModel;
 };
