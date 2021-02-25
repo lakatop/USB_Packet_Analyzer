@@ -12,12 +12,13 @@ public:
 	void ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex);
 	void CreateDevice(QByteArray packetData);
 	size_t GetHIDDescriptorSize();
+	HIDDescriptor FillUpHIDDescriptor(const unsigned char* packet);
 
 	std::vector<EndpointDevice> devices;
 private:
 	HIDDevices();
 	template<typename T> 
-	void CharToIntConvert(const unsigned char* addr, T& number, size_t size);
+	void CharToNumberConvert(const unsigned char* addr, T& number, int size);
 
 	static HIDDevices* hidDevices;
 	size_t HIDDescriptorSize;
@@ -25,11 +26,11 @@ private:
 
 
 template<typename T>
-void HIDDevices::CharToIntConvert(const unsigned char* addr, T& number, size_t size)
+void HIDDevices::CharToNumberConvert(const unsigned char* addr, T& number, int size)
 {
-	for (size_t i = 0; i < size; i++)
+	for (int i = size; i > 0; i--)
 	{
-		number = (number << 8) | addr[i];
+		number = (number << 8) | addr[i - 1];
 	}
 }
 

@@ -133,39 +133,39 @@ void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex
 				if (depth == 0)
 				{
 					inputParse.globalItemUsage = 0;
-					CharToIntConvert(packet, inputParse.globalItemUsage, size);
+					CharToNumberConvert(packet, inputParse.globalItemUsage, size);
 				}
 
 				inputValues.GlobalUsagePage = 0;
-				CharToIntConvert(packet, inputValues.GlobalUsagePage, size);
+				CharToNumberConvert(packet, inputValues.GlobalUsagePage, size);
 				packet += size;
 			}
 			break;
 			case LOGICAL_MINIMUM:
 			{
 				inputValues.LogicalMinimum = 0;
-				CharToIntConvert(packet, inputValues.LogicalMinimum, size);
+				CharToNumberConvert(packet, inputValues.LogicalMinimum, size);
 				packet += size;
 			}
 			break;
 			case LOGICAL_MAXIMUM:
 			{
 				inputValues.LogicalMaximum = 0;
-				CharToIntConvert(packet, inputValues.LogicalMaximum, size);
+				CharToNumberConvert(packet, inputValues.LogicalMaximum, size);
 				packet += size;
 			}
 			break;
 			case REPORT_SIZE:
 			{
 				inputValues.ReportSize = 0;
-				CharToIntConvert(packet, inputValues.ReportSize, size);
+				CharToNumberConvert(packet, inputValues.ReportSize, size);
 				packet += size;
 			}
 			break;
 			case REPORT_COUNT:
 			{
 				inputValues.ReportCount = 0;
-				CharToIntConvert(packet, inputValues.ReportCount, size);
+				CharToNumberConvert(packet, inputValues.ReportCount, size);
 				packet += size;
 			}
 			break;
@@ -174,7 +174,7 @@ void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex
 				inputParse.inputSize = 0;
 				inputParse.reportDefined = true;
 				inputParse.reportID = 0;
-				CharToIntConvert(packet, inputParse.reportID, size);
+				CharToNumberConvert(packet, inputParse.reportID, size);
 				packet += size;
 			}
 			break;
@@ -194,7 +194,7 @@ void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex
 			case USAGE:
 			{
 				uint32_t usage = 0;
-				CharToIntConvert(packet, usage, size);
+				CharToNumberConvert(packet, usage, size);
 
 				//if depth == 0, that means that local item usage doesnt represent any 
 				//collection usage (any input button etc.), but combined with 
@@ -213,14 +213,14 @@ void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex
 			case USAGE_MINIMUM:
 			{
 				inputValues.UsageMinimum = 0;
-				CharToIntConvert(packet, inputValues.UsageMinimum, size);
+				CharToNumberConvert(packet, inputValues.UsageMinimum, size);
 				packet += size;
 			}
 			break;
 			case USAGE_MAXIMUM:
 			{
 				inputValues.UsageMaximum = 0;
-				CharToIntConvert(packet, inputValues.UsageMaximum, size);
+				CharToNumberConvert(packet, inputValues.UsageMaximum, size);
 				packet += size;
 			}
 			break;
@@ -300,4 +300,33 @@ void HIDDevices::CreateDevice(QByteArray packetData)
 	}
 
 	devices.push_back(device);
+}
+
+//UCHAR                     bLength;
+//UCHAR                     bDescriptorType;
+//USHORT                    bcdHID;
+//UCHAR                     bCountry;
+//UCHAR                     bNumDescriptors;
+//UCHAR                     bReportType;
+//USHORT                    wReportLength;
+
+HIDDescriptor HIDDevices::FillUpHIDDescriptor(const unsigned char* packet)
+{
+	HIDDescriptor hidDescriptor;
+	hidDescriptor.bLength = (UCHAR)(*packet);
+	packet += 1;
+	hidDescriptor.bDescriptorType = (UCHAR)(*packet);
+	packet += 1;
+	hidDescriptor.bcdHID = (USHORT)(*packet);
+	packet += 2;
+	hidDescriptor.bCountry = (UCHAR)(*packet);
+	packet += 1;
+	hidDescriptor.bNumDescriptors = (UCHAR)(*packet);
+	packet += 1;
+	hidDescriptor.bReportType = (UCHAR)(*packet);
+	packet += 1;
+	hidDescriptor.wReportLength = (USHORT)(*packet);
+	packet += 2;
+
+	return hidDescriptor;
 }

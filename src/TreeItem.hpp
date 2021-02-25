@@ -11,7 +11,6 @@ public:
 		: data(data_), parent(parent_)
 	{
 	}
-
 	void AppendChild(TreeItem* child);
 	TreeItem* Child(int row);
 	int ChildCount() const;

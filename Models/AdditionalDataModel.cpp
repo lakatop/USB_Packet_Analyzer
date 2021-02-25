@@ -53,7 +53,8 @@ void AdditionalDataModel::CreateSpecifiedModel()
     case CONTROL_TRANSFER_HID_DESC:
     case CONTROL_TRANSFER_OTHER_SPEED_CONF_DESC:
     {
-
+        ConfigDescriptorsModel configDescsModel(rootItem.get(), item, this);
+        configDescsModel.InterpretConfigDescriptors();
     }
     break;
     case CONTROL_TRANSFER_DEVICE_DESC:
