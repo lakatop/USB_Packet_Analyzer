@@ -1,16 +1,16 @@
 #ifndef FIXEDDESCRIPTORTREEINTERPRETER_HPP
 #define FIXEDDESCRIPTORTREEINTERPRETER_HPP
 
-#include "AdditionalDataModel.hpp"
+#include "../Models/AdditionalDataModel.hpp"
 #include <qlistwidget.h>
 #include <winusb.h>
 
 class AdditionalDataModel; //forward declaration
 
-class FixedDescriptorTreeModel
+class FixedDescriptorTreeInterpreter
 {
 public:
-	FixedDescriptorTreeModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	FixedDescriptorTreeInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void InterpretControlTransferUnspecifiedDescriptor();
 	void InterpretControlTransferSetup();
 	template <typename T>

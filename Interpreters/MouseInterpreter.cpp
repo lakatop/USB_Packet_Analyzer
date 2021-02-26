@@ -14,6 +14,10 @@ MouseInterpreter::MouseInterpreter(TreeItem* rootItem, QListWidgetItem* item, Ad
 void MouseInterpreter::Interpret()
 {
     QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
+    if (leftoverData.isEmpty())
+    {
+        return;
+    }
     const unsigned char* packet = (unsigned char*)leftoverData.data();
 
     rootItem->AppendChild(new TreeItem(QVector<QVariant>{"MOUSE DEVICE", "", ""}, rootItem));

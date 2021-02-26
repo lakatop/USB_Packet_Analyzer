@@ -1,6 +1,6 @@
-#include "InterruptTransferModel.hpp"
+#include "InterruptTransferInterpreter.hpp"
 
-InterruptTransferModel::InterruptTransferModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+InterruptTransferInterpreter::InterruptTransferInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->item = item;
@@ -9,9 +9,15 @@ InterruptTransferModel::InterruptTransferModel(TreeItem* rootItem, QListWidgetIt
 	this->holder = DataHolder::GetDataHolder();
 }
 
-void InterruptTransferModel::InterpretInterruptTransfer()
+void InterruptTransferInterpreter::InterpretInterruptTransfer()
 {
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->data(holder->USBPCAP_HEADER_DATA).toByteArray().constData();
+	
+	if ((usbh->info & 0x01) == 0) // host -> device
+	{
+		return;
+	}
+	
 	int index = -1;
 	for (int i = 0; i < hidDevices->devices.size(); i++)
 	{
@@ -47,7 +53,7 @@ void InterruptTransferModel::InterpretInterruptTransfer()
 	}
 }
 
-HIDReportDescriptorInputParse InterruptTransferModel::GetInputParser(int index)
+HIDReportDescriptorInputParse InterruptTransferInterpreter::GetInputParser(int index)
 {
 	HIDReportDescriptorInputParse inputParser;
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->data(holder->USBPCAP_HEADER_DATA).toByteArray().constData();

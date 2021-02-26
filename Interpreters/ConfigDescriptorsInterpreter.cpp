@@ -1,6 +1,6 @@
-#include "ConfigDescriptorsModel.hpp"
+#include "ConfigDescriptorsInterpreter.hpp"
 
-ConfigDescriptorsModel::ConfigDescriptorsModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+ConfigDescriptorsInterpreter::ConfigDescriptorsInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->holder = DataHolder::GetDataHolder();
@@ -9,7 +9,7 @@ ConfigDescriptorsModel::ConfigDescriptorsModel(TreeItem* rootItem, QListWidgetIt
 	this->additionalDataModel = additionalDataModel;
 }
 
-void ConfigDescriptorsModel::InterpretConfigDescriptors()
+void ConfigDescriptorsInterpreter::InterpretConfigDescriptors()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	const unsigned char* packet = (unsigned char*)leftoverData.constData();
@@ -61,7 +61,7 @@ void ConfigDescriptorsModel::InterpretConfigDescriptors()
 	}
 }
 
-void ConfigDescriptorsModel::InterpretConfigDescriptor(const unsigned char* packet)
+void ConfigDescriptorsInterpreter::InterpretConfigDescriptor(const unsigned char* packet)
 {
 	PUSB_CONFIGURATION_DESCRIPTOR configDescriptor = (PUSB_CONFIGURATION_DESCRIPTOR)packet;
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{
@@ -103,7 +103,7 @@ void ConfigDescriptorsModel::InterpretConfigDescriptor(const unsigned char* pack
 		(std::to_string(configDescriptor->MaxPower) + std::string(" = ") + std::to_string(configDescriptor->MaxPower * 2) + std::string(" mA")).c_str()}, configDescriptorChild));
 }
 
-void ConfigDescriptorsModel::InterpretInterfaceDescriptor(const unsigned char* packet)
+void ConfigDescriptorsInterpreter::InterpretInterfaceDescriptor(const unsigned char* packet)
 {
 	PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR)packet;
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"INTERFACE_DESCRIPTOR", "", ""}, rootItem));
@@ -131,7 +131,7 @@ void ConfigDescriptorsModel::InterpretInterfaceDescriptor(const unsigned char* p
 	interfaceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iInterface", interfaceDescriptor->iInterface}, interfaceDescriptorChild));
 }
 
-void ConfigDescriptorsModel::InterpretEndpointDescriptor(const unsigned char* packet)
+void ConfigDescriptorsInterpreter::InterpretEndpointDescriptor(const unsigned char* packet)
 {
 	PUSB_ENDPOINT_DESCRIPTOR endpointDescriptor = (PUSB_ENDPOINT_DESCRIPTOR)packet;
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"ENDPOINT_DESCRIPTOR", "", ""}, rootItem));
@@ -208,7 +208,7 @@ void ConfigDescriptorsModel::InterpretEndpointDescriptor(const unsigned char* pa
 	endpointDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bInterval", endpointDescriptor->bInterval}, endpointDescriptorChild));
 }
 
-void ConfigDescriptorsModel::InterpretHIDDescriptor(const unsigned char* packet)
+void ConfigDescriptorsInterpreter::InterpretHIDDescriptor(const unsigned char* packet)
 {
 	HIDDescriptor hidDescriptor = hidDevices->FillUpHIDDescriptor(packet);
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"HID_DESCRIPTOR", "", ""}, rootItem));

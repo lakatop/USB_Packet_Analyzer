@@ -2,10 +2,10 @@
 #define ADDITIONALDATAMODEL_HPP
 
 #include "TreeItemBaseModel.h"
-#include "FixedDescriptorTreeeModel.hpp"
-#include "ReportDescriptorModel.hpp"
-#include "ConfigDescriptorsModel.hpp"
-#include "InterruptTransferModel.hpp"
+#include "../Interpreters/FixedDescriptorTreeInterpreter.hpp"
+#include "../Interpreters/ReportDescriptorInterpreter.hpp"
+#include "../Interpreters/ConfigDescriptorsInterpreter.hpp"
+#include "../Interpreters/InterruptTransferInterpreter.hpp"
 
 #include <qlistwidget.h>
 

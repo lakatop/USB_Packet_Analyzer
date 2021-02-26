@@ -1,13 +1,13 @@
 #ifndef INTERRUPTTRANSFERMODEL_HPP
 #define INTERRUPTTRANSFERMODEL_HPP
 
-#include "AdditionalDataModel.hpp"
+#include "../Models/AdditionalDataModel.hpp"
 #include "../Interpreters/MouseInterpreter.hpp"
 
-class InterruptTransferModel
+class InterruptTransferInterpreter
 {
 public:
-	InterruptTransferModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	InterruptTransferInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void InterpretInterruptTransfer();
 private:
 	HIDReportDescriptorInputParse GetInputParser(int index);

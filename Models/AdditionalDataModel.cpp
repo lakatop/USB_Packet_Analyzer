@@ -39,7 +39,7 @@ void AdditionalDataModel::CreateSpecifiedModel()
     {
     case INTERR_TRANSFER:
     {
-        InterruptTransferModel interruptModel(rootItem.get(), item, this);
+        InterruptTransferInterpreter interruptModel(rootItem.get(), item, this);
         interruptModel.InterpretInterruptTransfer();
     }
         break;
@@ -54,43 +54,43 @@ void AdditionalDataModel::CreateSpecifiedModel()
     case CONTROL_TRANSFER_HID_DESC:
     case CONTROL_TRANSFER_OTHER_SPEED_CONF_DESC:
     {
-        ConfigDescriptorsModel configDescsModel(rootItem.get(), item, this);
+        ConfigDescriptorsInterpreter configDescsModel(rootItem.get(), item, this);
         configDescsModel.InterpretConfigDescriptors();
     }
     break;
     case CONTROL_TRANSFER_DEVICE_DESC:
     {
-        FixedDescriptorTreeModel deviceDescModel(rootItem.get(), item, this);
+        FixedDescriptorTreeInterpreter deviceDescModel(rootItem.get(), item, this);
         deviceDescModel.InterpretControlTransferDeviceDescriptor();
     }
     break;
     case CONTROL_TRANSFER_STRING_DESC:
     {
-        FixedDescriptorTreeModel stringDescModel(rootItem.get(), item, this);
+        FixedDescriptorTreeInterpreter stringDescModel(rootItem.get(), item, this);
         stringDescModel.InterpretControlTransferStringDescriptor();
     }
     break;
     case CONTROL_TRANSFER_HID_REPORT_DESC:
     {
-        ReportDescriptorModel reportDescModel(rootItem.get(), item, this);
+        ReportDescriptorInterpreter reportDescModel(rootItem.get(), item, this);
         reportDescModel.InterpretReportDescriptor();
     }
     break;
     case CONTROL_TRANSFER_SETUP:
     {
-        FixedDescriptorTreeModel setupModel(rootItem.get(), item, this);
+        FixedDescriptorTreeInterpreter setupModel(rootItem.get(), item, this);
         setupModel.InterpretControlTransferSetup();
     }
     break;
     case CONTROL_TRANSFER_DEVICE_QUALIFIER_DESC:
     {
-        FixedDescriptorTreeModel deviceQualifierDescModel(rootItem.get(), item, this);
+        FixedDescriptorTreeInterpreter deviceQualifierDescModel(rootItem.get(), item, this);
         deviceQualifierDescModel.InterpretControlTransferDeviceQualifierDescriptor();
     }
     break;
     case CONTROL_TRANSFER_UNSPEC_DESC:
     {
-        FixedDescriptorTreeModel unspecDescModel(rootItem.get(), item, this);
+        FixedDescriptorTreeInterpreter unspecDescModel(rootItem.get(), item, this);
         unspecDescModel.InterpretControlTransferUnspecifiedDescriptor();
     }
     break;

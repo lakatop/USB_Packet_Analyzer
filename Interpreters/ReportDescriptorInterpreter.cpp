@@ -1,6 +1,6 @@
-#include "ReportDescriptorModel.hpp"
+#include "ReportDescriptorInterpreter.hpp"
 
-ReportDescriptorModel::ReportDescriptorModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->additionalDataModel = additionalDataModel;
@@ -11,7 +11,7 @@ ReportDescriptorModel::ReportDescriptorModel(TreeItem* rootItem, QListWidgetItem
 	ParseReportDescriptor(&reportDescriptor, 0);
 }
 
-void ReportDescriptorModel::InterpretReportDescriptor()
+void ReportDescriptorInterpreter::InterpretReportDescriptor()
 {
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"HID_REPORT_DESCRIPTOR", "", ""}, rootItem));
 	TreeItem* reportDescriptorChild = rootItem->Child(rootItem->ChildCount() - 1);
@@ -21,7 +21,7 @@ void ReportDescriptorModel::InterpretReportDescriptor()
 	}
 }
 
-void ReportDescriptorModel::InterpretReportDescriptor(TreeItem* parent, ReportDescTreeStruct* reportDescriptor)
+void ReportDescriptorInterpreter::InterpretReportDescriptor(TreeItem* parent, ReportDescTreeStruct* reportDescriptor)
 {
 
 	AppendItem(parent, reportDescriptor);
@@ -32,7 +32,7 @@ void ReportDescriptorModel::InterpretReportDescriptor(TreeItem* parent, ReportDe
 	}
 }
 
-std::size_t ReportDescriptorModel::ParseReportDescriptor(ReportDescTreeStruct* root, std::size_t parsed)
+std::size_t ReportDescriptorInterpreter::ParseReportDescriptor(ReportDescTreeStruct* root, std::size_t parsed)
 {
 	if (parsed == reportArray.size())
 	{
@@ -72,7 +72,7 @@ std::size_t ReportDescriptorModel::ParseReportDescriptor(ReportDescTreeStruct* r
 	return parsed + size + 1;
 }
 
-void ReportDescriptorModel::InterpretInputOutputFeature(BYTE tag, QByteArray& data, TreeItem* child)
+void ReportDescriptorInterpreter::InterpretInputOutputFeature(BYTE tag, QByteArray& data, TreeItem* child)
 {
 	const unsigned char* packet = (unsigned char*)data.constData();
 	USHORT value = (USHORT)*packet;
@@ -98,7 +98,7 @@ void ReportDescriptorModel::InterpretInputOutputFeature(BYTE tag, QByteArray& da
 	child->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(15, 1, value).right(19), dataConstant.c_str(), }, child));
 }
 
-void ReportDescriptorModel::InterpretHeader(ReportDescTreeStruct* reportDescriptor, TreeItem* child)
+void ReportDescriptorInterpreter::InterpretHeader(ReportDescTreeStruct* reportDescriptor, TreeItem* child)
 {
 	child->AppendChild(new TreeItem(QVector<QVariant>{"HEADER", "", ""}, child));
 	TreeItem* headerChild = child->Child(child->ChildCount() - 1);
@@ -110,7 +110,7 @@ void ReportDescriptorModel::InterpretHeader(ReportDescTreeStruct* reportDescript
 	headerChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(6, 2, value), "bSize", reportDescriptor->size}, headerChild));
 }
 
-std::string ReportDescriptorModel::InterpretData(ReportDescTreeStruct* reportDescriptor)
+std::string ReportDescriptorInterpreter::InterpretData(ReportDescTreeStruct* reportDescriptor)
 {
 	std::stringstream stream;
 	stream << holder->GetReportTag(reportDescriptor->tag, reportDescriptor->itemType) << ": ";
@@ -137,7 +137,7 @@ std::string ReportDescriptorModel::InterpretData(ReportDescTreeStruct* reportDes
 	return stream.str();
 }
 
-void ReportDescriptorModel::AppendItem(TreeItem* parent, ReportDescTreeStruct* reportDescriptor)
+void ReportDescriptorInterpreter::AppendItem(TreeItem* parent, ReportDescTreeStruct* reportDescriptor)
 {
 	parent->AppendChild(new TreeItem(QVector<QVariant>{(holder->GetReportItemType(reportDescriptor->itemType) +
 		" item ( " + holder->GetReportTag(reportDescriptor->tag, reportDescriptor->itemType) + " )").c_str(), "", ""}, parent));

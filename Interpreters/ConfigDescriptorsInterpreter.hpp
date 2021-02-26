@@ -1,13 +1,13 @@
 #ifndef CONFIGDESCRIPTORSMODEL_HPP
 #define CONFIGDESCRIPTORSMODEL_HPP
 
-#include "AdditionalDataModel.hpp"
+#include "../Models/AdditionalDataModel.hpp"
 #include "../HID/HIDDevices.hpp"
 
-class ConfigDescriptorsModel
+class ConfigDescriptorsInterpreter
 {
 public:
-	ConfigDescriptorsModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	ConfigDescriptorsInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
 
 	void InterpretConfigDescriptors();
 private:

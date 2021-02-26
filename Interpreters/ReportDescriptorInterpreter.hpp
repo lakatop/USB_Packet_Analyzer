@@ -2,15 +2,15 @@
 #define REPORTDESCRIPTORMODEL_HPP
 
 #include "../DefinedStructs/PacketExternStructs.hpp"
-#include "AdditionalDataModel.hpp"
+#include "../Models/AdditionalDataModel.hpp"
 #include <qlistwidget.h>
 
 class AdditionalDataModel; //forward declaration
 
-class ReportDescriptorModel
+class ReportDescriptorInterpreter
 {
 public:
-	ReportDescriptorModel(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	ReportDescriptorInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void InterpretReportDescriptor();
 private:
 	std::size_t ParseReportDescriptor(ReportDescTreeStruct* root, std::size_t parsed);
