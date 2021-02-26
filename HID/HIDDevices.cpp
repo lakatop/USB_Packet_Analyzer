@@ -15,11 +15,25 @@ HIDDevices* HIDDevices::GetHIDDevices()
 HIDDevices::HIDDevices()
 {
 	HIDDescriptorSize = 9; //must be set manually because of padding
+	FillSupportedDeviceMap();
 }
 
 size_t HIDDevices::GetHIDDescriptorSize()
 {
 	return HIDDescriptorSize;
+}
+
+Supported_Devices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> key)
+{
+	auto deviceMapIterator = deviceMap.find(key);
+	if (deviceMapIterator == deviceMap.end())
+	{
+		return D_UNDEFINED;
+	}
+	else
+	{
+		return deviceMapIterator->second;
+	}
 }
 
 void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex)
@@ -302,14 +316,6 @@ void HIDDevices::CreateDevice(QByteArray packetData)
 	devices.push_back(device);
 }
 
-//UCHAR                     bLength;
-//UCHAR                     bDescriptorType;
-//USHORT                    bcdHID;
-//UCHAR                     bCountry;
-//UCHAR                     bNumDescriptors;
-//UCHAR                     bReportType;
-//USHORT                    wReportLength;
-
 HIDDescriptor HIDDevices::FillUpHIDDescriptor(const unsigned char* packet)
 {
 	HIDDescriptor hidDescriptor;
@@ -329,4 +335,14 @@ HIDDescriptor HIDDevices::FillUpHIDDescriptor(const unsigned char* packet)
 	packet += 2;
 
 	return hidDescriptor;
+}
+
+void HIDDevices::FillSupportedDeviceMap()
+{
+	deviceMap.emplace(std::make_pair(0x01, 0x02), D_MOUSE);
+	deviceMap.emplace(std::make_pair(0x01, 0x04), D_JOYSTICK);
+	deviceMap.emplace(std::make_pair(0x01, 0x06), D_KEYBOARD);
+
+	//deviceMap.emplace(std::make_pair(0x0c, 0x01), D_KEYBOARD); these are not generic desktop page, not sure about implementing them
+	//deviceMap.emplace(std::make_pair(0x0c, 0x80), D_KEYBOARD);
 }

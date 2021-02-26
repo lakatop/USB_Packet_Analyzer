@@ -39,7 +39,8 @@ void AdditionalDataModel::CreateSpecifiedModel()
     {
     case INTERR_TRANSFER:
     {
-
+        InterruptTransferModel interruptModel(rootItem.get(), item, this);
+        interruptModel.InterpretInterruptTransfer();
     }
         break;
     case ISOCHRO_TRANSFER:

@@ -5,6 +5,7 @@
 #include "FixedDescriptorTreeeModel.hpp"
 #include "ReportDescriptorModel.hpp"
 #include "ConfigDescriptorsModel.hpp"
+#include "InterruptTransferModel.hpp"
 
 #include <qlistwidget.h>
 

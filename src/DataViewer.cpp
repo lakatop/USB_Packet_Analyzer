@@ -41,7 +41,7 @@ void DataViewer::InitTreeViews(QListWidgetItem* item, HeaderDataType additionalD
 
 	additionalDataModel = std::make_unique<AdditionalDataModel>(item, additionalDataType, this);
 	ui.additionalDataTreeView->setModel(additionalDataModel.get());
-	int columnWidth = (ui.additionalDataTreeView->width() - 100) / 2;
+	int columnWidth = ((ui.additionalDataTreeView->width() - 100) / 2) - 1;
 	ui.additionalDataTreeView->setColumnWidth(0, columnWidth);
 	ui.additionalDataTreeView->setColumnWidth(1, columnWidth);
 	ui.additionalDataTreeView->setColumnWidth(2, 100);
