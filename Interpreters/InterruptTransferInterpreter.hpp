@@ -4,6 +4,7 @@
 #include "../Models/AdditionalDataModel.hpp"
 #include "MouseInterpreter.hpp"
 #include "KeyboardInterpreter.hpp"
+#include "JoystickInterpreter.hpp"
 
 class InterruptTransferInterpreter
 {

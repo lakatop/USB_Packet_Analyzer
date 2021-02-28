@@ -72,7 +72,11 @@ void InterruptTransferInterpreter::InterpretInterruptTransfer()
 			keyboardInterpreter.Interpret();
 		}
 		case D_JOYSTICK:
-			break;
+		{
+			JoystickInterpreter joystickInterpreter(rootItem, item, additionalDataModel, inputParser);
+			joystickInterpreter.Interpret();
+		}
+		break;
 		case D_UNDEFINED:
 			break;
 		default:
