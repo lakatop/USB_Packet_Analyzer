@@ -15,7 +15,7 @@ class USB_Packet_Analyzer; //forward declaration
 class ItemManager
 {
 public:
-	ItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent);
+	static ItemManager* GetItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent);
 	void ProcessFile(QString filename, bool liveReading);
 	void ProcessPacket(QByteArray packetData);
 	void AppendItem();
@@ -26,10 +26,12 @@ public:
 	bool pauseButtonClicked;
 	bool atBottomOfList;
 private:
+	ItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent);
 	QString SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
 	void FillUpItem(QByteArray packetData);
 	void CheckForSetupPacket(QByteArray packetData);
 
+	static ItemManager* itemManager;
 	FileReader fileReader;
 	QListWidget* listWidget;
 	USB_Packet_Analyzer* parent;

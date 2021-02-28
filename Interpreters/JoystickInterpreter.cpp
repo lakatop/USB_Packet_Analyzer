@@ -113,7 +113,7 @@ void JoystickInterpreter::Interpret()
             }
             else  //probably something vendor defined
             {
-                uint32_t size = (inputParser.inputValues[i].ReportSize * inputParser.inputValues[i].ReportCount) /
+                uint32_t size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /
                     (8 * inputParser.inputValues[i].LocalUsageNames.size());
                 int value = 0;
                 uint32_t name = inputParser.inputValues[i].LocalUsageNames[0];
@@ -124,7 +124,7 @@ void JoystickInterpreter::Interpret()
         }
         else //something unusual
         {
-            uint32_t size = (inputParser.inputValues[i].ReportSize * inputParser.inputValues[i].ReportCount) /
+            uint32_t size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /
                 (8 * inputParser.inputValues[i].LocalUsageNames.size());
             for (int j = 0; j < inputParser.inputValues[i].LocalUsageNames.size(); j++)
             {

@@ -5,6 +5,7 @@
 #include "MouseInterpreter.hpp"
 #include "KeyboardInterpreter.hpp"
 #include "JoystickInterpreter.hpp"
+#include "UnknownDeviceInterpreter.hpp"
 
 class InterruptTransferInterpreter
 {

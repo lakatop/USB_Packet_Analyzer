@@ -10,6 +10,8 @@ USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
 
 void USB_Packet_Analyzer::Init()
 {
+    this->itemManager = ItemManager::GetItemManager(ui.listWidget, this);
+
     ui.OpenButton->setText("Open");
     ui.StartButton->setText("Start");
     ui.ClearButton->setText("Clear");
@@ -39,13 +41,35 @@ void USB_Packet_Analyzer::on_OpenButton_clicked()
 
 void USB_Packet_Analyzer::on_StartButton_clicked()
 {
-    ItemManager manager(ui.listWidget, this);
-    manager.ProcessFile(currentFile, ui.liveCaptureRadioButton->isChecked());
+    this->itemManager->ProcessFile(currentFile, ui.liveCaptureRadioButton->isChecked());
+}
+
+void USB_Packet_Analyzer::on_ClearButton_clicked()
+{
+    ui.listWidget->clear();
+}
+
+void USB_Packet_Analyzer::on_StopButton_clicked()
+{
+    this->itemManager->stopButtonClicked = true;
+}
+
+void USB_Packet_Analyzer::on_PauseButton_clicked()
+{
+    if (ui.PauseButton->text() == "Pause")
+    {
+        ui.PauseButton->setText("Continue");
+        this->itemManager->pauseButtonClicked = true;
+    }
+    else
+    {
+        ui.PauseButton->setText("Pause");
+        this->itemManager->pauseButtonClicked = false;
+    }
 }
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
 {
-    ItemManager manager(ui.listWidget, this);
     int currentRow = ui.listWidget->row(item);
     QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
     if (!dataViewer.isNull())
@@ -53,7 +77,7 @@ void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
         dataViewer->deleteLater();
     }
     //using nullptr as parent because otherwise it wont show in task bar
-    dataViewer = QPointer(new DataViewer(item, manager.GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked()));
+    dataViewer = QPointer(new DataViewer(item, this->itemManager->GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked()));
     dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
     connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
     dataViewer->show();

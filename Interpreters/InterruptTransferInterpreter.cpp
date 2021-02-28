@@ -78,7 +78,11 @@ void InterruptTransferInterpreter::InterpretInterruptTransfer()
 		}
 		break;
 		case D_UNDEFINED:
-			break;
+		{
+			UnknownDeviceInterpreter unknownInterpreter(rootItem, item, additionalDataModel, inputParser);
+			unknownInterpreter.Interpret();
+		}
+		break;
 		default:
 			break;
 		}

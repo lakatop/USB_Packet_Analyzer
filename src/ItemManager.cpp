@@ -1,5 +1,17 @@
 #include "ItemManager.hpp"
 
+ItemManager* ItemManager::itemManager = nullptr;
+
+ItemManager* ItemManager::GetItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent)
+{
+	if (itemManager == nullptr)
+	{
+		itemManager = new ItemManager(listWidget, parent);
+	}
+
+	return itemManager;
+}
+
 ItemManager::ItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent)
 {
 	this->stopButtonClicked = false;

@@ -1,0 +1,37 @@
+#include "UnknownDeviceInterpreter.hpp"
+
+UnknownDeviceInterpreter::UnknownDeviceInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+	HIDReportDescriptorInputParse inputParser)
+{
+	this->rootItem = rootItem;
+	this->item = item;
+	this->inputParser = inputParser;
+	this->additionalDataModel = additionalDataModel;
+	this->hidDevices = HIDDevices::GetHIDDevices();
+	this->holder = DataHolder::GetDataHolder();
+}
+
+void UnknownDeviceInterpreter::Interpret()
+{
+	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
+	const unsigned char* packet = (unsigned char*)leftoverData.constData();
+
+	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"UNKNOWN DEVICE", "", ""}, rootItem));
+	TreeItem* unknownDeviceChild = rootItem->Child(rootItem->ChildCount() - 1);
+
+	QString hexData;
+
+	for (int i = 0; i < inputParser.inputValues.size(); i++)
+	{
+		int size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /
+			(8 * inputParser.inputValues[i].LocalUsageNames.size());
+		int64_t value = 0;
+		hidDevices->CharToNumberConvert(packet, value, size);
+		additionalDataModel->CharToHexConvert(&packet, size, hexData);
+		for (int j = 0; j < inputParser.inputValues[i].LocalUsageNames.size(); j++)
+		{
+			unknownDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
+			{hexData, inputParser.inputValues[i].LocalUsageNames[j], value}, unknownDeviceChild));
+		}
+	}
+}
