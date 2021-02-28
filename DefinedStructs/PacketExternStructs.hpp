@@ -243,7 +243,7 @@ enum Global_Usage_Pages { GENERIC_DESKTOP_PAGE = 0x01, KEYBOARD_PAGE = 0x07, LED
 
 enum Generic_Desktop_Usages { UNDEFINED, POINTER, MOUSE, RESERVED, JOYSTICK, GAMEPAD, KEYBOARD, KEYPAD, X = 0X30, Y, Z, RX, RY, RZ, WHEEL = 0X38, HAT_SWITCH };
 
-enum Supported_Devices { D_MOUSE, D_KEYBOARD, D_JOYSTICK, D_UNDEFINED };
+enum Supported_Devices { D_KEYBOARD = 1, D_MOUSE, D_JOYSTICK, D_UNDEFINED };
 
 //STRUCTS
 
@@ -319,12 +319,13 @@ typedef struct HIDReportDescriptorInputParse   //just for parsing input, not for
 
 typedef struct EndpointDevice
 {
-	EndpointDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints() {}
-	EndpointDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints() {}
+	EndpointDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints(), hidDescription() {}
+	EndpointDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints(), hidDescription() {}
 	USHORT deviceAddress;
 	bool obsolete;
 	std::map<BYTE, std::vector<HIDReportDescriptorInputParse>> inputparser; // <endpointNum, parsers> // parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID
 	std::map<BYTE, std::vector<BYTE>> endpoints; //<interfaceNum, endpointsNum> endpoints attached to this interface number
+    std::map<BYTE, std::pair<bool, UCHAR>> hidDescription; //<endpointNum, pair<isHID, bInterfaceProtocol>>
 } EndpointDevice, * PEndpointDevice;
 
 #endif // !EXTERNSTRUCTS_HPP

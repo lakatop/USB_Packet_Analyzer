@@ -28,21 +28,49 @@ void InterruptTransferInterpreter::InterpretInterruptTransfer()
 		}
 	}
 
-	if (index != -1) //HID device
+	if (index != -1) //some known device
 	{
 		auto inputParser = GetInputParser(index);
 		std::pair<uint32_t, uint32_t> GlobalAndLocalUsagePair = std::make_pair(inputParser.globalItemUsage, inputParser.localItemUsage);
 		Supported_Devices dev = hidDevices->GetSupportedDevice(GlobalAndLocalUsagePair);
-		switch (dev)
+
+		auto it = hidDevices->devices[index].hidDescription.find(usbh->endpoint & 0x0F);
+		if (it != hidDevices->devices[index].hidDescription.end())
 		{
-		case D_MOUSE:
+			if (it->second.first) // hid device
+			{
+				switch (it->second.second)
+				{
+				case D_MOUSE:
+				{
+					MouseInterpreter mouseInterpreter(rootItem, item, additionalDataModel, inputParser);
+					mouseInterpreter.Interpret();
+				}
+				return;
+				case D_KEYBOARD:
+				{
+					KeyboardInterpreter keyboardInterpreter(rootItem, item, additionalDataModel, inputParser);
+					keyboardInterpreter.Interpret();
+				}
+				return;
+				default:
+					break;
+				}
+			}
+		}
+
+		switch (dev) //if it goes to mouse/keyboard it probably wont have default input format, so interpretation will look "ugly"
+		{
+		case D_MOUSE: 
 		{
 			MouseInterpreter mouseInterpreter(rootItem, item, additionalDataModel, inputParser);
 			mouseInterpreter.Interpret();
 		}
-		break;
 		case D_KEYBOARD:
-			break;
+		{
+			KeyboardInterpreter keyboardInterpreter(rootItem, item, additionalDataModel, inputParser);
+			keyboardInterpreter.Interpret();
+		}
 		case D_JOYSTICK:
 			break;
 		case D_UNDEFINED:

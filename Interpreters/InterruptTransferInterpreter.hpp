@@ -2,7 +2,8 @@
 #define INTERRUPTTRANSFERMODEL_HPP
 
 #include "../Models/AdditionalDataModel.hpp"
-#include "../Interpreters/MouseInterpreter.hpp"
+#include "MouseInterpreter.hpp"
+#include "KeyboardInterpreter.hpp"
 
 class InterruptTransferInterpreter
 {

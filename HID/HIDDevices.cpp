@@ -271,6 +271,8 @@ void HIDDevices::CreateDevice(QByteArray packetData)
 	packet += sizeof(USB_CONFIGURATION_DESCRIPTOR);
 	unsigned int currentIndex = sizeof(USB_CONFIGURATION_DESCRIPTOR);
 	BYTE interfaceNum = 0;
+	UCHAR bInterfaceProtocol = 0;
+	bool isHID = false;
 
 	while (currentIndex != usbh->dataLength)
 	{
@@ -288,6 +290,8 @@ void HIDDevices::CreateDevice(QByteArray packetData)
 		{
 			PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR)packet;
 			interfaceNum = interfaceDescriptor->bInterfaceNumber;
+			bInterfaceProtocol = interfaceDescriptor->bInterfaceProtocol;
+			isHID = (interfaceDescriptor->bInterfaceClass == 0x03);
 			packet += sizeof(USB_INTERFACE_DESCRIPTOR);
 			currentIndex += sizeof(USB_INTERFACE_DESCRIPTOR);
 		}
@@ -297,6 +301,7 @@ void HIDDevices::CreateDevice(QByteArray packetData)
 			PUSB_ENDPOINT_DESCRIPTOR endpointDescriptor = (PUSB_ENDPOINT_DESCRIPTOR)packet;
 			if ((endpointDescriptor->bEndpointAddress & 0xF0) > 0) // IN endpoint
 			{
+				device.hidDescription.insert(std::make_pair(endpointDescriptor->bEndpointAddress & 0x0F, std::make_pair(isHID, bInterfaceProtocol)));
 				device.endpoints[interfaceNum].push_back(endpointDescriptor->bEndpointAddress & 0x0F);
 			}
 			packet += sizeof(USB_ENDPOINT_DESCRIPTOR);
