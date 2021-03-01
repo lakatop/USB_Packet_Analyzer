@@ -15,6 +15,7 @@ private:
 	void InterpretInterfaceDescriptor(const unsigned char* packet);
 	void InterpretEndpointDescriptor(const unsigned char* packet);
 	void InterpretHIDDescriptor(const unsigned char* packet);
+	void InterpretUnknownDescriptor(const unsigned char* packet);
 
 	TreeItem* rootItem;
 	QListWidgetItem* item;

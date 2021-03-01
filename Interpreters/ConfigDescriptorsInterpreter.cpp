@@ -54,6 +54,7 @@ void ConfigDescriptorsInterpreter::InterpretConfigDescriptors()
 		default:
 		{
 			currentIndex += (byte)(*packet); // first byte of packet is representing size of descriptor
+			InterpretUnknownDescriptor(packet);
 			packet += (byte)(*packet);
 		}
 		break;
@@ -230,4 +231,22 @@ void ConfigDescriptorsInterpreter::InterpretHIDDescriptor(const unsigned char* p
 		(std::string("bDescriptorType: ") + holder->GetDescriptorType(hidDescriptor.bReportType)).c_str(), hidDescriptor.bReportType}, hidDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
 	hidDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wDescriptorLength", hidDescriptor.wReportLength}, hidDescriptorChild));
+}
+
+void ConfigDescriptorsInterpreter::InterpretUnknownDescriptor(const unsigned char* packet)
+{
+	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"UNKNOWN_DESCRIPTOR", "", ""}, rootItem));
+	TreeItem* unknownDescriptorChild = rootItem->Child(rootItem->ChildCount() - 1);
+	BYTE descriptorSize = (*packet);
+
+	QString hexData;
+	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+	unknownDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bLength", descriptorSize}, unknownDescriptorChild));
+
+	BYTE descriptorType = (*packet);
+	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+	unknownDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bDescriptorType", descriptorType}, unknownDescriptorChild));
+
+	additionalDataModel->CharToHexConvert(&packet, descriptorSize - 1, hexData); // -1 for descriptorType
+	unknownDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "unspecified"}, unknownDescriptorChild));
 }

@@ -182,14 +182,15 @@ QString ItemManager::SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsig
 	itemName += std::to_string(listWidget->count()) + '\t';
 	if ((usbh->info & 0x01) == 1)
 	{
-		itemName += std::to_string(usbh->device);
+		itemName += std::to_string(usbh->device) + "." + std::to_string(usbh->endpoint & 0x0F);
 		itemName += "\t host";
 	}
 	else
 	{
 		itemName += "host\t";
-		itemName += std::to_string(usbh->device);
+		itemName += std::to_string(usbh->device) + '.' + std::to_string(usbh->endpoint & 0x0F);
 	}
+	itemName += '\t' + std::to_string(usbh->dataLength + usbh->headerLen);
 	itemName += '\t' + dataHolder->GetTransferType(usbh->transfer);
 	if (usbh->transfer == USBPCAP_TRANSFER_CONTROL && (usbh->info & 0x01) == 0) //control transfer, host->device, additional data = setup packet
 	{
@@ -202,6 +203,10 @@ QString ItemManager::SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsig
 				itemName += '\t' + dataHolder->GetDescriptorType(setupPacket->Value >> 8);
 			}
 		}
+	}
+	else if (usbh->transfer == USBPCAP_TRANSFER_IRP_INFO && usbh->function == 0x0002)
+	{
+		itemName += "\tURB_FUNCTION_ABORT_PIPE";
 	}
 
 	return QString(itemName.c_str());

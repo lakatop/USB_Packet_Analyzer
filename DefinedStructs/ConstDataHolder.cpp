@@ -55,6 +55,10 @@ std::string DataHolder::GetTransferType(BYTE transfer)
 		return std::string("INTERRUPT TRANSFER");
 	case USBPCAP_TRANSFER_ISOCHRONOUS:
 		return std::string("ISOCHRONOUS TRANSFER");
+	case USBPCAP_TRANSFER_IRP_INFO:
+		return std::string("IRP INFO");
+	case USBPCAP_TRANSFER_UNKNOWN:
+		return std::string("UNKNOWN TRANSFER");
 	default:
 		return std::to_string(transfer);
 		break;

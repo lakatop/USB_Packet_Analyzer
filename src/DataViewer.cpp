@@ -6,10 +6,27 @@ DataViewer::DataViewer(QListWidgetItem* item, HeaderDataType additionalDataType,
 	ui.setupUi(this);
 	InitTables(item, additionalDataType, dataHighlight);
 	InitTreeViews(item, additionalDataType);
+	InitLabels();
 }
 
 DataViewer::~DataViewer()
 {
+}
+
+void DataViewer::InitLabels()
+{
+	ui.additionalDataLabel->setText("Additional Transfer Data");
+	ui.additionalDataLabel->adjustSize();
+	ui.addressLabel->setText("Address");
+	ui.addressLabel->adjustSize();
+	ui.colorMapLabel->setText("Color Map");
+	ui.colorMapLabel->adjustSize();
+	ui.hexaLabel->setText("Hexadecimal values");
+	ui.hexaLabel->adjustSize();
+	ui.printableLabel->setText("Printable");
+	ui.printableLabel->adjustSize();
+	ui.usbhLabel->setText("USBPCAP Header");
+	ui.usbhLabel->adjustSize();
 }
 
 void DataViewer::InitTables(QListWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight)
@@ -36,12 +53,14 @@ void DataViewer::InitTreeViews(QListWidgetItem* item, HeaderDataType additionalD
 
 	usbhModel = std::make_unique<USBPcapHeaderModel>(item, this);
 	ui.usbHeaderTreeView->setModel(usbhModel.get());
-	ui.usbHeaderTreeView->resizeColumnToContents(0);
 	ui.usbHeaderTreeView->resizeColumnToContents(1);
+	int columnWidth = ((ui.usbHeaderTreeView->width() - ui.usbHeaderTreeView->columnWidth(1)) / 2) - 1;
+	ui.usbHeaderTreeView->setColumnWidth(0, columnWidth + 50);
+	ui.usbHeaderTreeView->setColumnWidth(2, columnWidth - 50);
 
 	additionalDataModel = std::make_unique<AdditionalDataModel>(item, additionalDataType, this);
 	ui.additionalDataTreeView->setModel(additionalDataModel.get());
-	int columnWidth = ((ui.additionalDataTreeView->width() - 100) / 2) - 1;
+	columnWidth = ((ui.additionalDataTreeView->width() - 100) / 2) - 1;
 	ui.additionalDataTreeView->setColumnWidth(0, columnWidth);
 	ui.additionalDataTreeView->setColumnWidth(1, columnWidth);
 	ui.additionalDataTreeView->setColumnWidth(2, 100);

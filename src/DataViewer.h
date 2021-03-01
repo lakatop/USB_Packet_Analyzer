@@ -24,6 +24,7 @@ private:
 	void InitTables(QListWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight);
 	void InitTreeViews(QListWidgetItem* item, HeaderDataType additionalDataType);
 	void InitTableViewer(QTableView* table, bool hexViewTable);
+	void InitLabels();
 	void AdjustTableSize(QTableView* table, bool hexViewTable);
 
 	Ui::DataViewer ui;
