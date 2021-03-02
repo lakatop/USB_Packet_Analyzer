@@ -7,6 +7,8 @@ A simple C++ application for analyzing packets on USB bus.
 * [Setup](#setup)
 * [Features](#features)
 * [Illustrations](#illustrations)
+* [Project status](#project status)
+* [Sources](#sources)
 
 ## Introduction
 App is used for analyzing and visualizing packets on USB bus. Program itself does not capture packets, but uses third-party application [USBPCAP](https://desowin.org/usbpcap/)
@@ -42,3 +44,11 @@ Closer look on separate packet: ![ConcretePacket](./Images/FullConfigDesc.PNG)
 For easier navigation in hexdump, introducing colormap: ![ColorMap](./Images/ColorMapPNG.PNG)
 
 Concrete example of semantic analysis of mouse interrupt transfer data sent to the host: ![MouseExample](./Images/MouseView.PNG)
+
+## Project status
+Project is currently still under development.
+
+## Sources
+Microsoft Corporation: Windows Driver Kit (WDK) on MSDN: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/_usbref/
+USB HID Usage Tables 1.21: https://www.usb.org/document-library/hid-usage-tables-121
+USB Device Class Definition for HID 1.11: https://www.usb.org/document-library/device-class-definition-hid-111
