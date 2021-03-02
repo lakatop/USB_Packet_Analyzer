@@ -2,13 +2,14 @@
 A simple C++ application for analyzing packets on USB bus.
 
 ## Table of contents
-* [Introduction](#introduction)
-* [Technologies](#technologies)
-* [Setup](#setup)
-* [Features](#features)
-* [Illustrations](#illustrations)
-* [Project status](#project status)
-* [Sources](#sources)
+  * [Introduction](#introduction)
+  * [Technologies](#technologies)
+  * [Setup](#setup)
+  * [Features](#features)
+    + [To Do:](#to-do)
+  * [Ilustrations](#ilustrations)
+  * [Project status](#project-status)
+  * [Sources](#sources)
 
 ## Introduction
 App is used for analyzing and visualizing packets on USB bus. Program itself does not capture packets, but uses third-party application [USBPCAP](https://desowin.org/usbpcap/)
