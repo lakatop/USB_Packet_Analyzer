@@ -13,6 +13,7 @@ public:
 	bool ReadFileHeader();
 	bool EndOfFile();
 	bool OpenNewFile(QString filename);
+	qint64 FileSize();
 private:
 	pcap_hdr_t gheader;
 	QFile file;

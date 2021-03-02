@@ -37,6 +37,7 @@ void USB_Packet_Analyzer::on_OpenButton_clicked()
     currentFile = QFileDialog::getOpenFileName(this, "Select source file", ".", "Pcap files (*.pcap)");
     QString fileName = QDir(currentFile).dirName();
     ui.openFileLabel->setText("Selected file: " + fileName);
+    ui.progressBar->setValue(0);
 }
 
 void USB_Packet_Analyzer::on_StartButton_clicked()
@@ -47,6 +48,7 @@ void USB_Packet_Analyzer::on_StartButton_clicked()
 void USB_Packet_Analyzer::on_ClearButton_clicked()
 {
     ui.listWidget->clear();
+    ui.progressBar->setValue(0);
 }
 
 void USB_Packet_Analyzer::on_StopButton_clicked()
@@ -66,6 +68,11 @@ void USB_Packet_Analyzer::on_PauseButton_clicked()
         ui.PauseButton->setText("Pause");
         this->itemManager->pauseButtonClicked = false;
     }
+}
+
+QProgressBar* USB_Packet_Analyzer::GetProgressBar()
+{
+    return ui.progressBar;
 }
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)

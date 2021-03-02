@@ -3,6 +3,7 @@
 
 #include "../FilesHandler/FileReader.hpp"
 #include <qlistwidget.h>
+#include <qprogressbar.h>
 
 #include "USB_Packet_Analyzer.h"
 #include "../DefinedStructs/ConstDataHolder.hpp"

@@ -39,10 +39,20 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 		{
 			while (!stopButtonClicked)
 			{
+				qint64 value = sizeof(pcap_hdr_t); //global file header size
+				if (!liveReading)
+				{
+					parent->GetProgressBar()->setRange(0, fileReader.FileSize());
+				}
 				while (!fileReader.EndOfFile())
 				{
 					atBottomOfList = false;
 					QByteArray packetData = fileReader.GetPacket();
+					if (!liveReading)
+					{
+						value += packetData.size() + sizeof(pcaprec_hdr_t); //size of packet + pcap packet header
+						parent->GetProgressBar()->setValue(value);
+					}
 					if (!pauseButtonClicked)
 					{
 						ProcessPacket(packetData);

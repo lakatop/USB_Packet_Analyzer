@@ -15,6 +15,7 @@ class USB_Packet_Analyzer : public QWidget
 public:
     USB_Packet_Analyzer(QWidget *parent = Q_NULLPTR);
     void Refresh();
+    QProgressBar* GetProgressBar();
 
 private:
     Ui::USB_Packet_AnalyzerClass ui;

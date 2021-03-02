@@ -71,3 +71,8 @@ bool FileReader::OpenNewFile(QString filename)
 	file.setFileName(filename);
 	return file.open(QIODevice::ReadOnly);
 }
+
+qint64 FileReader::FileSize()
+{
+	return file.size();
+}
