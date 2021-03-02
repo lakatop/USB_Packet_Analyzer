@@ -43,6 +43,9 @@ void DataViewer::InitTables(QListWidgetItem* item, HeaderDataType additionalData
 
 	InitTableViewer(ui.byteTableView, false);
 	InitTableViewer(ui.hexTableView, true);
+
+	connect(ui.byteTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &DataViewer::updateHexSelection);
+	connect(ui.hexTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &DataViewer::updateByteSelection);
 }
 
 void DataViewer::InitTreeViews(QListWidgetItem* item, HeaderDataType additionalDataType)
@@ -111,4 +114,18 @@ void DataViewer::AdjustTableSize(QTableView* table, bool hexViewTable)
 
 	table->setMaximumHeight(maxHeight + 2);
 	table->setMaximumWidth(maxWidth + 3);
+}
+
+void DataViewer::updateHexSelection(const QItemSelection& selected, const QItemSelection& deselected)
+{
+	auto hexSelectionModel = ui.hexTableView->selectionModel();
+	hexSelectionModel->select(selected, QItemSelectionModel::Select);
+	hexSelectionModel->select(deselected, QItemSelectionModel::Deselect);
+}
+
+void DataViewer::updateByteSelection(const QItemSelection& selected, const QItemSelection& deselected)
+{
+	auto byteSelectionModel = ui.byteTableView->selectionModel();
+	byteSelectionModel->select(selected, QItemSelectionModel::Select);
+	byteSelectionModel->select(deselected, QItemSelectionModel::Deselect);
 }

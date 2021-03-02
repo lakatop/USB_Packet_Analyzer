@@ -25,11 +25,19 @@ void DataViewerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& op
 	{
 		QStyledItemDelegate::paint(painter, option, index);
 		list = data.toList();
+		if (option.state & QStyle::State_Selected)
+		{
+			painter->fillRect(option.rect, option.palette.highlight());
+		}
 		painter->drawText(option.rect, Qt::AlignCenter | Qt::AlignVCenter, list[0].toString());
 	}
 	else
 	{
 		QStyledItemDelegate::paint(painter, option, index);
+		if (option.state & QStyle::State_Selected)
+		{
+			painter->fillRect(option.rect, option.palette.highlight());
+		}
 	}
 	uint penWidth = 3;
 	QRect rect = option.rect;

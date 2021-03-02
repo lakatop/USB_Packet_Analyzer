@@ -34,4 +34,8 @@ private:
 	std::unique_ptr<ColorMapModel> colorMapModel;
 	std::unique_ptr<USBPcapHeaderModel> usbhModel;
 	std::unique_ptr<AdditionalDataModel> additionalDataModel;
+
+private slots:
+	void updateHexSelection(const QItemSelection& selected, const QItemSelection& deselected);
+	void updateByteSelection(const QItemSelection& selected, const QItemSelection& deselected);
 };
