@@ -50,5 +50,7 @@ Project is currently still under development.
 
 ## Sources
 Microsoft Corporation: Windows Driver Kit (WDK) on MSDN: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/_usbref/
+
 USB HID Usage Tables 1.21: https://www.usb.org/document-library/hid-usage-tables-121
+
 USB Device Class Definition for HID 1.11: https://www.usb.org/document-library/device-class-definition-hid-111
