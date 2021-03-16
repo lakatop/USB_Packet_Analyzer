@@ -3,19 +3,19 @@
 
 #include "TreeItemBaseModel.h"
 #include "../DefinedStructs/ConstDataHolder.hpp"
-#include <qlistwidget.h>
+#include <qtablewidget.h>
 
 class USBPcapHeaderModel : public TreeItemBaseModel
 {
 public:
-	USBPcapHeaderModel(QListWidgetItem* item, QObject* parent = nullptr);
+	USBPcapHeaderModel(QTableWidgetItem* item, QObject* parent = nullptr);
 	QVariant data(const QModelIndex& index, int role) const override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 private:
 	void SetupModelData();
 
 	DataHolder* holder;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 };
 
 #endif

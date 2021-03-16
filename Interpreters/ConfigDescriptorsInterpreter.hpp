@@ -7,7 +7,7 @@
 class ConfigDescriptorsInterpreter
 {
 public:
-	ConfigDescriptorsInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	ConfigDescriptorsInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 
 	void InterpretConfigDescriptors();
 private:
@@ -18,7 +18,7 @@ private:
 	void InterpretUnknownDescriptor(const unsigned char* packet);
 
 	TreeItem* rootItem;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 	AdditionalDataModel* additionalDataModel;
 	DataHolder* holder;
 	HIDDevices* hidDevices;

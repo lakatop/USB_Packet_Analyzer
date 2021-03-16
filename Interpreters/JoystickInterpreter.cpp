@@ -1,6 +1,6 @@
 #include "JoystickInterpreter.hpp"
 
-JoystickInterpreter::JoystickInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+JoystickInterpreter::JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 	HIDReportDescriptorInputParse inputParser)
 {
 	this->rootItem = rootItem;

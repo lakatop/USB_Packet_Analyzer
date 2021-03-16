@@ -1,6 +1,6 @@
 #include "DataViewerModel.h"
 
-DataViewerModel::DataViewerModel(QListWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent)
+DataViewerModel::DataViewerModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent)
 	: QAbstractTableModel(parent)
 {
 	this->hexView = hexView;

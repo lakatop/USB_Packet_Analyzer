@@ -1,6 +1,6 @@
 #include "ReportDescriptorInterpreter.hpp"
 
-ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->additionalDataModel = additionalDataModel;

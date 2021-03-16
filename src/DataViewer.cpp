@@ -1,6 +1,6 @@
 #include "DataViewer.h"
 
-DataViewer::DataViewer(QListWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight, QWidget *parent)
+DataViewer::DataViewer(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight, QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -29,7 +29,7 @@ void DataViewer::InitLabels()
 	ui.usbhLabel->adjustSize();
 }
 
-void DataViewer::InitTables(QListWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight)
+void DataViewer::InitTables(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight)
 {
 	byteTableModel = std::make_unique<DataViewerModel>(item, false, additionalDataType, this);
 	hexTableModel = std::make_unique<DataViewerModel>(item, true, additionalDataType, this);
@@ -48,7 +48,7 @@ void DataViewer::InitTables(QListWidgetItem* item, HeaderDataType additionalData
 	connect(ui.hexTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &DataViewer::updateByteSelection);
 }
 
-void DataViewer::InitTreeViews(QListWidgetItem* item, HeaderDataType additionalDataType)
+void DataViewer::InitTreeViews(QTableWidgetItem* item, HeaderDataType additionalDataType)
 {
 	colorMapModel = std::make_unique<ColorMapModel>(this);
 	ui.colorMapTreeView->setModel(colorMapModel.get());

@@ -1,6 +1,6 @@
 #include "InterruptTransferInterpreter.hpp"
 
-InterruptTransferInterpreter::InterruptTransferInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+InterruptTransferInterpreter::InterruptTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->item = item;

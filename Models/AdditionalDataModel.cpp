@@ -1,6 +1,6 @@
 #include "AdditionalDataModel.hpp"
 
-AdditionalDataModel::AdditionalDataModel(QListWidgetItem* item, HeaderDataType dataType, QObject* parent) : 
+AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, HeaderDataType dataType, QObject* parent) :
 	TreeItemBaseModel(parent)
 {
 	this->item = item;

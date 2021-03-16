@@ -1,6 +1,6 @@
 #include "ConfigDescriptorsInterpreter.hpp"
 
-ConfigDescriptorsInterpreter::ConfigDescriptorsInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+ConfigDescriptorsInterpreter::ConfigDescriptorsInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->holder = DataHolder::GetDataHolder();

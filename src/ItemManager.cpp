@@ -2,33 +2,27 @@
 
 ItemManager* ItemManager::itemManager = nullptr;
 
-ItemManager* ItemManager::GetItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent)
+ItemManager* ItemManager::GetItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 {
 	if (itemManager == nullptr)
 	{
-		itemManager = new ItemManager(listWidget, parent);
+		itemManager = new ItemManager(tableWidget, parent);
 	}
 
 	return itemManager;
 }
 
-ItemManager::ItemManager(QListWidget* listWidget, USB_Packet_Analyzer* parent)
+ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 {
 	this->stopButtonClicked = false;
 	this->pauseButtonClicked = false;
 	this->atBottomOfList = false;
 	this->representingHIDDescriptor = false;
 	this->representingConfigurationDescriptor = false;
-	this->listWidget = listWidget;
 	this->parent = parent;
+	this->tableWidget = tableWidget;
 	this->dataHolder = DataHolder::GetDataHolder();
 	this->hidDevices = HIDDevices::GetHIDDevices();
-}
-
-void ItemManager::AppendItem()
-{
-	QListWidgetItem* item = new QListWidgetItem;
-	listWidget->insertItem(listWidget->count(), item);
 }
 
 void ItemManager::ProcessFile(QString filename, bool liveReading)
@@ -55,6 +49,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 					}
 					if (!pauseButtonClicked)
 					{
+						tableWidget->setRowCount(tableWidget->rowCount() + 1);
 						ProcessPacket(packetData);
 					}
 				}
@@ -63,7 +58,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 
 				if (!atBottomOfList)
 				{
-					listWidget->scrollToBottom();
+					tableWidget->scrollToBottom();
 				}
 
 				atBottomOfList = true;
@@ -108,9 +103,10 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 
 	if (representingHIDDescriptor)
 	{
-		QListWidgetItem* previousItem = listWidget->item(listWidget->count() - 1);
+		auto a = tableWidget->rowCount();
+		QTableWidgetItem* previousItem = tableWidget->item(tableWidget->rowCount() - 2, 0);
 		QByteArray previousLeftoverData = previousItem->data(dataHolder->TRANSFER_LEFTOVER_DATA).toByteArray();
-		unsigned char* previousPacket = (unsigned char*)previousLeftoverData.data();
+		const unsigned char* previousPacket = (unsigned char*)previousLeftoverData.constData();
 		PWINUSB_SETUP_PACKET setupPacket = (PWINUSB_SETUP_PACKET)previousPacket;
 
 		hidDevices->ParseHIDDescriptor(packetData, setupPacket->Index);
@@ -127,12 +123,12 @@ void ItemManager::FillUpItem(QByteArray packetData)
 	const unsigned char* packet = (unsigned char*)packetData.data();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;
 
-	QString itemName = SetItemName(usbh, packet);
-	QListWidgetItem* item = new QListWidgetItem(itemName);
+	InsertRow(usbh, packet);
+	QTableWidgetItem* tableItem = tableWidget->item(tableWidget->rowCount() - 1, 0);
 
 	//set USBPCAP header to item
 	QByteArray usbhArray((const char*)packet, sizeof(USBPCAP_BUFFER_PACKET_HEADER));
-	item->setData(dataHolder->USBPCAP_HEADER_DATA, QVariant(usbhArray));
+	tableItem->setData(dataHolder->USBPCAP_HEADER_DATA, QVariant(usbhArray));
 	packet += sizeof(USBPCAP_BUFFER_PACKET_HEADER);
 
 	if (usbh->transfer == USBPCAP_TRANSFER_ISOCHRONOUS || usbh->transfer == USBPCAP_TRANSFER_CONTROL) //check for optional header data
@@ -142,24 +138,22 @@ void ItemManager::FillUpItem(QByteArray packetData)
 		{
 			//set additional header data to item
 			QByteArray additionalDataArray((const char*)(packet), additionalDataSize);
-			item->setData(dataHolder->TRANSFER_OPTIONAL_HEADER, QVariant(additionalDataArray));
+			tableItem->setData(dataHolder->TRANSFER_OPTIONAL_HEADER, QVariant(additionalDataArray));
 			packet += additionalDataSize;
 		}
 		else
 		{
-			item->setData(dataHolder->TRANSFER_OPTIONAL_HEADER, QVariant()); //QVariant creates invalid QVariant, later i just need to check with QVariant::isValid()
+			tableItem->setData(dataHolder->TRANSFER_OPTIONAL_HEADER, QVariant());
 		}
 	}
 	else
 	{
-		item->setData(dataHolder->TRANSFER_OPTIONAL_HEADER, QVariant());
+		tableItem->setData(dataHolder->TRANSFER_OPTIONAL_HEADER, QVariant());
 	}
 
 	//set leftover data to item
 	QByteArray leftoverDataArray((const char*)packet, usbh->dataLength);
-	item->setData(dataHolder->TRANSFER_LEFTOVER_DATA, QVariant(leftoverDataArray));
-
-	listWidget->insertItem(listWidget->count(), item);
+	tableItem->setData(dataHolder->TRANSFER_LEFTOVER_DATA, QVariant(leftoverDataArray));
 }
 
 void ItemManager::CheckForSetupPacket(QByteArray packetData)
@@ -186,22 +180,30 @@ void ItemManager::CheckForSetupPacket(QByteArray packetData)
 	}
 }
 
-QString ItemManager::SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet)
+void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet)
 {
-	std::string itemName;
-	itemName += std::to_string(listWidget->count()) + '\t';
+	std::string name;
+	int column = 0;
+	name = std::to_string(tableWidget->rowCount() - 1);
+	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 	if ((usbh->info & 0x01) == 1)
 	{
-		itemName += std::to_string(usbh->device) + "." + std::to_string(usbh->endpoint & 0x0F);
-		itemName += "\t host";
+		name = std::to_string(usbh->device) + "." + std::to_string(usbh->endpoint & 0x0F);
+		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+		name = "host";
+		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 	}
 	else
 	{
-		itemName += "host\t";
-		itemName += std::to_string(usbh->device) + '.' + std::to_string(usbh->endpoint & 0x0F);
+		name = "host";
+		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+		name = std::to_string(usbh->device) + '.' + std::to_string(usbh->endpoint & 0x0F);
+		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 	}
-	itemName += '\t' + std::to_string(usbh->dataLength + usbh->headerLen);
-	itemName += '\t' + dataHolder->GetTransferType(usbh->transfer);
+	name = std::to_string(usbh->dataLength + usbh->headerLen);
+	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+	name = dataHolder->GetTransferType(usbh->transfer);
+	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 	if (usbh->transfer == USBPCAP_TRANSFER_CONTROL && (usbh->info & 0x01) == 0) //control transfer, host->device, additional data = setup packet
 	{
 		if (usbh->dataLength == sizeof(WINUSB_SETUP_PACKET))
@@ -210,19 +212,27 @@ QString ItemManager::SetItemName(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsig
 			PWINUSB_SETUP_PACKET setupPacket = (PWINUSB_SETUP_PACKET)packet;
 			if (setupPacket->Request == GET_DESCRIPTOR)
 			{
-				itemName += '\t' + dataHolder->GetDescriptorType(setupPacket->Value >> 8);
+				name = dataHolder->GetDescriptorType(setupPacket->Value >> 8);
+				tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+			}
+			else
+			{
+				tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem());
 			}
 		}
 	}
 	else if (usbh->transfer == USBPCAP_TRANSFER_IRP_INFO && usbh->function == 0x0002)
 	{
-		itemName += "\tURB_FUNCTION_ABORT_PIPE";
+		name = "URB_FUNCTION_ABORT_PIPE";
+		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 	}
-
-	return QString(itemName.c_str());
+	else
+	{
+		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem());
+	}
 }
 
-HeaderDataType ItemManager::GetDataType(QListWidgetItem* currentItem, QListWidgetItem* previousItem)
+HeaderDataType ItemManager::GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem)
 {
 	QByteArray usbhArr = currentItem->data(dataHolder->USBPCAP_HEADER_DATA).toByteArray();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)usbhArr.constData();

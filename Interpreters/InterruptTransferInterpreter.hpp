@@ -10,13 +10,13 @@
 class InterruptTransferInterpreter
 {
 public:
-	InterruptTransferInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	InterruptTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void InterpretInterruptTransfer();
 private:
 	HIDReportDescriptorInputParse GetInputParser(int index);
 
 	TreeItem* rootItem;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 	AdditionalDataModel* additionalDataModel;
 	HIDDevices* hidDevices;
 	DataHolder* holder;

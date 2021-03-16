@@ -8,12 +8,12 @@
 class MouseInterpreter
 {
 public:
-	MouseInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+	MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 		HIDReportDescriptorInputParse inputParser);
 	void Interpret();
 private:
 	TreeItem* rootItem;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 	AdditionalDataModel* additionalDataModel;
 	HIDReportDescriptorInputParse inputParser;
 	HIDDevices* hidDevices;

@@ -1,6 +1,6 @@
 #include "KeyboardInterpreter.hpp"
 
-KeyboardInterpreter::KeyboardInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+KeyboardInterpreter::KeyboardInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 	HIDReportDescriptorInputParse inputParser)
 {
 	this->rootItem = rootItem;

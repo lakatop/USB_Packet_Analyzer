@@ -38,7 +38,7 @@ To run this project, you will need to download `Qt` version 5.15.0 or higher and
 ## Ilustrations
 Basic look of application at start: ![Basic](./Images/BasicLook.PNG)
 
-The view of packets after file selection: ![Packets](./Images/ListViewLook.PNG)
+The view of packets after file selection: ![Packets](./Images/TableViewLook.PNG)
 
 Closer look on separate packet: ![ConcretePacket](./Images/FullConfigDesc.PNG)
 

@@ -1,6 +1,6 @@
 #include "MouseInterpreter.hpp"
 
-MouseInterpreter::MouseInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+MouseInterpreter::MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
     HIDReportDescriptorInputParse inputParser)
 {
 	this->rootItem = rootItem;
@@ -47,12 +47,12 @@ void MouseInterpreter::Interpret()
                     {
                         if ((buttonCounter + 1) % 8 == 0) //if true, then this is last bit of 1B button sector, let packet go +1
                         {
-                            buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(j % 8, 1, buttonValue), std::string("Button " + std::to_string(buttonCounter)).c_str(), buttonValue}, buttonsChild));
+                            buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(7 - j % 8, 1, buttonValue), std::string("Button " + std::to_string(buttonCounter)).c_str(), buttonValue}, buttonsChild));
                             packet += 1;
                         }
                         else   //else dont move packet
                         {
-                            buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(j % 8, 1, buttonValue), std::string("Button " + std::to_string(buttonCounter)).c_str(), buttonValue}, buttonsChild));
+                            buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(7 - j % 8, 1, buttonValue), std::string("Button " + std::to_string(buttonCounter)).c_str(), buttonValue}, buttonsChild));
                         }
                         buttonCounter++;
                     }
@@ -64,7 +64,7 @@ void MouseInterpreter::Interpret()
                     if (size == 0)  //padding is usually shorted than 1B, but i still need to move to the next byte
                     {
                         buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{
-                            additionalDataModel->ShowBits(buttonCounter % 8, 8 - (std::size_t)(buttonCounter % 8), *packet), std::string("Button padding").c_str(), buttonValue}, buttonsChild));
+                            additionalDataModel->ShowBits(0, 8 - (std::size_t)(buttonCounter % 8), *packet), std::string("Button padding").c_str(), buttonValue}, buttonsChild));
                         packet += 1;
                     }
                     else

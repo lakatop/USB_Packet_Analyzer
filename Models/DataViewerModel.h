@@ -5,7 +5,7 @@
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include "../HID/HIDDevices.hpp"
 
-#include <qlistwidget.h>
+#include <qtablewidget.h>
 #include <sstream>
 #include <iomanip>
 
@@ -14,7 +14,7 @@ class DataViewerModel : public QAbstractTableModel
 	Q_OBJECT
 
 public:
-	DataViewerModel(QListWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent = nullptr);
+	DataViewerModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent = nullptr);
 	~DataViewerModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -29,5 +29,5 @@ private:
 	HeaderDataType additionaldataType;
 	DataHolder* holder;
 	HIDDevices* hidDevices;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 };

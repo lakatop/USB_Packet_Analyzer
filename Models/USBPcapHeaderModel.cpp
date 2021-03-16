@@ -1,6 +1,6 @@
 #include "USBPcapHeaderModel.hpp"
 
-USBPcapHeaderModel::USBPcapHeaderModel(QListWidgetItem* item, QObject* parent) : TreeItemBaseModel(parent)
+USBPcapHeaderModel::USBPcapHeaderModel(QTableWidgetItem* item, QObject* parent) : TreeItemBaseModel(parent)
 {
     this->item = item;
     this->holder = DataHolder::GetDataHolder();

@@ -1,6 +1,7 @@
 #include "USB_Packet_Analyzer.h"
 #include "../stdafx.h"
 
+
 USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
     : QWidget(parent)
 {
@@ -10,7 +11,7 @@ USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
 
 void USB_Packet_Analyzer::Init()
 {
-    this->itemManager = ItemManager::GetItemManager(ui.listWidget, this);
+    this->itemManager = ItemManager::GetItemManager(ui.tableWidget, this);
 
     ui.OpenButton->setText("Open");
     ui.StartButton->setText("Start");
@@ -25,6 +26,14 @@ void USB_Packet_Analyzer::Init()
     ui.dataHighlightCheckBox->setChecked(true);
 
     ui.openFileLabel->setText("");
+
+    QStringList headerList{ "Index", "Source", "Destination", "Length", "Transfer type", "Function" };
+    ui.tableWidget->setColumnCount(headerList.size());
+    ui.tableWidget->setHorizontalHeaderLabels(headerList);
+    ui.tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.tableWidget->verticalHeader()->setVisible(false);
+    ui.tableWidget->setShowGrid(false);
+    connect(ui.tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(on_tableWidget_itemDoubleclicked(QTableWidgetItem*)));
 }
 
 void USB_Packet_Analyzer::Refresh()
@@ -43,11 +52,13 @@ void USB_Packet_Analyzer::on_OpenButton_clicked()
 void USB_Packet_Analyzer::on_StartButton_clicked()
 {
     this->itemManager->ProcessFile(currentFile, ui.liveCaptureRadioButton->isChecked());
+    ui.tableWidget->resizeColumnsToContents();
 }
 
 void USB_Packet_Analyzer::on_ClearButton_clicked()
 {
-    ui.listWidget->clear();
+    ui.tableWidget->clearContents();
+    ui.tableWidget->setRowCount(0);
     ui.progressBar->setValue(0);
 }
 
@@ -77,14 +88,30 @@ QProgressBar* USB_Packet_Analyzer::GetProgressBar()
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
 {
-    int currentRow = ui.listWidget->row(item);
-    QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
+    //int currentRow = ui.listWidget->row(item);
+    //QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
+    //if (!dataViewer.isNull())
+    //{
+    //    dataViewer->deleteLater();
+    //}
+    ////using nullptr as parent because otherwise it wont show in task bar
+    //dataViewer = QPointer(new DataViewer(item, this->itemManager->GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked()));
+    //dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
+    //connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
+    //dataViewer->show();
+}
+
+void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* item)
+{
+    int currentRow = ui.tableWidget->row(item);
+    QTableWidgetItem* previousItem = ui.tableWidget->item(currentRow - 1, 0);
     if (!dataViewer.isNull())
     {
         dataViewer->deleteLater();
     }
+    QTableWidgetItem* dataItem = ui.tableWidget->item(currentRow, 0);
     //using nullptr as parent because otherwise it wont show in task bar
-    dataViewer = QPointer(new DataViewer(item, this->itemManager->GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked()));
+    dataViewer = QPointer(new DataViewer(dataItem, this->itemManager->GetDataType(dataItem, previousItem), ui.dataHighlightCheckBox->isChecked()));
     dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
     connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
     dataViewer->show();

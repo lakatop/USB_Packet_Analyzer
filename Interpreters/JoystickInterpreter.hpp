@@ -8,12 +8,12 @@
 class JoystickInterpreter
 {
 public:
-	JoystickInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+	JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 		HIDReportDescriptorInputParse inputParser);
 	void Interpret();
 private:
 	TreeItem* rootItem;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 	AdditionalDataModel* additionalDataModel;
 	HIDReportDescriptorInputParse inputParser;
 	HIDDevices* hidDevices;

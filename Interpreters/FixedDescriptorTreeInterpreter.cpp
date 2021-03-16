@@ -1,6 +1,6 @@
 #include "FixedDescriptorTreeInterpreter.hpp"
 
-FixedDescriptorTreeInterpreter::FixedDescriptorTreeInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel)
+FixedDescriptorTreeInterpreter::FixedDescriptorTreeInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 {
 	this->rootItem = rootItem;
 	this->item = item;

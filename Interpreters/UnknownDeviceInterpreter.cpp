@@ -1,6 +1,6 @@
 #include "UnknownDeviceInterpreter.hpp"
 
-UnknownDeviceInterpreter::UnknownDeviceInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel,
+UnknownDeviceInterpreter::UnknownDeviceInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 	HIDReportDescriptorInputParse inputParser)
 {
 	this->rootItem = rootItem;

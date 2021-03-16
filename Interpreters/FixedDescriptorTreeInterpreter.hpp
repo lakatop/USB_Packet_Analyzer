@@ -2,7 +2,7 @@
 #define FIXEDDESCRIPTORTREEINTERPRETER_HPP
 
 #include "../Models/AdditionalDataModel.hpp"
-#include <qlistwidget.h>
+#include <qtablewidget.h>
 #include <winusb.h>
 
 class AdditionalDataModel; //forward declaration
@@ -10,7 +10,7 @@ class AdditionalDataModel; //forward declaration
 class FixedDescriptorTreeInterpreter
 {
 public:
-	FixedDescriptorTreeInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	FixedDescriptorTreeInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void InterpretControlTransferUnspecifiedDescriptor();
 	void InterpretControlTransferSetup();
 	template <typename T>
@@ -24,7 +24,7 @@ private:
 	void AppendSetupwLength(const unsigned char** it, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
 
 	TreeItem* rootItem;
-	QListWidgetItem* item;
+	QTableWidgetItem* item;
 	AdditionalDataModel* additionalDataModel;
 	DataHolder* holder;
 };

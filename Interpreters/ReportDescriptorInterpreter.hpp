@@ -3,14 +3,14 @@
 
 #include "../DefinedStructs/PacketExternStructs.hpp"
 #include "../Models/AdditionalDataModel.hpp"
-#include <qlistwidget.h>
+#include <qtablewidget.h>
 
 class AdditionalDataModel; //forward declaration
 
 class ReportDescriptorInterpreter
 {
 public:
-	ReportDescriptorInterpreter(TreeItem* rootItem, QListWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	ReportDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void InterpretReportDescriptor();
 private:
 	std::size_t ParseReportDescriptor(ReportDescTreeStruct* root, std::size_t parsed);
