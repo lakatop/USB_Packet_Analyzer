@@ -1,25 +1,22 @@
 #ifndef INTERRUPTTRANSFERMODEL_HPP
 #define INTERRUPTTRANSFERMODEL_HPP
 
-#include "../Models/AdditionalDataModel.hpp"
 #include "MouseInterpreter.hpp"
 #include "KeyboardInterpreter.hpp"
 #include "JoystickInterpreter.hpp"
 #include "UnknownDeviceInterpreter.hpp"
+#include "BaseInterpreter.hpp"
 
-class InterruptTransferInterpreter
+class InterruptTransferInterpreter : public BaseInterpreter
 {
 public:
 	InterruptTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
-	void InterpretInterruptTransfer();
+	void Interpret() override;
 private:
 	HIDReportDescriptorInputParse GetInputParser(int index);
 
-	TreeItem* rootItem;
-	QTableWidgetItem* item;
-	AdditionalDataModel* additionalDataModel;
-	HIDDevices* hidDevices;
 	DataHolder* holder;
+	HIDDevices* hidDevices;
 };
 
 #endif // !INTERRUPTTRANSFERMODEL_HPP

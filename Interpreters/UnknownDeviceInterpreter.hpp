@@ -1,20 +1,18 @@
 #ifndef UNKNOWNDEVICEINTERPRETER_HPP
 #define UNKNOWNDEVICEINTERPRETER_HPP
 
-#include "../Models/AdditionalDataModel.hpp"
+#include "BaseInterpreter.hpp"
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include "../HID/HIDDevices.hpp"
 
-class UnknownDeviceInterpreter
+
+class UnknownDeviceInterpreter : public BaseInterpreter
 {
 public:
 	UnknownDeviceInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 		HIDReportDescriptorInputParse inputParser);
-	void Interpret();
+	void Interpret() override;
 private:
-	TreeItem* rootItem;
-	QTableWidgetItem* item;
-	AdditionalDataModel* additionalDataModel;
 	HIDReportDescriptorInputParse inputParser;
 	HIDDevices* hidDevices;
 	DataHolder* holder;

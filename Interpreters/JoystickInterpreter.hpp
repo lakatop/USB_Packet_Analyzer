@@ -1,23 +1,20 @@
 #ifndef JOYSTICKINTERPRETER_HPP
 #define JOYSTICKINTERPRETER_HPP
 
-#include "../Models/AdditionalDataModel.hpp"
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include "../HID/HIDDevices.hpp"
+#include "BaseInterpreter.hpp"
 
-class JoystickInterpreter
+class JoystickInterpreter : public BaseInterpreter
 {
 public:
 	JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 		HIDReportDescriptorInputParse inputParser);
-	void Interpret();
+	void Interpret() override;
 private:
-	TreeItem* rootItem;
-	QTableWidgetItem* item;
-	AdditionalDataModel* additionalDataModel;
 	HIDReportDescriptorInputParse inputParser;
-	HIDDevices* hidDevices;
 	DataHolder* holder;
+	HIDDevices* hidDevices;
 };
 
 #endif // !JOYSTICKINTERPRETER_HPP

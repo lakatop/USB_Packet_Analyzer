@@ -2,13 +2,11 @@
 
 JoystickInterpreter::JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 	HIDReportDescriptorInputParse inputParser)
+    :BaseInterpreter(rootItem,item,additionalDataModel)
 {
-	this->rootItem = rootItem;
-	this->item = item;
 	this->inputParser = inputParser;
-	this->additionalDataModel = additionalDataModel;
-	this->hidDevices = HIDDevices::GetHIDDevices();
-	this->holder = DataHolder::GetDataHolder();
+    this->holder = DataHolder::GetDataHolder();
+    this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
 void JoystickInterpreter::Interpret()

@@ -1,24 +1,11 @@
-#include "FixedDescriptorTreeInterpreter.hpp"
+#include "SetupPacketInterpreter.hpp"
 
-FixedDescriptorTreeInterpreter::FixedDescriptorTreeInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
-{
-	this->rootItem = rootItem;
-	this->holder = DataHolder::GetDataHolder();
-	this->item = item;
-	this->additionalDataModel = additionalDataModel;
-}
-
-
-void FixedDescriptorTreeInterpreter::Interpret()
-{
-
-}
-
-void FixedDescriptorTreeInterpreter::InterpretControlTransferUnspecifiedDescriptor()
+SetupPacketInterpreter::SetupPacketInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
+	:BaseInterpreter(rootItem, item, additionalDataModel)
 {
 }
 
-void FixedDescriptorTreeInterpreter::InterpretControlTransferSetup()
+void SetupPacketInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	const unsigned char* packet = (unsigned char*)leftoverData.constData();
@@ -147,107 +134,24 @@ void FixedDescriptorTreeInterpreter::InterpretControlTransferSetup()
 	}
 }
 
-void FixedDescriptorTreeInterpreter::AppendSetupwValue(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
+
+void SetupPacketInterpreter::AppendSetupwValue(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 2, hexData);
 	setupChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wValue", setupPacket->Value}, setupChild));
 }
 
-void FixedDescriptorTreeInterpreter::AppendSetupwIndex(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
+void SetupPacketInterpreter::AppendSetupwIndex(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 2, hexData);
 	setupChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wIndex", setupPacket->Index}, setupChild));
 }
 
-void FixedDescriptorTreeInterpreter::AppendSetupwLength(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
+void SetupPacketInterpreter::AppendSetupwLength(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 2, hexData);
 	setupChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wLength", setupPacket->Length}, setupChild));
-}
-
-void FixedDescriptorTreeInterpreter::InterpretControlTransferDeviceDescriptor()
-{
-	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
-	const unsigned char* packet = (unsigned char*)leftoverData.constData();
-	PUSB_DEVICE_DESCRIPTOR deviceDescriptor = (PUSB_DEVICE_DESCRIPTOR)packet;
-	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"DEVICE_DESCRIPTOR", "", ""}, rootItem));
-	TreeItem* deviceDescriptorChild = rootItem->Child(rootItem->ChildCount() - 1);
-
-	QString hexData;
-	InterpretControlTransferDeviceDescriptorBase(deviceDescriptor, &packet, deviceDescriptorChild);
-	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "idVendor", deviceDescriptor->idVendor}, deviceDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "idProduct", deviceDescriptor->idProduct}, deviceDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bcdDevice", deviceDescriptor->bLength}, deviceDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iManufacturer", deviceDescriptor->iManufacturer}, deviceDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iProduct", deviceDescriptor->iProduct}, deviceDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iSerialNumber", deviceDescriptor->iSerialNumber}, deviceDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bNumConfigurations", deviceDescriptor->bNumConfigurations}, deviceDescriptorChild));
-}
-
-void FixedDescriptorTreeInterpreter::InterpretControlTransferDeviceQualifierDescriptor()
-{
-	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
-	const unsigned char* packet = (unsigned char*)leftoverData.constData();
-	PUSB_DEVICE_QUALIFIER_DESCRIPTOR deviceQualifierDescriptor = (PUSB_DEVICE_QUALIFIER_DESCRIPTOR)packet;
-	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"DEVICE_QUALIFIER_DESCRIPTOR", "", ""}, rootItem));
-	TreeItem* deviceQualifierChild = rootItem->Child(rootItem->ChildCount() - 1);
-
-	QString hexData;
-	InterpretControlTransferDeviceDescriptorBase(deviceQualifierDescriptor, &packet, deviceQualifierChild);
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	deviceQualifierChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bNumConfigurations", deviceQualifierDescriptor->bNumConfigurations}, deviceQualifierChild));
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	deviceQualifierChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bReserved", deviceQualifierDescriptor->bReserved}, deviceQualifierChild));
-}
-
-template <typename T>
-void FixedDescriptorTreeInterpreter::InterpretControlTransferDeviceDescriptorBase(T* deviceDescriptor, const unsigned char** packet,
-	TreeItem* descriptorChild)
-{
-	QString hexData;
-	additionalDataModel->CharToHexConvert(packet, 1, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bLength", deviceDescriptor->bLength}, descriptorChild));
-	additionalDataModel->CharToHexConvert(packet, 1, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, (std::string("bDescriptorType ") +
-		std::string((deviceDescriptor->bDescriptorType == DEVICE_DESCRIPTOR) ? "(DEVICE_DESCRIPTOR)" : "(DEVICE_QUALIFIER_DESCRIPTOR)")).c_str(),
-		deviceDescriptor->bDescriptorType}, descriptorChild));
-	additionalDataModel->CharToHexConvert(packet, 2, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bcdUSB", deviceDescriptor->bcdUSB}, descriptorChild));
-	additionalDataModel->CharToHexConvert(packet, 1, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bDeviceClass", deviceDescriptor->bDeviceClass}, descriptorChild));
-	additionalDataModel->CharToHexConvert(packet, 1, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bDeviceSubClass", deviceDescriptor->bDeviceSubClass}, descriptorChild));
-	additionalDataModel->CharToHexConvert(packet, 1, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bDeviceProtocol", deviceDescriptor->bDeviceProtocol}, descriptorChild));
-	additionalDataModel->CharToHexConvert(packet, 1, hexData);
-	descriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bMaxPacketSize0", deviceDescriptor->bMaxPacketSize0}, descriptorChild));
-}
-
-void FixedDescriptorTreeInterpreter::InterpretControlTransferStringDescriptor()
-{
-	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
-	const unsigned char* packet = (unsigned char*)leftoverData.constData();
-	PUSB_STRING_DESCRIPTOR stringDescriptor = (PUSB_STRING_DESCRIPTOR)packet;
-	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"STRING_DESCRIPTOR", "", ""}, rootItem));
-	TreeItem* stringDescriptorChild = rootItem->Child(rootItem->ChildCount() - 1);
-
-	QString hexData;
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	stringDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bLength", stringDescriptor->bLength}, stringDescriptorChild));
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
-	stringDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bDescriptorType (STRING_DESCRIPTOR)", stringDescriptor->bDescriptorType}, stringDescriptorChild));
-	std::wstring wbString(stringDescriptor->bString);
-	std::string bString(wbString.begin(), wbString.end());
-	additionalDataModel->CharToHexConvert(&packet, leftoverData.size() - 2, hexData); //-2 for bLength and bDescriporType
-	stringDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bString", bString.c_str()}, stringDescriptorChild));
 }

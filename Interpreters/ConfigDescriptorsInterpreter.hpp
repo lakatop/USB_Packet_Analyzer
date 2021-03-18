@@ -1,15 +1,15 @@
 #ifndef CONFIGDESCRIPTORSMODEL_HPP
 #define CONFIGDESCRIPTORSMODEL_HPP
 
-#include "../Models/AdditionalDataModel.hpp"
 #include "../HID/HIDDevices.hpp"
+#include "BaseInterpreter.hpp"
 
-class ConfigDescriptorsInterpreter
+class ConfigDescriptorsInterpreter : public BaseInterpreter
 {
 public:
 	ConfigDescriptorsInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 
-	void InterpretConfigDescriptors();
+	void Interpret() override;
 private:
 	void InterpretConfigDescriptor(const unsigned char* packet);
 	void InterpretInterfaceDescriptor(const unsigned char* packet);
@@ -17,9 +17,6 @@ private:
 	void InterpretHIDDescriptor(const unsigned char* packet);
 	void InterpretUnknownDescriptor(const unsigned char* packet);
 
-	TreeItem* rootItem;
-	QTableWidgetItem* item;
-	AdditionalDataModel* additionalDataModel;
 	DataHolder* holder;
 	HIDDevices* hidDevices;
 };

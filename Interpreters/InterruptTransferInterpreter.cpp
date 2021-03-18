@@ -1,15 +1,13 @@
 #include "InterruptTransferInterpreter.hpp"
 
 InterruptTransferInterpreter::InterruptTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
+	:BaseInterpreter(rootItem,item,additionalDataModel)
 {
-	this->rootItem = rootItem;
-	this->item = item;
-	this->additionalDataModel = additionalDataModel;
-	this->hidDevices = HIDDevices::GetHIDDevices();
 	this->holder = DataHolder::GetDataHolder();
+	this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
-void InterruptTransferInterpreter::InterpretInterruptTransfer()
+void InterruptTransferInterpreter::Interpret()
 {
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->data(holder->USBPCAP_HEADER_DATA).toByteArray().constData();
 	

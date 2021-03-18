@@ -1,15 +1,13 @@
 #include "ConfigDescriptorsInterpreter.hpp"
 
 ConfigDescriptorsInterpreter::ConfigDescriptorsInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
+	:BaseInterpreter(rootItem,item,additionalDataModel)
 {
-	this->rootItem = rootItem;
 	this->holder = DataHolder::GetDataHolder();
 	this->hidDevices = HIDDevices::GetHIDDevices();
-	this->item = item;
-	this->additionalDataModel = additionalDataModel;
 }
 
-void ConfigDescriptorsInterpreter::InterpretConfigDescriptors()
+void ConfigDescriptorsInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	const unsigned char* packet = (unsigned char*)leftoverData.constData();

@@ -5,12 +5,14 @@
 #include <qtablewidget.h>
 #include <winusb.h>
 
+
 class AdditionalDataModel; //forward declaration
 
 class FixedDescriptorTreeInterpreter
 {
 public:
 	FixedDescriptorTreeInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
+	void Interpret();
 	void InterpretControlTransferUnspecifiedDescriptor();
 	void InterpretControlTransferSetup();
 	template <typename T>

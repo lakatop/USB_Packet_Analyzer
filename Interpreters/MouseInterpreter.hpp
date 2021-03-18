@@ -1,23 +1,21 @@
 #ifndef MOUSEINTERPRETER_HPP
 #define MOUSEINTERPRETER_HPP
 
-#include "../Models/AdditionalDataModel.hpp"
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include "../HID/HIDDevices.hpp"
+#include "BaseInterpreter.hpp"
 
-class MouseInterpreter
+
+class MouseInterpreter : public BaseInterpreter
 {
 public:
 	MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 		HIDReportDescriptorInputParse inputParser);
-	void Interpret();
+	void Interpret() override;
 private:
-	TreeItem* rootItem;
-	QTableWidgetItem* item;
-	AdditionalDataModel* additionalDataModel;
 	HIDReportDescriptorInputParse inputParser;
-	HIDDevices* hidDevices;
 	DataHolder* holder;
+	HIDDevices* hidDevices;
 };
 
 #endif // !MOUSEINTERPRETER_HPP

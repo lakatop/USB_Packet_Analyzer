@@ -1,5 +1,7 @@
 #include "AdditionalDataModel.hpp"
 
+#include "../Interpreters/InterpreterFactory.hpp"
+
 AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, HeaderDataType dataType, QObject* parent) :
 	TreeItemBaseModel(parent)
 {
@@ -35,70 +37,10 @@ QVariant AdditionalDataModel::headerData(int section, Qt::Orientation orientatio
 
 void AdditionalDataModel::CreateSpecifiedModel()
 {
-    switch (dataType)
+    InterpreterFactory factory(rootItem.get(), item, this,dataType);
+    std::unique_ptr<BaseInterpreter> interpreter(factory.GetInterpreter());
+    if (interpreter != nullptr)
     {
-    case INTERR_TRANSFER:
-    {
-        InterruptTransferInterpreter interruptModel(rootItem.get(), item, this);
-        interruptModel.InterpretInterruptTransfer();
-    }
-        break;
-    case ISOCHRO_TRANSFER:
-        break;
-    case BULK_TRANSFER:
-        break;
-    case CONTROL_TRANSFER:
-    case CONTROL_TRANSFER_CONFIG_DESC:
-    case CONTROL_TRANSFER_INTERF_DESC:
-    case CONTROL_TRANSFER_ENDPOI_DESC:
-    case CONTROL_TRANSFER_HID_DESC:
-    case CONTROL_TRANSFER_OTHER_SPEED_CONF_DESC:
-    {
-        ConfigDescriptorsInterpreter configDescsModel(rootItem.get(), item, this);
-        configDescsModel.InterpretConfigDescriptors();
-    }
-    break;
-    case CONTROL_TRANSFER_DEVICE_DESC:
-    {
-        FixedDescriptorTreeInterpreter deviceDescModel(rootItem.get(), item, this);
-        deviceDescModel.InterpretControlTransferDeviceDescriptor();
-    }
-    break;
-    case CONTROL_TRANSFER_STRING_DESC:
-    {
-        FixedDescriptorTreeInterpreter stringDescModel(rootItem.get(), item, this);
-        stringDescModel.InterpretControlTransferStringDescriptor();
-    }
-    break;
-    case CONTROL_TRANSFER_HID_REPORT_DESC:
-    {
-        ReportDescriptorInterpreter reportDescModel(rootItem.get(), item, this);
-        reportDescModel.InterpretReportDescriptor();
-    }
-    break;
-    case CONTROL_TRANSFER_SETUP:
-    {
-        FixedDescriptorTreeInterpreter setupModel(rootItem.get(), item, this);
-        setupModel.InterpretControlTransferSetup();
-    }
-    break;
-    case CONTROL_TRANSFER_DEVICE_QUALIFIER_DESC:
-    {
-        FixedDescriptorTreeInterpreter deviceQualifierDescModel(rootItem.get(), item, this);
-        deviceQualifierDescModel.InterpretControlTransferDeviceQualifierDescriptor();
-    }
-    break;
-    case CONTROL_TRANSFER_UNSPEC_DESC:
-    {
-        FixedDescriptorTreeInterpreter unspecDescModel(rootItem.get(), item, this);
-        unspecDescModel.InterpretControlTransferUnspecifiedDescriptor();
-    }
-    break;
-    case IRP_INFO_TRANSFER:
-        break;
-    case UNKNOWN_TRANSFER:
-        break;
-    default:
-        break;
+        interpreter->Interpret();
     }
 }

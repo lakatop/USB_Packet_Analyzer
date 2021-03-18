@@ -1,9 +1,8 @@
 #include "ReportDescriptorInterpreter.hpp"
 
 ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
+	:BaseInterpreter(rootItem, item, additionalDataModel)
 {
-	this->rootItem = rootItem;
-	this->additionalDataModel = additionalDataModel;
 	this->holder = DataHolder::GetDataHolder();
 	this->reportArray = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	this->globalUsage = 0;
@@ -11,7 +10,7 @@ ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QTa
 	ParseReportDescriptor(&reportDescriptor, 0);
 }
 
-void ReportDescriptorInterpreter::InterpretReportDescriptor()
+void ReportDescriptorInterpreter::Interpret()
 {
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"HID_REPORT_DESCRIPTOR", "", ""}, rootItem));
 	TreeItem* reportDescriptorChild = rootItem->Child(rootItem->ChildCount() - 1);

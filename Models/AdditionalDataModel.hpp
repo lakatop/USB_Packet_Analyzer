@@ -2,10 +2,6 @@
 #define ADDITIONALDATAMODEL_HPP
 
 #include "TreeItemBaseModel.h"
-#include "../Interpreters/FixedDescriptorTreeInterpreter.hpp"
-#include "../Interpreters/ReportDescriptorInterpreter.hpp"
-#include "../Interpreters/ConfigDescriptorsInterpreter.hpp"
-#include "../Interpreters/InterruptTransferInterpreter.hpp"
 
 #include <qtablewidget.h>
 
