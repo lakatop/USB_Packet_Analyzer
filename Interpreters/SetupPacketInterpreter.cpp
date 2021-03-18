@@ -3,6 +3,7 @@
 SetupPacketInterpreter::SetupPacketInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem, item, additionalDataModel)
 {
+	this->holder = DataHolder::GetDataHolder();
 }
 
 void SetupPacketInterpreter::Interpret()
