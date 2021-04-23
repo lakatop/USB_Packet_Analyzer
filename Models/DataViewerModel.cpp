@@ -180,6 +180,8 @@ QVariant DataViewerModel::GetDataRepresentationType(int index, qint8 dataReprese
 	}
 	break;
 	}
+
+	return QVariant();
 }
 QVariant DataViewerModel::GetPacketData(std::stringstream& stream, bool hexView, int hex) const
 {

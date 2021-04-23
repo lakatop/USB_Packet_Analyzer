@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TREEITEMBASEMODEL_HPP
+#define TREEITEMBASEMODEL_HPP
 
 #include <QAbstractItemModel>
 
@@ -64,3 +65,5 @@ QString TreeItemBaseModel::ShowBits(uint32_t start, size_t size, T number)
 
 	return QString(stream.str().c_str());
 }
+
+#endif // !TREEITEMBASEMODEL_HPP

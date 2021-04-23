@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DATAVIEWERMODEL_HPP
+#define DATAVIEWERMODEL_HPP
 
 #include <QObject>
 
@@ -31,3 +32,5 @@ private:
 	HIDDevices* hidDevices;
 	QTableWidgetItem* item;
 };
+
+#endif // !DATAVIEWERMODEL_HPP

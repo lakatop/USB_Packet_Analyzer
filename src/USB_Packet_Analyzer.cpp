@@ -88,17 +88,6 @@ QProgressBar* USB_Packet_Analyzer::GetProgressBar()
 
 void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
 {
-    //int currentRow = ui.listWidget->row(item);
-    //QListWidgetItem* previousItem = ui.listWidget->item(currentRow - 1);
-    //if (!dataViewer.isNull())
-    //{
-    //    dataViewer->deleteLater();
-    //}
-    ////using nullptr as parent because otherwise it wont show in task bar
-    //dataViewer = QPointer(new DataViewer(item, this->itemManager->GetDataType(item, previousItem), ui.dataHighlightCheckBox->isChecked()));
-    //dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
-    //connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
-    //dataViewer->show();
 }
 
 void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* item)

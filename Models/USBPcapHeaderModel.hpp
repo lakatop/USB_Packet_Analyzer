@@ -18,4 +18,4 @@ private:
 	QTableWidgetItem* item;
 };
 
-#endif
+#endif // !USBPCAPHEADERMODEL_HPP

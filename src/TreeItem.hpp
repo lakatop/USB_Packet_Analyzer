@@ -24,4 +24,4 @@ private:
 	TreeItem* parent;
 };
 
-#endif
+#endif // !TREEITEM_HPP

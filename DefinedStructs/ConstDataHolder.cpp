@@ -40,6 +40,8 @@ void DataHolder::FillDataColorsMap()
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(CONTROL_TRANSFER_HID_REPORT_DESC, { 153,0,76,255 }));
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(ADDITIONAL_HEADER_DATA, { 0,128,255,255 }));
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(HEADER_DATA, { 255,0,255,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(IRP_INFO_TRANSFER, { 179,0,179,255 }));
+	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(UNKNOWN_TRANSFER, { 0,0,255,255 }));
 }
 
 

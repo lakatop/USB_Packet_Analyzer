@@ -20,4 +20,4 @@ private:
 	HeaderDataType dataType;
 };
 
-#endif
+#endif // !ADDITIONALDATAMODEL_HPP

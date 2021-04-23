@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DATAVIEWERDELEGATE_HPP
+#define DATAVIEWERDELEGATE_HPP
 
 #include <QStyledItemDelegate>
 
@@ -23,3 +24,5 @@ private:
 	bool dataHighlight;
 	DataHolder* holder;
 };
+
+#endif // !DATAVIEWERDELEGATE_HPP

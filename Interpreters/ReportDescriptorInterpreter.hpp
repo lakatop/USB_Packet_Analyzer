@@ -23,4 +23,4 @@ private:
 	QByteArray reportArray;
 };
 
-#endif
+#endif // !REPORTDESCRIPTORMODEL_HPP

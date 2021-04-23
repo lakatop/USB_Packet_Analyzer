@@ -230,6 +230,46 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 	{
 		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem());
 	}
+
+	ColorRow(usbh);
+}
+
+void ItemManager::ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh)
+{
+	if ((usbh->info & 0x01) == 1) //host->device transfer
+	{
+		QColor backgroundColor;
+		DataTypeColor col;
+		switch (usbh->transfer)
+		{
+		case USBPCAP_TRANSFER_ISOCHRONOUS:
+			col = dataHolder->DataColors[ISOCHRO_TRANSFER];
+			break;
+		case USBPCAP_TRANSFER_INTERRUPT:
+			col = dataHolder->DataColors[INTERR_TRANSFER];
+			break;
+		case USBPCAP_TRANSFER_CONTROL:
+			col = dataHolder->DataColors[CONTROL_TRANSFER];
+			break;
+		case USBPCAP_TRANSFER_BULK:
+			col = dataHolder->DataColors[BULK_TRANSFER];
+			break;
+		case USBPCAP_TRANSFER_IRP_INFO:
+			col = dataHolder->DataColors[IRP_INFO_TRANSFER];
+			break;
+		case USBPCAP_TRANSFER_UNKNOWN:
+			col = dataHolder->DataColors[UNKNOWN_TRANSFER];
+			break;
+		default:
+			col = DataTypeColor{ 255, 255, 255, 255 };
+			break;
+		}
+
+		for (int i = 0; i < tableWidget->columnCount(); i++)
+		{
+			tableWidget->item(tableWidget->rowCount() - 1, i)->setBackgroundColor(QColor(col.red, col.green, col.blue, 50));
+		}
+	}
 }
 
 HeaderDataType ItemManager::GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem)

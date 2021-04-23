@@ -14,4 +14,4 @@ private:
 	void SetupModelData();
 };
 
-#endif
+#endif // !COLORMAPMODEL_HPP

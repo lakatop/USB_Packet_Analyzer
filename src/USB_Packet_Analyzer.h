@@ -1,4 +1,5 @@
-#pragma once
+#ifndef USBPACKETANALYZER_HPP
+#define USBPACKETANALYZER_HPP
 
 #include <QtWidgets/QWidget>
 #include <qpointer.h>
@@ -34,3 +35,5 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem* item);
     void on_tableWidget_itemDoubleclicked(QTableWidgetItem* item);
 };
+
+#endif // !USBPACKETANALYZER_HPP

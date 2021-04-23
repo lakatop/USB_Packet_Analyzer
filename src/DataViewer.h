@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DATAVIEWER_HPP
+#define DATAVIEWER_HPP
 
 #include <QDialog>
 #include "ui_DataViewer.h"
@@ -39,3 +40,5 @@ private slots:
 	void updateHexSelection(const QItemSelection& selected, const QItemSelection& deselected);
 	void updateByteSelection(const QItemSelection& selected, const QItemSelection& deselected);
 };
+
+#endif // !DATAVIEWER_HPP

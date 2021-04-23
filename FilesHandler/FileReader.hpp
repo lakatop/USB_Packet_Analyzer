@@ -19,4 +19,4 @@ private:
 	QFile file;
 };
 
-#endif
+#endif // !FILEREADER_HPP

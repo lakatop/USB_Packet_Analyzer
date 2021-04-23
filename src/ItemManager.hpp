@@ -29,6 +29,7 @@ private:
 	void InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
 	void FillUpItem(QByteArray packetData);
 	void CheckForSetupPacket(QByteArray packetData);
+	void ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh);
 
 	static ItemManager* itemManager;
 	FileReader fileReader;
@@ -40,4 +41,4 @@ private:
 	bool representingConfigurationDescriptor;
 };
 
-#endif
+#endif // !ITEMMANAGER_HPP
