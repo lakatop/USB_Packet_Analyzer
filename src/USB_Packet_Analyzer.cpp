@@ -86,10 +86,6 @@ QProgressBar* USB_Packet_Analyzer::GetProgressBar()
     return ui.progressBar;
 }
 
-void USB_Packet_Analyzer::on_listWidget_itemDoubleClicked(QListWidgetItem* item)
-{
-}
-
 void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* item)
 {
     int currentRow = ui.tableWidget->row(item);

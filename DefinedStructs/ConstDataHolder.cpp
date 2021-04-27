@@ -16,10 +16,10 @@ DataHolder::DataHolder()
 {
 	FillDataColorsMap();
 	BYTES_ON_ROW = 16;
-	TRANSFER_LEFTOVER_DATA = 15;
-	TRANSFER_OPTIONAL_HEADER = 16;
-	USBPCAP_HEADER_DATA = 17;
-	REPORT_DESC_TREE_INDEX = 18;
+	TRANSFER_LEFTOVER_DATA = Qt::UserRole + 1;
+	TRANSFER_OPTIONAL_HEADER = Qt::UserRole + 2;
+	USBPCAP_HEADER_DATA = Qt::UserRole + 3;
+	REPORT_DESC_TREE_INDEX = Qt::UserRole + 4;
 }
 
 void DataHolder::FillDataColorsMap()

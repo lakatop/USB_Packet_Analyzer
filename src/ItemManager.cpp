@@ -65,6 +65,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 
 				if (liveReading)
 				{
+					tableWidget->resizeColumnsToContents();
 					Sleep(50);
 				}
 				else
@@ -236,7 +237,7 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 
 void ItemManager::ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh)
 {
-	if ((usbh->info & 0x01) == 1) //host->device transfer
+	if ((usbh->info & 0x01) == 1) //device->host transfer
 	{
 		QColor backgroundColor;
 		DataTypeColor col;

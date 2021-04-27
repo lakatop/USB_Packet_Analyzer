@@ -22,10 +22,10 @@ public:
 	std::string GetGenericDesktopUsage(BYTE value);
 
 	uint8_t BYTES_ON_ROW;
-	int8_t TRANSFER_LEFTOVER_DATA;
-	int8_t TRANSFER_OPTIONAL_HEADER;
-	int8_t USBPCAP_HEADER_DATA;
-	int8_t REPORT_DESC_TREE_INDEX;
+	int TRANSFER_LEFTOVER_DATA;
+	int TRANSFER_OPTIONAL_HEADER;
+	int USBPCAP_HEADER_DATA;
+	int REPORT_DESC_TREE_INDEX;
 	std::map<HeaderDataType, DataTypeColor> DataColors;
 private:
 	DataHolder();

@@ -32,7 +32,6 @@ private slots:
     void on_ClearButton_clicked();
     void on_StopButton_clicked();
     void on_PauseButton_clicked();
-    void on_listWidget_itemDoubleClicked(QListWidgetItem* item);
     void on_tableWidget_itemDoubleclicked(QTableWidgetItem* item);
 };
 
