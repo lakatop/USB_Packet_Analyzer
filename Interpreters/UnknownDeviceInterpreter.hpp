@@ -5,7 +5,9 @@
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include "../HID/HIDDevices.hpp"
 
-
+/// <summary>
+/// Interpreter class for unknown descriptor
+/// </summary>
 class UnknownDeviceInterpreter : public BaseInterpreter
 {
 public:
@@ -13,9 +15,18 @@ public:
 		HIDReportDescriptorInputParse inputParser);
 	void Interpret() override;
 private:
+	/// <summary>
+	/// Concrete HIDReportDescriptorInputParse struct to parse this input.
+	/// </summary>
 	HIDReportDescriptorInputParse inputParser;
-	HIDDevices* hidDevices;
+	/// <summary>
+	/// Pointer to DataHolder instance.
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// Pointer to HIDDevices instance.
+	/// </summary>
+	HIDDevices* hidDevices;
 };
 
 #endif // !UNKNOWNDEVICEINTERPRETER_HPP

@@ -1,5 +1,8 @@
 #include "FileReader.hpp"
 
+/// <summary>
+/// Desctructor of FileReader
+/// </summary>
 FileReader::~FileReader()
 {
 	if (file.isOpen())
@@ -8,6 +11,10 @@ FileReader::~FileReader()
 	}
 }
 
+/// <summary>
+/// Processes one packet from file. Saves dat arepresenting given packet into QByteArray and returns it.
+/// </summary>
+/// <returns>QByteArray representing one packet</returns>
 QByteArray FileReader::GetPacket()
 {
 	QByteArray packetData;
@@ -40,6 +47,10 @@ QByteArray FileReader::GetPacket()
 	return packetData;
 }
 
+/// <summary>
+/// Reads pcap file header.
+/// </summary>
+/// <returns>Wheter read was successful</returns>
 bool FileReader::ReadFileHeader()
 {
 	if (file.isOpen())
@@ -51,6 +62,10 @@ bool FileReader::ReadFileHeader()
 	return false;
 }
 
+/// <summary>
+/// Determines whether we are at the end of file.
+/// </summary>
+/// <returns>Whether we are at the ed of file</returns>
 bool FileReader::EndOfFile()
 {
 	if (file.isOpen())
@@ -61,6 +76,11 @@ bool FileReader::EndOfFile()
 	return true;
 }
 
+/// <summary>
+/// Opens new file for read.
+/// </summary>
+/// <param name="filename">Name of file which should be opened for read</param>
+/// <returns>Whether opening was successful</returns>
 bool FileReader::OpenNewFile(QString filename)
 {
 	if (file.isOpen())
@@ -72,6 +92,10 @@ bool FileReader::OpenNewFile(QString filename)
 	return file.open(QIODevice::ReadOnly);
 }
 
+/// <summary>
+/// Get size of actual file.
+/// </summary>
+/// <returns>Size of file</returns>
 qint64 FileReader::FileSize()
 {
 	return file.size();

@@ -5,12 +5,16 @@
 
 class DeviceQualifierDescriptorInterpreter; //forward declaration
 
+/// <summary>
+/// Interpreter class for Device Descriptor
+/// </summary>
 class DeviceDescriptorInterpreter : public BaseInterpreter
 {
 public:
 	DeviceDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void Interpret() override;
 private:
+	//friend class so we can call InterpretControlTransferDeviceDescriptorBase()
 	friend class DeviceQualifierDescriptorInterpreter;
 	DataHolder* holder;
 	template <typename T>
@@ -18,6 +22,9 @@ private:
 		TreeItem* descriptorChild, AdditionalDataModel* additionalDataModel);
 };
 
+/// <summary>
+/// Interpreter class for Device Qualifier Descriptor
+/// </summary>
 class DeviceQualifierDescriptorInterpreter : public BaseInterpreter
 {
 public:
@@ -27,7 +34,14 @@ private:
 	DataHolder* holder;
 };
 
-
+/// <summary>
+/// Interprets part of Device Descriptor and Device Qualifier Descriptor which they have in common
+/// </summary>
+/// <typeparam name="T">DeviceQualifierDescriptorInterpreter or DeviceDescriptorInterpreter</typeparam>
+/// <param name="deviceDescriptor">device descriptor</param>
+/// <param name="packet">pointer to descriptor data</param>
+/// <param name="descriptorChild">Tree item to which we are adding child items</param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 template <typename T>
 void DeviceDescriptorInterpreter::InterpretControlTransferDeviceDescriptorBase(T* deviceDescriptor, const unsigned char** packet,
 	TreeItem* descriptorChild, AdditionalDataModel* additionalDataModel)

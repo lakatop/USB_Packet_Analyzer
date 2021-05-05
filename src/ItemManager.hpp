@@ -12,6 +12,9 @@
 
 class USB_Packet_Analyzer; //forward declaration
 
+/// <summary>
+/// Class that handles pcap file processing and extracting packet data into individual items
+/// </summary>
 class ItemManager
 {
 public:
@@ -20,9 +23,17 @@ public:
 	void ProcessPacket(QByteArray packetData);
 	HeaderDataType GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem);
 
-
+	/// <summary>
+	/// Represents whether Stop Button is clicked.
+	/// </summary>
 	bool stopButtonClicked;
+	/// <summary>
+	/// Represents whether Pause Button is clicked.
+	/// </summary>
 	bool pauseButtonClicked;
+	/// <summary>
+	/// Represents whether QTableWidget is scrolled to the bottom.
+	/// </summary>
 	bool atBottomOfList;
 private:
 	ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent);
@@ -31,13 +42,37 @@ private:
 	void CheckForSetupPacket(QByteArray packetData);
 	void ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh);
 
+	/// <summary>
+	/// Stataic pointer to instance of this class.
+	/// </summary>
 	static ItemManager* itemManager;
+	/// <summary>
+	/// FileReader instance for reading files.
+	/// </summary>
 	FileReader fileReader;
+	/// <summary>
+	/// Pointer to tableWidget that represents general packet data
+	/// </summary>
 	QTableWidget* tableWidget;
+	/// <summary>
+	/// Pointer to main application class.
+	/// </summary>
 	USB_Packet_Analyzer* parent;
+	/// <summary>
+	/// Pointer to DataHolder class.
+	/// </summary>
 	DataHolder* dataHolder;
+	/// <summary>
+	/// Pointer to HIDDevices class.
+	/// </summary>
 	HIDDevices* hidDevices;
+	/// <summary>
+	/// Whether packet data represents HID Report Descriptor
+	/// </summary>
 	bool representingHIDDescriptor;
+	/// <summary>
+	/// Whetherpacket data represents Configuration Descriptor
+	/// </summary>
 	bool representingConfigurationDescriptor;
 };
 

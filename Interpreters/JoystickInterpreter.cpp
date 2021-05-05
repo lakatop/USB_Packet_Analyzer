@@ -1,5 +1,12 @@
 #include "JoystickInterpreter.hpp"
 
+/// <summary>
+/// Constructor for JoystickInterpreter.
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
+/// <param name="inputParser"><see cref="inputParser"/></param>
 JoystickInterpreter::JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 	HIDReportDescriptorInputParse inputParser)
     :BaseInterpreter(rootItem,item,additionalDataModel)
@@ -9,6 +16,9 @@ JoystickInterpreter::JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* i
     this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
+/// <summary>
+/// Interprets concrete input for HID joystick device
+/// </summary>
 void JoystickInterpreter::Interpret()
 {
     QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();

@@ -1,5 +1,10 @@
 #include "DataViewerDelegate.h"
 
+/// <summary>
+/// Constructor of DataViewerDelegate.
+/// </summary>
+/// <param name="dataHighlight"><see cref="dataHighlight"/></param>
+/// <param name="parent">Dialog <see cref="DataViewer"/></param>
 DataViewerDelegate::DataViewerDelegate(bool dataHighlight, QObject *parent)
 	: QStyledItemDelegate(parent)
 {
@@ -7,15 +12,29 @@ DataViewerDelegate::DataViewerDelegate(bool dataHighlight, QObject *parent)
 	holder = DataHolder::GetDataHolder();
 }
 
+/// <summary>
+/// Desctructor of DataViewerDelegate.
+/// </summary>
 DataViewerDelegate::~DataViewerDelegate()
 {
 }
-
+/// <summary>
+/// Determines size of cells in hexdump
+/// </summary>
+/// <param name="option">Not used in this scenario, we are returning fixed size</param>
+/// <param name="index">Not used in this scenario, we are returning fixed size</param>
+/// <returns>QSize of cells in hexdump</returns>
 QSize DataViewerDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
 	return QSize(30, 30);
 }
 
+/// <summary>
+/// Paints hexdump data.
+/// </summary>
+/// <param name="painter">Given painter</param>
+/// <param name="option">Describe the parameters used to draw an item</param>
+/// <param name="index">Index to concrete data we want to draw</param>
 void DataViewerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
 	QVariantList list;
@@ -54,6 +73,12 @@ void DataViewerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& op
 	painter->restore();
 }
 
+/// <summary>
+/// Highlights hexdump data.
+/// </summary>
+/// <param name="painter">Given painter</param>
+/// <param name="option">Describe the parameters used to draw an item</param>
+/// <param name="list">QVariant list containing of HeaderDataType from which we determine color of highlighting</param>
 void DataViewerDelegate::drawDataHighlight(QPainter* painter, const QStyleOptionViewItem& option, const QVariantList& list) const
 {
 	uint penWidth = 3;
@@ -91,6 +116,12 @@ void DataViewerDelegate::drawDataHighlight(QPainter* painter, const QStyleOption
 	}
 }
 
+/// <summary>
+/// Highlighting data other than Control Transfer type.
+/// </summary>
+/// <param name="painter">Given painter</param>
+/// <param name="color">Color used for highliting</param>
+/// <param name="rect">Rectangle which will be highlighted</param>
 void DataViewerDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor& color, QRect& rect) const
 {
 	uint penWidth = 3;
@@ -98,6 +129,12 @@ void DataViewerDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor
 	painter->drawRect(rect);
 }
 
+/// <summary>
+/// Highlighting Control Transfer data type.
+/// </summary>
+/// <param name="painter">Given painter</param>
+/// <param name="color">Color used for highliting</param>
+/// <param name="rect">Rectangle which will be highlighted</param>
 void DataViewerDelegate::drawControlHeaderDataHiglight(QPainter* painter, DataTypeColor& color, QRect& rect) const
 {
 	painter->fillRect(rect, QColor(color.red, color.green, color.blue, color.alpha));

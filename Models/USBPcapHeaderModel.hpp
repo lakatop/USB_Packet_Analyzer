@@ -5,6 +5,9 @@
 #include "../DefinedStructs/ConstDataHolder.hpp"
 #include <qtablewidget.h>
 
+/// <summary>
+/// Model class for packet header.
+/// </summary>
 class USBPcapHeaderModel : public TreeItemBaseModel
 {
 public:
@@ -14,7 +17,13 @@ public:
 private:
 	void SetupModelData();
 
+	/// <summary>
+	/// Pointer to DataHolder class instance.
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// Pointer to item which holds packet data (alongside with header data)
+	/// </summary>
 	QTableWidgetItem* item;
 };
 

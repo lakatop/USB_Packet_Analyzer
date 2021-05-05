@@ -1,14 +1,27 @@
 #include "ColorMapModel.hpp"
 
+/// <summary>
+/// Constructor of ColorMapModel
+/// </summary>
+/// <param name="parent">Dialog <see cref="DataViewer"/></param>
 ColorMapModel::ColorMapModel(QObject* parent) : TreeItemBaseModel(parent)
 {
     SetupModelData();
 }
 
+/// <summary>
+/// Desctructor of ColorMapModel
+/// </summary>
 ColorMapModel::~ColorMapModel()
 {
 }
 
+/// <summary>
+/// Returns data on specified index and role
+/// </summary>
+/// <param name="index">Index of data</param>
+/// <param name="role">Role of data</param>
+/// <returns>QVariant on specified index and role</returns>
 QVariant ColorMapModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
@@ -27,9 +40,13 @@ QVariant ColorMapModel::data(const QModelIndex& index, int role) const
     return item->Data(1);
 }
 
+/// <summary>
+/// Fills Color Map viewer with fixed data
+/// </summary>
 void ColorMapModel::SetupModelData()
 {
-    rootItem = std::make_unique<TreeItem>(QVector<QVariant>({ "" })); //adding 1 item to vector, because columnCount returns size of parents vector(which in this situation should be 1)
+    //adding 1 item to vector, because columnCount returns size of parents vector(which in this situation should be 1)
+    rootItem = std::make_unique<TreeItem>(QVector<QVariant>({ "" }));
     rootItem->AppendChild(new TreeItem(QVector<QVariant>{ INTERR_TRANSFER, "Interrupt Transfer"}, rootItem.get()));
     rootItem->AppendChild(new TreeItem(QVector<QVariant>{ ISOCHRO_TRANSFER, "Isochronous Transfer"}, rootItem.get()));
     rootItem->AppendChild(new TreeItem(QVector<QVariant>{ BULK_TRANSFER, "Bulk Transfer"}, rootItem.get()));

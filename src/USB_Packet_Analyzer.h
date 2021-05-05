@@ -9,6 +9,9 @@
 
 class ItemManager; //forward declaration
 
+/// <summary>
+/// Main class for application.
+/// </summary>
 class USB_Packet_Analyzer : public QWidget
 {
     Q_OBJECT
@@ -20,8 +23,17 @@ public:
 
 private:
     Ui::USB_Packet_AnalyzerClass ui;
+    /// <summary>
+    /// Pointer to ItemManager instance.
+    /// </summary>
     ItemManager* itemManager;
+    /// <summary>
+    /// Name of current file which is being processed.
+    /// </summary>
     QString currentFile;
+    /// <summary>
+    /// QPointer to pop-up DataViewer dialog.
+    /// </summary>
     QPointer<DataViewer> dataViewer;
 
     void Init();

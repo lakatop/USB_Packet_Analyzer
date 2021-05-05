@@ -2,6 +2,12 @@
 
 ItemManager* ItemManager::itemManager = nullptr;
 
+/// <summary>
+/// Static method to get instance of this class.
+/// </summary>
+/// <param name="tableWidget"><see cref="tableWidget"/></param>
+/// <param name="parent"><see cref="parent"/></param>
+/// <returns></returns>
 ItemManager* ItemManager::GetItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 {
 	if (itemManager == nullptr)
@@ -12,6 +18,11 @@ ItemManager* ItemManager::GetItemManager(QTableWidget* tableWidget, USB_Packet_A
 	return itemManager;
 }
 
+/// <summary>
+/// Constructor for ItemManager class.
+/// </summary>
+/// <param name="tableWidget"><see cref="tableWidget"/></param>
+/// <param name="parent"><see cref="parent"/></param>
 ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 {
 	this->stopButtonClicked = false;
@@ -25,6 +36,11 @@ ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 	this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
+/// <summary>
+/// Sequentially processing pcap file and extracting packet data into individual items
+/// </summary>
+/// <param name="filename">Name of file to be processed</param>
+/// <param name="liveReading">Whether we are processing live capture or not</param>
 void ItemManager::ProcessFile(QString filename, bool liveReading)
 {
 	if (fileReader.OpenNewFile(filename))
@@ -76,19 +92,14 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 		}
 	}
 }
+
+/// <summary>
+/// Process one concrete packet.
+/// </summary>
+/// <param name="packetData">Data that represents one concrete packet</param>
 void ItemManager::ProcessPacket(QByteArray packetData)
 {
-	/*
-* CO POTREBUJEM ULOZIT DO ITEMU:
-*	usbh (QByteArray)
-*	optionalHeaderData (QByteArray / NULL)
-*	leftoverData (QByteArray)
-*
-* CO TU POTREBUJEM ESTE SPRAVIT:
-*	Nastavit meno itemu
-*	Parse HID Report Desc.
-*	Create Device
-*/
+	//create new device
 	if (representingConfigurationDescriptor)
 	{
 		const unsigned char* packet = (unsigned char*)packetData.data();
@@ -102,9 +113,9 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 		representingConfigurationDescriptor = false;
 	}
 
+	//parse HID Report Descriptor
 	if (representingHIDDescriptor)
 	{
-		auto a = tableWidget->rowCount();
 		QTableWidgetItem* previousItem = tableWidget->item(tableWidget->rowCount() - 2, 0);
 		QByteArray previousLeftoverData = previousItem->data(dataHolder->TRANSFER_LEFTOVER_DATA).toByteArray();
 		const unsigned char* previousPacket = (unsigned char*)previousLeftoverData.constData();
@@ -119,6 +130,10 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 	CheckForSetupPacket(packetData);
 }
 
+/// <summary>
+/// Fills up first item in the row with all data needed for later analysis.
+/// </summary>
+/// <param name="packetData">Data that represents one concrete packet</param>
 void ItemManager::FillUpItem(QByteArray packetData)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();
@@ -157,6 +172,10 @@ void ItemManager::FillUpItem(QByteArray packetData)
 	tableItem->setData(dataHolder->TRANSFER_LEFTOVER_DATA, QVariant(leftoverDataArray));
 }
 
+/// <summary>
+/// Analyzing Setup Packet and setting up <see cref="representingHIDDescriptor"/> and <see cref="representingConfigurationDescriptor"/>
+/// </summary>
+/// <param name="packetData">Data that represents Setup Packet</param>
 void ItemManager::CheckForSetupPacket(QByteArray packetData)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();
@@ -181,12 +200,20 @@ void ItemManager::CheckForSetupPacket(QByteArray packetData)
 	}
 }
 
+/// <summary>
+/// Creates next row in <see cref="tableWidget"/>
+/// </summary>
+/// <param name="usbh">USB packet header in USBPcap format</param>
+/// <param name="packet">pointer to the start of packet data</param>
 void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet)
 {
 	std::string name;
 	int column = 0;
 	name = std::to_string(tableWidget->rowCount() - 1);
+	//inserts Index cell
 	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+
+	//inserts Source and Destination cells
 	if ((usbh->info & 0x01) == 1)
 	{
 		name = std::to_string(usbh->device) + "." + std::to_string(usbh->endpoint & 0x0F);
@@ -201,10 +228,16 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 		name = std::to_string(usbh->device) + '.' + std::to_string(usbh->endpoint & 0x0F);
 		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 	}
+
+	//inserts Length cell
 	name = std::to_string(usbh->dataLength + usbh->headerLen);
 	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+
+	//inserts Transfer type cell
 	name = dataHolder->GetTransferType(usbh->transfer);
 	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+	
+	//inserts Function cell
 	if (usbh->transfer == USBPCAP_TRANSFER_CONTROL && (usbh->info & 0x01) == 0) //control transfer, host->device, additional data = setup packet
 	{
 		if (usbh->dataLength == sizeof(WINUSB_SETUP_PACKET))
@@ -235,6 +268,10 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 	ColorRow(usbh);
 }
 
+/// <summary>
+/// Colors rows in <see cref="tableWidget"/>
+/// </summary>
+/// <param name="usbh">Header of packet. Determines transfer type</param>
 void ItemManager::ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh)
 {
 	if ((usbh->info & 0x01) == 1) //device->host transfer
@@ -273,6 +310,12 @@ void ItemManager::ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh)
 	}
 }
 
+/// <summary>
+/// Determines concrete data type of packet
+/// </summary>
+/// <param name="currentItem">current item that holds data</param>
+/// <param name="previousItem">item that stands tight before <see cref="currentItem"/></param>
+/// <returns></returns>
 HeaderDataType ItemManager::GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem)
 {
 	QByteArray usbhArr = currentItem->data(dataHolder->USBPCAP_HEADER_DATA).toByteArray();
@@ -307,7 +350,7 @@ HeaderDataType ItemManager::GetDataType(QTableWidgetItem* currentItem, QTableWid
 			return CONTROL_TRANSFER_SETUP;
 		}
 
-		// device->host and control tranfser ... some descriptor is being sent to the host
+		// device->host and control transfer ... some descriptor is being sent to the host
 		if (previousItem == nullptr)
 		{
 			return UNKNOWN_TRANSFER;

@@ -1,3 +1,8 @@
+
+/****************************************************************************************************************
+ * USBPCAP SPECIFIC STRUCTS
+ ****************************************************************************************************************/
+
 /*
  * Copyright (c) 2013-2019 Tomasz Moñ <desowin@gmail.com>
  *
@@ -187,6 +192,10 @@ extern "C" {
 #endif /* USBPCAP_H */
 
 
+/*****************************************************************************************************************
+ * STRUCTS AND ENUMS DEFINED BY AUTHOR OF THIS PROJECT
+ *****************************************************************************************************************/
+
 #ifndef EXTERNSTRUCTS_HPP
 #define EXTERNSTRUCTS_HPP
 
@@ -197,6 +206,9 @@ extern "C" {
 
 //ENUMS
 
+/// <summary>
+/// Representing specific additional data by transfer type and in Control TRansfer also by descriptor type
+/// </summary>
 enum HeaderDataType
 {
     INTERR_TRANSFER, ISOCHRO_TRANSFER, BULK_TRANSFER, CONTROL_TRANSFER, CONTROL_TRANSFER_RESPONSE, CONTROL_TRANSFER_DEVICE_DESC, CONTROL_TRANSFER_CONFIG_DESC, CONTROL_TRANSFER_STRING_DESC,
@@ -205,46 +217,82 @@ enum HeaderDataType
     IRP_INFO_TRANSFER, UNKNOWN_TRANSFER
 };
 
+/// <summary>
+/// Representing descriptor types.
+/// </summary>
 enum Descriptor_Types
 {
     DEVICE_DESCRIPTOR = 1, CONFIGURATION_DESCRIPTOR, STRING_DESCRIPTOR, INTERFACE_DESCRIPTOR, ENDPOINT_DESCRIPTOR,
     DEVICE_QUALIFIER, OTHER_SPEED_CONFIGURATION, HID_DESCRIPTOR_ENUM = 0x21, HID_REPORT_DESCRIPTOR = 0x22
 };
 
+/// <summary>
+/// Representing standard device requests.
+/// </summary>
 enum Setup_Packet_bRequest
 {
     GET_STATUS, CLEAR_FEATURE, SET_FEATURE = 3, SET_ADDRESS = 5, GET_DESCRIPTOR, SET_DESCRIPTOR, GET_CONFIGURATION, SET_CONFIGURATION,
     GET_INTERFACE, SET_INTERFACE, SYNCH_FRAME
 };
 
+/// <summary>
+/// Represents Setup Packet SET_FEATURE Test Mode Selectors.
+/// </summary>
 enum USB_Test_Selectors { TEST_J = 1, TEST_K, TEST_SE0_NAK, TEST_PACKET, TEST_FORCE_ENABLE };
 
+/// <summary>
+/// Represents HID Report Descriptor Item type.
+/// </summary>
 enum Report_Desc_Item_Type { MAIN, GLOBAL, LOCAL };
 
+/// <summary>
+/// Represents HID Report Descriptor Main Item tag.
+/// </summary>
 enum Report_Desc_Main_Tags { MAIN_INPUT = 0x8, OUTPUT = 0x9, COLLECTION = 0xA, FEATURE = 0xB, END_COLLECTION = 0xC };
 
+/// <summary>
+/// Represents HID Report Descriptor Global tag.
+/// </summary>
 enum Report_Desc_Global_Tags
 {
     USAGE_PAGE, LOGICAL_MINIMUM, LOGICAL_MAXIMUM, PHYSICAL_MINIMUM, PHYSICAL_MAXIMUM, UNIT_EXPONENT, UNIT, REPORT_SIZE, REPORT_ID,
     REPORT_COUNT, PUSH, POP
 };
 
+/// <summary>
+/// Represents HID Report Descriptor Local tag.
+/// </summary>
 enum Report_Desc_Local_Tags
 {
     USAGE, USAGE_MINIMUM, USAGE_MAXIMUM, DESIGNATOR_INDEX, DESIGNATOR_MINIMUM, DESIGNATOR_MAXIMUM, STRING_INDEX = 0X7,
     STRING_MINIMUM = 0X8, STRING_MAXIMUM = 0X9, DELIMITER = 0XA
 };
 
+/// <summary>
+/// Represents HID Report Descriptor Collection Type.
+/// </summary>
 enum Report_Desc_Collection_Type { PHYSICAL, APPLICATION, LOGICAL, REPORT, NAMED_ARRAY, USAGE_SWITCH, USAGE_MODIFIER };
 
+/// <summary>
+/// Represents HID Usage Pages.
+/// </summary>
 enum Global_Usage_Pages { GENERIC_DESKTOP_PAGE = 0x01, KEYBOARD_PAGE = 0x07, LED_PAGE, BUTTON_PAGE };
 
+/// <summary>
+/// Represents Generic Desktop Usages.
+/// </summary>
 enum Generic_Desktop_Usages { UNDEFINED, POINTER, MOUSE, RESERVED, JOYSTICK, GAMEPAD, KEYBOARD, KEYPAD, X = 0X30, Y, Z, RX, RY, RZ, WHEEL = 0X38, HAT_SWITCH };
 
+/// <summary>
+/// Represents supported devices by this application.
+/// </summary>
 enum Supported_Devices { D_KEYBOARD = 1, D_MOUSE, D_JOYSTICK, D_UNDEFINED };
 
 //STRUCTS
 
+/// <summary>
+/// Represents one color instance
+/// </summary>
 typedef struct DataTypeColor
 {
     int red;
@@ -253,6 +301,9 @@ typedef struct DataTypeColor
     int alpha;
 } DataTypeColor;
 
+/// <summary>
+/// Represents Report Descriptor struct for easy interpretation in tree view.
+/// </summary>
 struct ReportDescTreeStruct
 {
     ReportDescTreeStruct() : tag(0), size(0), itemType(0), root(false), childs(), data(NULL) {}
@@ -269,6 +320,9 @@ struct ReportDescTreeStruct
     std::vector<std::shared_ptr<ReportDescTreeStruct>> childs;
 };
 
+/// <summary>
+/// Represents HID Descriptor
+/// </summary>
 typedef struct HIDDescriptor
 {
     UCHAR                     bLength;
@@ -280,6 +334,9 @@ typedef struct HIDDescriptor
     USHORT                    wReportLength;
 } HIDDescriptor, * PHIDDescriptor;
 
+/// <summary>
+/// Represents one Input Item in Report Descriptor. Used for semantic analysis of data.
+/// </summary>
 typedef struct InputValues
 {
     InputValues() : GlobalUsagePage(0), ReportSize(0), ReportCount(0), UsageMinimum(0), UsageMaximum(0),
@@ -287,7 +344,7 @@ typedef struct InputValues
     {
     }
 
-    //uint32 because i am assuming short items, and they can have data up to 4 bytes
+    //uint32 because we are assuming short items, and they can have data up to 4 bytes
     std::vector<uint32_t> LocalUsageNames;
     uint32_t GlobalUsagePage;
     uint32_t ReportSize;
@@ -299,7 +356,10 @@ typedef struct InputValues
     bool Variable;
 }InputValues, * PInputValues;
 
-typedef struct HIDReportDescriptorInputParse   //just for parsing input, not for interpreting HID Report Descriptor
+/// <summary>
+/// Represents one concrete input of HID device. Used just for parsing input, not for interpreting HID Report Descriptor.
+/// </summary>
+typedef struct HIDReportDescriptorInputParse
 {
     HIDReportDescriptorInputParse() : inputSize(0), reportDefined(false), reportID(0), deviceAddress(0),
         globalItemUsage(0), localItemUsage(0), inputValues()
@@ -315,10 +375,13 @@ typedef struct HIDReportDescriptorInputParse   //just for parsing input, not for
     std::vector<InputValues> inputValues;
 } HIDReportDescriptorInputParse, * PHIDReportDescriptorInputParse;
 
-typedef struct EndpointDevice
+/// <summary>
+/// Represents one concrete device attached to bus
+/// </summary>
+typedef struct BusDevice
 {
-	EndpointDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints(), hidDescription() {}
-	EndpointDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints(), hidDescription() {}
+	BusDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints(), hidDescription() {}
+	BusDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints(), hidDescription() {}
 	USHORT deviceAddress;
 	bool obsolete;
 	std::map<BYTE, std::vector<HIDReportDescriptorInputParse>> inputparser; // <endpointNum, parsers> // parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID

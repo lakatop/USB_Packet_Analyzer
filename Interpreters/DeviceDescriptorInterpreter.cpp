@@ -1,11 +1,20 @@
 #include "DeviceDescriptorInterpreter.hpp"
 
+/// <summary>
+/// Constructor for DeviceDescriptorInterpreter
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 DeviceDescriptorInterpreter::DeviceDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem, item, additionalDataModel)
 {
 	this->holder = DataHolder::GetDataHolder();
 }
 
+/// <summary>
+/// Interprets Device Descriptor
+/// </summary>
 void DeviceDescriptorInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
@@ -15,7 +24,9 @@ void DeviceDescriptorInterpreter::Interpret()
 	TreeItem* deviceDescriptorChild = rootItem->Child(rootItem->ChildCount() - 1);
 
 	QString hexData;
+	//interprete common part for device descriptors
 	InterpretControlTransferDeviceDescriptorBase(deviceDescriptor, &packet, deviceDescriptorChild, additionalDataModel);
+
 	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
 	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "idVendor", deviceDescriptor->idVendor}, deviceDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
@@ -32,6 +43,12 @@ void DeviceDescriptorInterpreter::Interpret()
 	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bNumConfigurations", deviceDescriptor->bNumConfigurations}, deviceDescriptorChild));
 }
 
+/// <summary>
+/// Constructor for DeviceQualifierDescriptorInterpreter
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 DeviceQualifierDescriptorInterpreter::DeviceQualifierDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item,
 	AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem, item, additionalDataModel)
@@ -39,6 +56,9 @@ DeviceQualifierDescriptorInterpreter::DeviceQualifierDescriptorInterpreter(TreeI
 	this->holder = DataHolder::GetDataHolder();
 }
 
+/// <summary>
+/// Inteprrets Device Qualifier Descriptor
+/// </summary>
 void DeviceQualifierDescriptorInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
@@ -48,7 +68,9 @@ void DeviceQualifierDescriptorInterpreter::Interpret()
 	TreeItem* deviceQualifierChild = rootItem->Child(rootItem->ChildCount() - 1);
 
 	QString hexData;
+	//intepret common part for device descriptors
 	DeviceDescriptorInterpreter::InterpretControlTransferDeviceDescriptorBase(deviceQualifierDescriptor, &packet, deviceQualifierChild, additionalDataModel);
+	
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	deviceQualifierChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bNumConfigurations", deviceQualifierDescriptor->bNumConfigurations}, deviceQualifierChild));
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);

@@ -1,5 +1,12 @@
 #include "MouseInterpreter.hpp"
 
+/// <summary>
+/// Constructor for MouseInterpreter.
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
+/// <param name="inputParser"><see cref="inputParser"/></param>
 MouseInterpreter::MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
     HIDReportDescriptorInputParse inputParser)
     :BaseInterpreter(rootItem, item, additionalDataModel)
@@ -9,6 +16,9 @@ MouseInterpreter::MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, A
     this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
+/// <summary>
+/// Interprets concrete input for HID joystick device
+/// </summary>
 void MouseInterpreter::Interpret()
 {
     QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();

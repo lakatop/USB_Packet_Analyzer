@@ -1,5 +1,12 @@
 #include "UnknownDeviceInterpreter.hpp"
 
+/// <summary>
+/// Constructor of UnknownDeviceInterpreter
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
+/// <param name="inputParser"><see cref="inputParser"/></param>
 UnknownDeviceInterpreter::UnknownDeviceInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
 	HIDReportDescriptorInputParse inputParser)
 	:BaseInterpreter(rootItem, item, additionalDataModel)
@@ -9,6 +16,9 @@ UnknownDeviceInterpreter::UnknownDeviceInterpreter(TreeItem* rootItem, QTableWid
 	this->holder = DataHolder::GetDataHolder();
 }
 
+/// <summary>
+/// Interprets unknown descriptor.
+/// </summary>
 void UnknownDeviceInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();

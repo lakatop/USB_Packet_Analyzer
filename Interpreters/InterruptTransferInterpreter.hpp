@@ -7,6 +7,9 @@
 #include "UnknownDeviceInterpreter.hpp"
 #include "BaseInterpreter.hpp"
 
+/// <summary>
+/// Intepreter class for interrupt transfer
+/// </summary>
 class InterruptTransferInterpreter : public BaseInterpreter
 {
 public:
@@ -14,8 +17,13 @@ public:
 	void Interpret() override;
 private:
 	HIDReportDescriptorInputParse GetInputParser(int index);
-
+	/// <summary>
+	/// Pointer to DataHolder instance.
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// Pointer to HIDDevices instance.
+	/// </summary>
 	HIDDevices* hidDevices;
 };
 

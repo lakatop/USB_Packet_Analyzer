@@ -4,6 +4,9 @@
 #include "BaseInterpreter.hpp"
 #include <winusb.h>
 
+/// <summary>
+/// Interpreter class for Setup Packet Descriptor
+/// </summary>
 class SetupPacketInterpreter : public BaseInterpreter
 {
 public:
@@ -14,6 +17,9 @@ private:
 	void AppendSetupwIndex(const unsigned char** it, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
 	void AppendSetupwLength(const unsigned char** it, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
 
+	/// <summary>
+	/// Pointer to DataHolder instance.
+	/// </summary>
 	DataHolder* holder;
 };
 

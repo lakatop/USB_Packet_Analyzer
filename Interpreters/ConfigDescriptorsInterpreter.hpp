@@ -4,6 +4,9 @@
 #include "../HID/HIDDevices.hpp"
 #include "BaseInterpreter.hpp"
 
+/// <summary>
+/// Interpreter class for configuration descriptors
+/// </summary>
 class ConfigDescriptorsInterpreter : public BaseInterpreter
 {
 public:
@@ -17,7 +20,13 @@ private:
 	void InterpretHIDDescriptor(const unsigned char* packet);
 	void InterpretUnknownDescriptor(const unsigned char* packet);
 
+	/// <summary>
+	/// Pointer to DataHolder class instance
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// Pointer to HIDDevices class instance
+	/// </summary>
 	HIDDevices* hidDevices;
 };
 

@@ -2,6 +2,12 @@
 
 #include "../Interpreters/InterpreterFactory.hpp"
 
+/// <summary>
+/// Constructor of AdditionaldataModel.
+/// </summary>
+/// <param name="item"><see cref="item"/></param>
+/// <param name="dataType"><see cref="dataType"/></param>
+/// <param name="parent">Dialog <see cref="DataViewer"/></param>
 AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, HeaderDataType dataType, QObject* parent) :
 	TreeItemBaseModel(parent)
 {
@@ -11,6 +17,12 @@ AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, HeaderDataType 
     CreateSpecifiedModel();
 }
 
+/// <summary>
+/// Returns data on specified index and role
+/// </summary>
+/// <param name="index">Index of data</param>
+/// <param name="role">Role of data</param>
+/// <returns>QVariant on specified index and role of <see cref="item"/></returns>
 QVariant AdditionalDataModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
@@ -21,12 +33,16 @@ QVariant AdditionalDataModel::data(const QModelIndex& index, int role) const
 
     TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
 
-    auto a = index.column();
-    auto b = index.row();
-
     return item->Data(index.column());
 }
 
+/// <summary>
+/// Returns header data which are stored as data in <see cref="rootItem"/>
+/// </summary>
+/// <param name="section">Column of header</param>
+/// <param name="orientation">Defines orientation of header</param>
+/// <param name="role">Defines Qt role</param>
+/// <returns>QVariant with header data</returns>
 QVariant AdditionalDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
@@ -35,6 +51,9 @@ QVariant AdditionalDataModel::headerData(int section, Qt::Orientation orientatio
     return QVariant();
 }
 
+/// <summary>
+/// Thanks to <see cref="InterpreterFactory"/> chooses correct interpreter and interprets additional packet data.
+/// </summary>
 void AdditionalDataModel::CreateSpecifiedModel()
 {
     InterpreterFactory factory(rootItem.get(), item, this,dataType);

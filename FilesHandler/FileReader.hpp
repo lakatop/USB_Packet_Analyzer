@@ -4,10 +4,16 @@
 #include "../DefinedStructs/PacketExternStructs.hpp"
 #include <qfile.h>
 
+/// <summary>
+/// Class for handling file operations
+/// </summary>
 class FileReader
 {
 public:
-    FileReader() { gheader.magic_number = 0; gheader.version_major = 0; gheader.version_minor = 0; gheader.thiszone = 0; gheader.sigfigs = 0; gheader.snaplen = 0; gheader.network = 0; }
+    /// <summary>
+    /// Constructor of FileReader.
+    /// </summary>
+    FileReader() {}
 	~FileReader();
 	QByteArray GetPacket();
 	bool ReadFileHeader();
@@ -15,7 +21,13 @@ public:
 	bool OpenNewFile(QString filename);
 	qint64 FileSize();
 private:
-	pcap_hdr_t gheader;
+	/// <summary>
+	/// Global header of pcap file.
+	/// </summary>
+	pcap_hdr_t gheader{};
+	/// <summary>
+	/// QFile instance for handling file operations
+	/// </summary>
 	QFile file;
 };
 

@@ -4,6 +4,9 @@
 #include "../DefinedStructs/PacketExternStructs.hpp"
 #include "BaseInterpreter.hpp"
 
+/// <summary>
+/// Interpreter class for HID Report Descriptor
+/// </summary>
 class ReportDescriptorInterpreter : public BaseInterpreter
 {
 public:
@@ -17,9 +20,21 @@ private:
 	void AppendItem(TreeItem* parent, ReportDescTreeStruct* reportDescriptor);
 	std::string InterpretData(ReportDescTreeStruct* reportDescriptor);
 
+	/// <summary>
+	/// Holds Global Usage for Report Descriptor.
+	/// </summary>
 	BYTE globalUsage;
+	/// <summary>
+	/// Tree structure representing Report Descriptor in format so it can be easily interpreted
+	/// </summary>
 	ReportDescTreeStruct reportDescriptor;
+	/// <summary>
+	/// Pointer to DataHolder instance.
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// QByteArray holding data which represents Report Descriptor
+	/// </summary>
 	QByteArray reportArray;
 };
 

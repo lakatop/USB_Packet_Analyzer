@@ -2,6 +2,10 @@
 
 DataHolder* DataHolder::holder = nullptr;
 
+/// <summary>
+/// Get instance of this class
+/// </summary>
+/// <returns>Pointer to instance of DataHolder class</returns>
 DataHolder* DataHolder::GetDataHolder()
 {
 	if (holder == nullptr)
@@ -12,6 +16,9 @@ DataHolder* DataHolder::GetDataHolder()
 	return holder;
 }
 
+/// <summary>
+/// Constructor of DataHolder.
+/// </summary>
 DataHolder::DataHolder()
 {
 	FillDataColorsMap();
@@ -19,9 +26,11 @@ DataHolder::DataHolder()
 	TRANSFER_LEFTOVER_DATA = Qt::UserRole + 1;
 	TRANSFER_OPTIONAL_HEADER = Qt::UserRole + 2;
 	USBPCAP_HEADER_DATA = Qt::UserRole + 3;
-	REPORT_DESC_TREE_INDEX = Qt::UserRole + 4;
 }
 
+/// <summary>
+/// Fills up DataColors.
+/// </summary>
 void DataHolder::FillDataColorsMap()
 {
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(INTERR_TRANSFER, { 255,0,0,255 }));
@@ -44,7 +53,11 @@ void DataHolder::FillDataColorsMap()
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(UNKNOWN_TRANSFER, { 0,0,255,255 }));
 }
 
-
+/// <summary>
+/// Get string representation for USBPcap transfer.
+/// </summary>
+/// <param name="transfer">USBPcap transfer</param>
+/// <returns>String representation for USBPcap transfer</returns>
 std::string DataHolder::GetTransferType(BYTE transfer)
 {
 	switch (transfer)
@@ -67,6 +80,11 @@ std::string DataHolder::GetTransferType(BYTE transfer)
 	}
 }
 
+/// <summary>
+/// Get string representation for Descriptor_Types enum.
+/// </summary>
+/// <param name="type">Descriptor_Types enum</param>
+/// <returns>String representation for Descriptor_Types enum</returns>
 std::string DataHolder::GetDescriptorType(BYTE type)
 {
 	switch (type)
@@ -111,6 +129,12 @@ std::string DataHolder::GetDescriptorType(BYTE type)
 		return std::to_string(type);
 	}
 }
+
+/// <summary>
+/// Get string representation for Setup_Packet_bRequest enum.
+/// </summary>
+/// <param name="request">Setup_Packet_bRequest enum</param>
+/// <returns>String representation for Setup_Packet_bRequest enum</returns>
 std::string DataHolder::GetSetupPacketRequest(BYTE request)
 {
 	switch (request)
@@ -164,6 +188,11 @@ std::string DataHolder::GetSetupPacketRequest(BYTE request)
 	}
 }
 
+/// <summary>
+/// Get string representation for USB_Test_Selectors enum.
+/// </summary>
+/// <param name="selector">USB_Test_Selectors enum</param>
+/// <returns>String representation for USB_Test_Selectors enum</returns>
 std::string DataHolder::GetUSBTestSelector(BYTE selector)
 {
 	switch (selector)
@@ -193,6 +222,11 @@ std::string DataHolder::GetUSBTestSelector(BYTE selector)
 	}
 }
 
+/// <summary>
+/// Get string representation for Report_Desc_Item_Type enum.
+/// </summary>
+/// <param name="type">Report_Desc_Item_Type enum</param>
+/// <returns>String representation for Report_Desc_Item_Type enum</returns>
 std::string DataHolder::GetReportItemType(BYTE type)
 {
 	switch (type)
@@ -214,6 +248,12 @@ std::string DataHolder::GetReportItemType(BYTE type)
 	}
 }
 
+/// <summary>
+/// Get string representation for Report Descriptor tag enums
+/// </summary>
+/// <param name="tag">Report Descriptor tags</param>
+/// <param name="type">Report_Desc_Item_Type enum</param>
+/// <returns>String representation for Report Descriptor tag enums</returns>
 std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
 {
 	switch (type)
@@ -301,6 +341,11 @@ std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
 	}
 }
 
+/// <summary>
+/// Get string representation for Report_Desc_Collection_Type enum.
+/// </summary>
+/// <param name="collection">Report_Desc_Collection_Type enum</param>
+/// <returns>String representation for Report_Desc_Collection_Type enum</returns>
 std::string DataHolder::GetReportCollectionType(BYTE collection)
 {
 	switch (collection)
@@ -346,6 +391,11 @@ std::string DataHolder::GetReportCollectionType(BYTE collection)
 	}
 }
 
+/// <summary>
+/// Get string representation for Global_Usage_Pages enum.
+/// </summary>
+/// <param name="value">Global_Usage_Pages enum</param>
+/// <returns>String representation for Global_Usage_Pages enum</returns>
 std::string DataHolder::GetGlobalUsagePage(BYTE value)
 {
 	switch (value)
@@ -371,6 +421,12 @@ std::string DataHolder::GetGlobalUsagePage(BYTE value)
 	}
 }
 
+/// <summary>
+/// Get string representation for specific usage name specified by global usage and usage ID
+/// </summary>
+/// <param name="globalUsage">Global_Usage_Pages enum</param>
+/// <param name="value">Usage ID</param>
+/// <returns>String representation for specific usage name specified by global usage and usage ID</returns>
 std::string DataHolder::GetUsage(BYTE globalUsage, BYTE value)
 {
 	switch (globalUsage)
@@ -384,6 +440,11 @@ std::string DataHolder::GetUsage(BYTE globalUsage, BYTE value)
 	}
 }
 
+/// <summary>
+/// Get string representation for Generic_Desktop_Usages enum.
+/// </summary>
+/// <param name="value">Generic_Desktop_Usages enum</param>
+/// <returns>String representation for Generic_Desktop_Usages enum</returns>
 std::string DataHolder::GetGenericDesktopUsage(BYTE value)
 {
 	switch (value)

@@ -1,11 +1,22 @@
 #include "TreeItemBaseModel.h"
 
+/// <summary>
+/// Constructor of TreeItemBaseModel
+/// </summary>
+/// <param name="parent">Dialog <see cref="DataViewer"/></param>
 TreeItemBaseModel::TreeItemBaseModel(QObject *parent)
 	: QAbstractItemModel(parent)
 {
 	holder = DataHolder::GetDataHolder();
 }
 
+/// <summary>
+/// Get index of concrete item in model specified by row, column and parent.
+/// </summary>
+/// <param name="row">Row of item</param>
+/// <param name="column">Column of item</param>
+/// <param name="parent">Parent of item</param>
+/// <returns>QModelIndex of concrete item specified by parameters</returns>
 QModelIndex TreeItemBaseModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -24,6 +35,11 @@ QModelIndex TreeItemBaseModel::index(int row, int column, const QModelIndex& par
     return QModelIndex();
 }
 
+/// <summary>
+/// Get parent of item with given index.
+/// </summary>
+/// <param name="index">Index of item whose parent we want</param>
+/// <returns>QModelIndex which indexes parent of item given by index</returns>
 QModelIndex TreeItemBaseModel::parent(const QModelIndex& index) const
 {
     if (!index.isValid())
@@ -39,11 +55,14 @@ QModelIndex TreeItemBaseModel::parent(const QModelIndex& index) const
     return createIndex(parentItem->Row(), 0, parentItem);
 }
 
+/// <summary>
+/// Get number of childs that parent has.
+/// </summary>
+/// <param name="parent">Index of parent</param>
+/// <returns>Size of TreeItem.childs vector</returns>
 int TreeItemBaseModel::rowCount(const QModelIndex& parent) const
 {
     TreeItem* parentItem;
-    if (parent.column() > 0)
-        return 0;
 
     if (!parent.isValid())
         parentItem = rootItem.get();
@@ -53,6 +72,11 @@ int TreeItemBaseModel::rowCount(const QModelIndex& parent) const
     return parentItem->ChildCount();
 }
 
+/// <summary>
+/// Get number of columns.
+/// </summary>
+/// <param name="parent">Item whose columns we want to count</param>
+/// <returns>Size of TreeItem.data vector</returns>
 int TreeItemBaseModel::columnCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
@@ -60,12 +84,23 @@ int TreeItemBaseModel::columnCount(const QModelIndex& parent) const
     return rootItem->ColumnCount();
 }
 
+/// <summary>
+/// Get color depending on data type.
+/// </summary>
+/// <param name="dataType">Data type whose color we want</param>
+/// <returns>QColor representing specific data type</returns>
 QColor TreeItemBaseModel::GetDataTypeColor(HeaderDataType dataType) const
 {
     DataTypeColor col = holder->DataColors[dataType];
     return QColor::fromRgb(col.red, col.green, col.blue, col.alpha);
 }
 
+/// <summary>
+/// Converts char to hex
+/// </summary>
+/// <param name="addr">char* to data which we want to convert</param>
+/// <param name="len">Length of data which we want to be converted</param>
+/// <param name="data">QString in which we will insert converted data</param>
 void TreeItemBaseModel::CharToHexConvert(const unsigned char** addr, const unsigned int len, QString& data)
 {
     std::stringstream stream;

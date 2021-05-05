@@ -1,5 +1,11 @@
 #include "InterruptTransferInterpreter.hpp"
 
+/// <summary>
+/// Constructor for InterruptTransferInterpreter.
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 InterruptTransferInterpreter::InterruptTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem,item,additionalDataModel)
 {
@@ -7,6 +13,9 @@ InterruptTransferInterpreter::InterruptTransferInterpreter(TreeItem* rootItem, Q
 	this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
+/// <summary>
+/// Chooses appropriate interpreter and interprets interrupt transfer data
+/// </summary>
 void InterruptTransferInterpreter::Interpret()
 {
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->data(holder->USBPCAP_HEADER_DATA).toByteArray().constData();
@@ -87,6 +96,11 @@ void InterruptTransferInterpreter::Interpret()
 	}
 }
 
+/// <summary>
+/// Gets concrete HIDReportDescriptorInputParse struct for interpreting this interrupt transfer data
+/// </summary>
+/// <param name="index">Index of concrete device for which we are finding interpreter</param>
+/// <returns>Concrete HIDReportDescriptorInputParse struct for parsing input, or default HIDReportDescriptorInputParse struct if nothing was found</returns>
 HIDReportDescriptorInputParse InterruptTransferInterpreter::GetInputParser(int index)
 {
 	HIDReportDescriptorInputParse inputParser;

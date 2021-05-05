@@ -1,5 +1,11 @@
 #include "ReportDescriptorInterpreter.hpp"
 
+/// <summary>
+/// Constructor for ReportDescriptorInterpreter
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem, item, additionalDataModel)
 {
@@ -10,6 +16,9 @@ ReportDescriptorInterpreter::ReportDescriptorInterpreter(TreeItem* rootItem, QTa
 	ParseReportDescriptor(&reportDescriptor, 0);
 }
 
+/// <summary>
+/// Interprets Report Descriptor. Starting point of recursive call InterpretReportDescriptor().
+/// </summary>
 void ReportDescriptorInterpreter::Interpret()
 {
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"HID_REPORT_DESCRIPTOR", "", ""}, rootItem));
@@ -20,6 +29,11 @@ void ReportDescriptorInterpreter::Interpret()
 	}
 }
 
+/// <summary>
+/// Recursive function to interpret Report Descriptor in a hierarchical way
+/// </summary>
+/// <param name="parent">Tree item to which we are appending items</param>
+/// <param name="reportDescriptor">Node of ReportDescTreeStruct which we are interpreting</param>
 void ReportDescriptorInterpreter::InterpretReportDescriptor(TreeItem* parent, ReportDescTreeStruct* reportDescriptor)
 {
 
@@ -31,6 +45,12 @@ void ReportDescriptorInterpreter::InterpretReportDescriptor(TreeItem* parent, Re
 	}
 }
 
+/// <summary>
+/// Parsing method to fill up <see cref="reportDescriptor"/>
+/// </summary>
+/// <param name="root">Current node in reportDescriptor</param>
+/// <param name="parsed">Value representing how much data of reportArray has been parsed already</param>
+/// <returns>How much data has been already parsed</returns>
 std::size_t ReportDescriptorInterpreter::ParseReportDescriptor(ReportDescTreeStruct* root, std::size_t parsed)
 {
 	if (parsed == reportArray.size())
@@ -71,6 +91,12 @@ std::size_t ReportDescriptorInterpreter::ParseReportDescriptor(ReportDescTreeStr
 	return parsed + size + 1;
 }
 
+/// <summary>
+/// Interprets Input/Output/Feature item.
+/// </summary>
+/// <param name="tag">Tag of Report Descriptor item</param>
+/// <param name="data">Data of Report Descriptor item</param>
+/// <param name="child">Tree item to which we are appending items</param>
 void ReportDescriptorInterpreter::InterpretInputOutputFeature(BYTE tag, QByteArray& data, TreeItem* child)
 {
 	const unsigned char* packet = (unsigned char*)data.constData();
@@ -97,6 +123,11 @@ void ReportDescriptorInterpreter::InterpretInputOutputFeature(BYTE tag, QByteArr
 	child->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(15, 1, value).right(19), dataConstant.c_str(), }, child));
 }
 
+/// <summary>
+/// Interprets header of Report Descriptor item.
+/// </summary>
+/// <param name="reportDescriptor">Current node in reportDescriptor whose header should be interpreted</param>
+/// <param name="child">Tree item to which we are appending items</param>
 void ReportDescriptorInterpreter::InterpretHeader(ReportDescTreeStruct* reportDescriptor, TreeItem* child)
 {
 	child->AppendChild(new TreeItem(QVector<QVariant>{"HEADER", "", ""}, child));
@@ -109,6 +140,11 @@ void ReportDescriptorInterpreter::InterpretHeader(ReportDescTreeStruct* reportDe
 	headerChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(6, 2, value), "bSize", reportDescriptor->size}, headerChild));
 }
 
+/// <summary>
+/// Interprets data of current item (if its not Input/Output/Feature item)
+/// </summary>
+/// <param name="reportDescriptor">Current node in reportDescriptor whose data should be interpreted</param>
+/// <returns>String of data which will be appended to concrete item as interpreted</returns>
 std::string ReportDescriptorInterpreter::InterpretData(ReportDescTreeStruct* reportDescriptor)
 {
 	std::stringstream stream;
@@ -136,6 +172,11 @@ std::string ReportDescriptorInterpreter::InterpretData(ReportDescTreeStruct* rep
 	return stream.str();
 }
 
+/// <summary>
+/// Handles interpreting one item - calling all specific item interpreting methods.
+/// </summary>
+/// <param name="parent">Tree item to which we are appending item</param>
+/// <param name="reportDescriptor">Current node in reportDescriptor which should be interpreted</param>
 void ReportDescriptorInterpreter::AppendItem(TreeItem* parent, ReportDescTreeStruct* reportDescriptor)
 {
 	parent->AppendChild(new TreeItem(QVector<QVariant>{(holder->GetReportItemType(reportDescriptor->itemType) +

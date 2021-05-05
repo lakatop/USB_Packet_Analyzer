@@ -5,6 +5,9 @@
 
 #include <qbytearray.h>
 
+/// <summary>
+/// Class for handling HID device specific tasks
+/// </summary>
 class HIDDevices
 {
 public:
@@ -17,17 +20,34 @@ public:
 	template<typename T>
 	void CharToNumberConvert(const unsigned char* addr, T& number, int size);
 
-	std::vector<EndpointDevice> devices;
+	std::vector<BusDevice> devices;
 private:
 	HIDDevices();
 	void FillSupportedDeviceMap();
 
+	/// <summary>
+	/// Instance of this class
+	/// </summary>
 	static HIDDevices* hidDevices;
+	/// <summary>
+	/// Size of HID Descriptor
+	/// </summary>
 	size_t HIDDescriptorSize;
+	/// <summary>
+	/// Map whose key is Global and Local Usage, and value is Supported_Devices enum 
+	/// representing whether this application supports device given by key.
+	/// </summary>
 	std::map<std::pair<uint32_t, uint32_t>, Supported_Devices> deviceMap;
 };
 
 
+/// <summary>
+/// Converts char buffer to decimal number
+/// </summary>
+/// <typeparam name="T">Type of decimal number we want to convert to.</typeparam>
+/// <param name="addr">Pointer to char buffer</param>
+/// <param name="number">Serves as output parameter for decimal number</param>
+/// <param name="size">Number of chars we want to convert</param>
 template<typename T>
 void HIDDevices::CharToNumberConvert(const unsigned char* addr, T& number, int size)
 {

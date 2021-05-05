@@ -5,6 +5,9 @@
 #include "../HID/HIDDevices.hpp"
 #include "BaseInterpreter.hpp"
 
+/// <summary>
+/// Interpreter for HID joystick device.
+/// </summary>
 class JoystickInterpreter : public BaseInterpreter
 {
 public:
@@ -12,8 +15,17 @@ public:
 		HIDReportDescriptorInputParse inputParser);
 	void Interpret() override;
 private:
+	/// <summary>
+	/// Concrete HIDReportDescriptorInputParse struct to parse this input.
+	/// </summary>
 	HIDReportDescriptorInputParse inputParser;
+	/// <summary>
+	/// Pointer to DataHolder instance.
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// Pointer to HIDDevices instance.
+	/// </summary>
 	HIDDevices* hidDevices;
 };
 

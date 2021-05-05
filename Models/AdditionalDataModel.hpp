@@ -5,6 +5,9 @@
 
 #include <qtablewidget.h>
 
+/// <summary>
+/// Model class for additional packet data.
+/// </summary>
 class AdditionalDataModel : public TreeItemBaseModel
 {
 public:
@@ -16,7 +19,13 @@ public:
 private:
 	void CreateSpecifiedModel();
 
+	/// <summary>
+	/// Item which holds data for this model.
+	/// </summary>
 	QTableWidgetItem* item;
+	/// <summary>
+	/// Data type of packet data in <see cref = "item"/>
+	/// </summary>
 	HeaderDataType dataType;
 };
 

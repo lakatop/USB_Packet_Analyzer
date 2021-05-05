@@ -1,7 +1,10 @@
 #include "USB_Packet_Analyzer.h"
 #include "../stdafx.h"
 
-
+/// <summary>
+/// Constuctor for USB_Packet_Analyzer.
+/// </summary>
+/// <param name="parent">Parent of this class</param>
 USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
     : QWidget(parent)
 {
@@ -9,6 +12,9 @@ USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
     Init();
 }
 
+/// <summary>
+/// Initializes components of main window.
+/// </summary>
 void USB_Packet_Analyzer::Init()
 {
     this->itemManager = ItemManager::GetItemManager(ui.tableWidget, this);
@@ -36,11 +42,17 @@ void USB_Packet_Analyzer::Init()
     connect(ui.tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(on_tableWidget_itemDoubleclicked(QTableWidgetItem*)));
 }
 
+/// <summary>
+/// Processes all pending events.
+/// </summary>
 void USB_Packet_Analyzer::Refresh()
 {
     QCoreApplication::processEvents();
 }
 
+/// <summary>
+/// Slot which will be called when user click Open Button
+/// </summary>
 void USB_Packet_Analyzer::on_OpenButton_clicked()
 {
     currentFile = QFileDialog::getOpenFileName(this, "Select source file", ".", "Pcap files (*.pcap)");
@@ -49,12 +61,18 @@ void USB_Packet_Analyzer::on_OpenButton_clicked()
     ui.progressBar->setValue(0);
 }
 
+/// <summary>
+/// Slot which will be called when user click Start Button
+/// </summary>
 void USB_Packet_Analyzer::on_StartButton_clicked()
 {
     this->itemManager->ProcessFile(currentFile, ui.liveCaptureRadioButton->isChecked());
     ui.tableWidget->resizeColumnsToContents();
 }
 
+/// <summary>
+/// Slot which will be called when user click Clear Button
+/// </summary>
 void USB_Packet_Analyzer::on_ClearButton_clicked()
 {
     ui.tableWidget->clearContents();
@@ -62,11 +80,17 @@ void USB_Packet_Analyzer::on_ClearButton_clicked()
     ui.progressBar->setValue(0);
 }
 
+/// <summary>
+/// Slot which will be called when user click Stop Button
+/// </summary>
 void USB_Packet_Analyzer::on_StopButton_clicked()
 {
     this->itemManager->stopButtonClicked = true;
 }
 
+/// <summary>
+/// Slot which will be called when user click Pause Button
+/// </summary>
 void USB_Packet_Analyzer::on_PauseButton_clicked()
 {
     if (ui.PauseButton->text() == "Pause")
@@ -81,11 +105,19 @@ void USB_Packet_Analyzer::on_PauseButton_clicked()
     }
 }
 
+/// <summary>
+/// Get pointer on progress bar.
+/// </summary>
+/// <returns>Pointer on applications progress bar</returns>
 QProgressBar* USB_Packet_Analyzer::GetProgressBar()
 {
     return ui.progressBar;
 }
 
+/// <summary>
+/// Slot which will be called when user double-clicks on item in tableWidget
+/// </summary>
+/// <param name="item">Item on which user double-clicked</param>
 void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* item)
 {
     int currentRow = ui.tableWidget->row(item);
@@ -95,6 +127,7 @@ void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* ite
         dataViewer->deleteLater();
     }
     QTableWidgetItem* dataItem = ui.tableWidget->item(currentRow, 0);
+
     //using nullptr as parent because otherwise it wont show in task bar
     dataViewer = QPointer(new DataViewer(dataItem, this->itemManager->GetDataType(dataItem, previousItem), ui.dataHighlightCheckBox->isChecked()));
     dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);

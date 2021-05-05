@@ -1,11 +1,20 @@
 #include "StringDescsriptorInterpreter.hpp"
 
+/// <summary>
+/// Constructor of StringDescriptorInterpreter
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 StringDescriptorInterpreter::StringDescriptorInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem, item, additionalDataModel)
 {
 	this->holder = DataHolder::GetDataHolder();
 }
 
+/// <summary>
+/// Interprets String Descriptor.
+/// </summary>
 void StringDescriptorInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();

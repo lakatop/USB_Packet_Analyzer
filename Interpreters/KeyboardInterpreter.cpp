@@ -1,5 +1,12 @@
 #include "KeyboardInterpreter.hpp"
 
+/// <summary>
+/// Constructor for KeyboardInterpreter.
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
+/// <param name="inputParser"><see cref="inputParser"/></param>
 KeyboardInterpreter::KeyboardInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
     HIDReportDescriptorInputParse inputParser)
     :BaseInterpreter(rootItem, item, additionalDataModel)
@@ -9,6 +16,9 @@ KeyboardInterpreter::KeyboardInterpreter(TreeItem* rootItem, QTableWidgetItem* i
     this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
+/// <summary>
+/// Interprets concrete input for HID keyboard device
+/// </summary>
 void KeyboardInterpreter::Interpret()
 {
     QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
@@ -78,6 +88,11 @@ void KeyboardInterpreter::Interpret()
     }
 }
 
+/// <summary>
+/// Interprets keyboards modifier_key_status
+/// </summary>
+/// <param name="child">Tree item to which we will append interpreted data</param>
+/// <param name="packet">Pointer to modifier_key_status data in packet data</param>
 void KeyboardInterpreter::InterpretModifierKey(TreeItem* child, const unsigned char* packet)
 {
     BYTE modifierStatus = 0;

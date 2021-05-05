@@ -5,6 +5,9 @@
 #include "../HID/HIDDevices.hpp"
 #include "BaseInterpreter.hpp"
 
+/// <summary>
+/// Interpreter for HID keyboard device.
+/// </summary>
 class KeyboardInterpreter : public BaseInterpreter
 {
 public:
@@ -14,8 +17,17 @@ public:
 private:
 	void InterpretModifierKey(TreeItem* child, const unsigned char* packet);
 
+	/// <summary>
+	/// Concrete HIDReportDescriptorInputParse struct to parse this input.
+	/// </summary>
 	HIDReportDescriptorInputParse inputParser;
+	/// <summary>
+	/// Pointer to DataHolder instance.
+	/// </summary>
 	DataHolder* holder;
+	/// <summary>
+	/// Pointer to HIDDevices instance.
+	/// </summary>
 	HIDDevices* hidDevices;
 };
 

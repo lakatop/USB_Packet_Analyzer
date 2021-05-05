@@ -1,5 +1,11 @@
 #include "DataViewer.h"
-
+/// <summary>
+/// Constructor fo DataViewer class.
+/// </summary>
+/// <param name="item">pointer to QTableWidgetItem which holds data for analysis</param>
+/// <param name="additionalDataType">Specific type of data transfer</param>
+/// <param name="dataHighlight">Determines whether data should be highlighted or not</param>
+/// <param name="parent">Parent of this object</param>
 DataViewer::DataViewer(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight, QWidget *parent)
 	: QDialog(parent)
 {
@@ -9,10 +15,16 @@ DataViewer::DataViewer(QTableWidgetItem* item, HeaderDataType additionalDataType
 	InitLabels();
 }
 
+/// <summary>
+/// Destructor of DataViewer
+/// </summary>
 DataViewer::~DataViewer()
 {
 }
 
+/// <summary>
+/// Initializes labels for views.
+/// </summary>
 void DataViewer::InitLabels()
 {
 	ui.additionalDataLabel->setText("Additional Transfer Data");
@@ -29,6 +41,12 @@ void DataViewer::InitLabels()
 	ui.usbhLabel->adjustSize();
 }
 
+/// <summary>
+/// Initializes table views. Sets models and delegates, connects signals and slots.
+/// </summary>
+/// <param name="item"><see cref="DataViewer()"/></param>
+/// <param name="additionalDataType"><see cref="DataViewer()"/></param>
+/// <param name="dataHighlight"><see cref="DataViewer()"/></param>
 void DataViewer::InitTables(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight)
 {
 	byteTableModel = std::make_unique<DataViewerModel>(item, false, additionalDataType, this);
@@ -48,6 +66,11 @@ void DataViewer::InitTables(QTableWidgetItem* item, HeaderDataType additionalDat
 	connect(ui.hexTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &DataViewer::updateByteSelection);
 }
 
+/// <summary>
+/// Initializes tree views. Sets models and adjust columns width.
+/// </summary>
+/// <param name="item"><see cref="DataViewer()"/></param>
+/// <param name="additionalDataType"><see cref="DataViewer()"/></param>
 void DataViewer::InitTreeViews(QTableWidgetItem* item, HeaderDataType additionalDataType)
 {
 	colorMapModel = std::make_unique<ColorMapModel>(this);
@@ -69,6 +92,11 @@ void DataViewer::InitTreeViews(QTableWidgetItem* item, HeaderDataType additional
 	ui.additionalDataTreeView->setColumnWidth(2, 100);
 }
 
+/// <summary>
+/// Sets properties for concrete table view.
+/// </summary>
+/// <param name="table">Table view which properties should be set</param>
+/// <param name="hexViewTable">true if table is hexTableView, false if it is byteTableView</param>
 void DataViewer::InitTableViewer(QTableView* table, bool hexViewTable)
 {
 	if (hexViewTable)
@@ -92,6 +120,11 @@ void DataViewer::InitTableViewer(QTableView* table, bool hexViewTable)
 	AdjustTableSize(table, hexViewTable);
 }
 
+/// <summary>
+/// Adjust size of table cells.
+/// </summary>
+/// <param name="table"><see cref="InitTableViewer()"/></param>
+/// <param name="hexViewTable"><see cref="InitTableViewer()"/></param>
 void DataViewer::AdjustTableSize(QTableView* table, bool hexViewTable)
 {
 	size_t maxHeight = 0;
@@ -116,6 +149,11 @@ void DataViewer::AdjustTableSize(QTableView* table, bool hexViewTable)
 	table->setMaximumWidth(maxWidth + 3);
 }
 
+/// <summary>
+/// Slot which is called when items in byteTableView are selected. It then selects and deselects corresponding items in hexTableView.
+/// </summary>
+/// <param name="selected">Selected items in byteTableView</param>
+/// <param name="deselected">Deselected items in byteTableView</param>
 void DataViewer::updateHexSelection(const QItemSelection& selected, const QItemSelection& deselected)
 {
 	auto hexSelectionModel = ui.hexTableView->selectionModel();
@@ -123,6 +161,11 @@ void DataViewer::updateHexSelection(const QItemSelection& selected, const QItemS
 	hexSelectionModel->select(deselected, QItemSelectionModel::Deselect);
 }
 
+/// <summary>
+/// Slot which is called when items in hexTableView are selected. It then selects and deselects corresponding items in byteTableView.
+/// </summary>
+/// <param name="selected">Selected items in hexTableView</param>
+/// <param name="deselected">Deselected items in hexTableView</param>
 void DataViewer::updateByteSelection(const QItemSelection& selected, const QItemSelection& deselected)
 {
 	auto byteSelectionModel = ui.byteTableView->selectionModel();

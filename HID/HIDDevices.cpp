@@ -2,6 +2,10 @@
 
 HIDDevices* HIDDevices::hidDevices = nullptr;
 
+/// <summary>
+/// Get instance of HIDDevices class
+/// </summary>
+/// <returns>Pointer to instance of HIDDevices class</returns>
 HIDDevices* HIDDevices::GetHIDDevices()
 {
 	if (hidDevices == nullptr)
@@ -12,17 +16,29 @@ HIDDevices* HIDDevices::GetHIDDevices()
 	return hidDevices;
 }
 
+/// <summary>
+/// Constructor of HIDDevices.
+/// </summary>
 HIDDevices::HIDDevices()
 {
 	HIDDescriptorSize = 9; //must be set manually because of padding
 	FillSupportedDeviceMap();
 }
 
+/// <summary>
+/// Get size of HID Descriptor
+/// </summary>
+/// <returns>Size of HID Descriptor without memory padding</returns>
 size_t HIDDevices::GetHIDDescriptorSize()
 {
 	return HIDDescriptorSize;
 }
 
+/// <summary>
+/// Get Supported_device enum representing whether this device is supported by this application or not.
+/// </summary>
+/// <param name="key">Key to deviceMap</param>
+/// <returns>Supported_Devices enum representing whether this device is supported by this application or not</returns>
 Supported_Devices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> key)
 {
 	auto deviceMapIterator = deviceMap.find(key);
@@ -35,7 +51,11 @@ Supported_Devices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> k
 		return deviceMapIterator->second;
 	}
 }
-
+/// <summary>
+/// HID Report Descriptor parser. Parses descriptor so we can later provide semantic analysis
+/// </summary>
+/// <param name="packetData">QByteArray representing Report Descriptor data</param>
+/// <param name="interfaceIndex">Interface number of device</param>
 void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();
@@ -262,11 +282,15 @@ void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex
 	}
 }
 
+/// <summary>
+/// Creating new BusDevice. Called when new Configuration Descriptor was sent to host.
+/// </summary>
+/// <param name="packetData">QByteArray representing data of Control Transfer</param>
 void HIDDevices::CreateDevice(QByteArray packetData)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;
-	EndpointDevice device(usbh->device);
+	BusDevice device(usbh->device);
 	packet += usbh->headerLen;
 	packet += sizeof(USB_CONFIGURATION_DESCRIPTOR);
 	unsigned int currentIndex = sizeof(USB_CONFIGURATION_DESCRIPTOR);
@@ -321,6 +345,11 @@ void HIDDevices::CreateDevice(QByteArray packetData)
 	devices.push_back(device);
 }
 
+/// <summary>
+/// Fills up new HID Descriptor. Is done manually because of possible memory padding.
+/// </summary>
+/// <param name="packet">Pointer to HID Descriptor data</param>
+/// <returns>Filled HID Descriptor</returns>
 HIDDescriptor HIDDevices::FillUpHIDDescriptor(const unsigned char* packet)
 {
 	HIDDescriptor hidDescriptor;
@@ -342,12 +371,12 @@ HIDDescriptor HIDDevices::FillUpHIDDescriptor(const unsigned char* packet)
 	return hidDescriptor;
 }
 
+/// <summary>
+/// Fill up deviceMap with supported devices.
+/// </summary>
 void HIDDevices::FillSupportedDeviceMap()
 {
 	deviceMap.emplace(std::make_pair(0x01, 0x02), D_MOUSE);
 	deviceMap.emplace(std::make_pair(0x01, 0x04), D_JOYSTICK);
 	deviceMap.emplace(std::make_pair(0x01, 0x06), D_KEYBOARD);
-
-	//deviceMap.emplace(std::make_pair(0x0c, 0x01), D_KEYBOARD); these are not generic desktop page, not sure about implementing them
-	//deviceMap.emplace(std::make_pair(0x0c, 0x80), D_KEYBOARD);
 }

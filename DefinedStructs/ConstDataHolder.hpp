@@ -5,6 +5,9 @@
 #include <string>
 #include <map>
 
+/// <summary>
+/// Class used for holding global variables and for converting data constants to string.
+/// </summary>
 class DataHolder
 {
 public:
@@ -21,15 +24,34 @@ public:
 	std::string GetUsage(BYTE globalUsage, BYTE value);
 	std::string GetGenericDesktopUsage(BYTE value);
 
+	/// <summary>
+	/// Constant representing bytes on one hexdump row.
+	/// </summary>
 	uint8_t BYTES_ON_ROW;
+	/// <summary>
+	/// Representing Qt UserRole for leftover data.
+	/// </summary>
 	int TRANSFER_LEFTOVER_DATA;
+	/// <summary>
+	/// Representing Qt UserRole for header optional data.
+	/// </summary>
 	int TRANSFER_OPTIONAL_HEADER;
+	/// <summary>
+	/// Representing Qt UserRole for USBPcap header data.
+	/// </summary>
 	int USBPCAP_HEADER_DATA;
-	int REPORT_DESC_TREE_INDEX;
+
+	/// <summary>
+	/// Map that associate HeaderDataType to its color highlightion
+	/// </summary>
 	std::map<HeaderDataType, DataTypeColor> DataColors;
 private:
 	DataHolder();
 	void FillDataColorsMap();
+
+	/// <summary>
+	/// Instance of this class.
+	/// </summary>
 	static DataHolder* holder;
 };
 

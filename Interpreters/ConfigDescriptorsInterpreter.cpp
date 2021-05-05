@@ -1,5 +1,11 @@
 #include "ConfigDescriptorsInterpreter.hpp"
 
+/// <summary>
+/// Constructor of ConfigDescriptorsInterpreter.
+/// </summary>
+/// <param name="rootItem"><see cref="BaseInterpreter.rootItem"/></param>
+/// <param name="item"><see cref="BaseInterpreter.item"/></param>
+/// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 ConfigDescriptorsInterpreter::ConfigDescriptorsInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel)
 	:BaseInterpreter(rootItem,item,additionalDataModel)
 {
@@ -7,6 +13,10 @@ ConfigDescriptorsInterpreter::ConfigDescriptorsInterpreter(TreeItem* rootItem, Q
 	this->hidDevices = HIDDevices::GetHIDDevices();
 }
 
+/// <summary>
+/// Interprets Configuration Descriptor, but if packet data consists of something more then it
+/// sequentially interprets corresponding configuration descriptors like HID Descriptor, Endpoint Descriptor,...
+/// </summary>
 void ConfigDescriptorsInterpreter::Interpret()
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
@@ -60,6 +70,10 @@ void ConfigDescriptorsInterpreter::Interpret()
 	}
 }
 
+/// <summary>
+/// Interprets Configuration Descriptor
+/// </summary>
+/// <param name="packet">Pointer to descriptor data</param>
 void ConfigDescriptorsInterpreter::InterpretConfigDescriptor(const unsigned char* packet)
 {
 	PUSB_CONFIGURATION_DESCRIPTOR configDescriptor = (PUSB_CONFIGURATION_DESCRIPTOR)packet;
@@ -85,6 +99,8 @@ void ConfigDescriptorsInterpreter::InterpretConfigDescriptor(const unsigned char
 	configDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iConfiguration", configDescriptor->iConfiguration}, configDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	configDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bmAttributes", configDescriptor->bmAttributes}, configDescriptorChild));
+	
+	//bmAttributes defines meaning on bit level -> show those bits and their meaning
 	TreeItem* bmAttributesChild = configDescriptorChild->Child(configDescriptorChild->ChildCount() - 1);
 	BYTE selfPoweredValue = (configDescriptor->bmAttributes & 0x40) >> 6;
 	BYTE remoteWakeupValue = (configDescriptor->bmAttributes & 0x20) >> 5;
@@ -97,11 +113,17 @@ void ConfigDescriptorsInterpreter::InterpretConfigDescriptor(const unsigned char
 		bmAttributesChild));
 	bmAttributesChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(3, 5, configDescriptor->bmAttributes),
 		"Reserved (0)", selfPoweredValue}, bmAttributesChild));
+	
+	//bmAttributes is fully interpreted, continue with endpointDescriptorChild tree item.
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	configDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bMaxPower",
 		(std::to_string(configDescriptor->MaxPower) + std::string(" = ") + std::to_string(configDescriptor->MaxPower * 2) + std::string(" mA")).c_str()}, configDescriptorChild));
 }
 
+/// <summary>
+/// Interprets Interface Descriptor
+/// </summary>
+/// <param name="packet">Pointer to descriptor data</param>
 void ConfigDescriptorsInterpreter::InterpretInterfaceDescriptor(const unsigned char* packet)
 {
 	PUSB_INTERFACE_DESCRIPTOR interfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR)packet;
@@ -130,6 +152,10 @@ void ConfigDescriptorsInterpreter::InterpretInterfaceDescriptor(const unsigned c
 	interfaceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iInterface", interfaceDescriptor->iInterface}, interfaceDescriptorChild));
 }
 
+/// <summary>
+/// Interprets Endpoint Descriptor
+/// </summary>
+/// <param name="packet">Pointer to descriptor data</param>
 void ConfigDescriptorsInterpreter::InterpretEndpointDescriptor(const unsigned char* packet)
 {
 	PUSB_ENDPOINT_DESCRIPTOR endpointDescriptor = (PUSB_ENDPOINT_DESCRIPTOR)packet;
@@ -144,6 +170,7 @@ void ConfigDescriptorsInterpreter::InterpretEndpointDescriptor(const unsigned ch
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	endpointDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bEndpointAddress", endpointDescriptor->bEndpointAddress}, endpointDescriptorChild));
 
+	//bEndpointAddress defines meaning on bit level -> show those bits and their meaning
 	TreeItem* bEndpointAddressChild = endpointDescriptorChild->Child(endpointDescriptorChild->ChildCount() - 1);
 	if ((endpointDescriptor->bmAttributes & 0x03) != 0) //if not Control endpoint
 	{
@@ -157,9 +184,11 @@ void ConfigDescriptorsInterpreter::InterpretEndpointDescriptor(const unsigned ch
 	bEndpointAddressChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(4, 4, endpointDescriptor->bEndpointAddress),
 		"Endpoint Number: ", endpointNumber}, bEndpointAddressChild));
 
+	//bEndpointAddress is fully interpreted, continue with endpointDescriptorChild tree item.
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	endpointDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bmAttributes", endpointDescriptor->bmAttributes}, endpointDescriptorChild));
 
+	//bmAttributes againg defines meaning on bit level
 	TreeItem* bmAttributesChild = endpointDescriptorChild->Child(endpointDescriptorChild->ChildCount() - 1);
 	bmAttributesChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(0, 2, endpointDescriptor->bmAttributes), "Reserved"},
 		bmAttributesChild));
@@ -187,9 +216,11 @@ void ConfigDescriptorsInterpreter::InterpretEndpointDescriptor(const unsigned ch
 			(transferType == 1) ? "Isochronous (1)" :
 			(transferType == 2) ? "Bulk (2)" : "Interrupt (3)")).c_str()}, bmAttributesChild));
 
-	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+	//bmAttributes is fully interpreted, continue with endpointDescriptorChild tree item.
+	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
 	endpointDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wMaxPacketSize", endpointDescriptor->wMaxPacketSize}, endpointDescriptorChild));
-
+	
+	//wMaxPacketSize againg defines meaning on bit level
 	TreeItem* wMaxPacketSizeChild = endpointDescriptorChild->Child(endpointDescriptorChild->ChildCount() - 1);
 	wMaxPacketSizeChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(0, 3, endpointDescriptor->wMaxPacketSize),
 		"Reserved"}, wMaxPacketSizeChild));
@@ -203,10 +234,15 @@ void ConfigDescriptorsInterpreter::InterpretEndpointDescriptor(const unsigned ch
 	wMaxPacketSizeChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(5, 11, endpointDescriptor->wMaxPacketSize),
 		"Max packet size: ", maxPacketSize}, wMaxPacketSizeChild));
 
+	//wMaxPacketSize is fully interpreted, continue with endpointDescriptorChild tree item.
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	endpointDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bInterval", endpointDescriptor->bInterval}, endpointDescriptorChild));
 }
 
+/// <summary>
+/// Inteprets HID Descriptor
+/// </summary>
+/// <param name="packet">Pointer to descriptor data</param>
 void ConfigDescriptorsInterpreter::InterpretHIDDescriptor(const unsigned char* packet)
 {
 	HIDDescriptor hidDescriptor = hidDevices->FillUpHIDDescriptor(packet);
@@ -231,6 +267,10 @@ void ConfigDescriptorsInterpreter::InterpretHIDDescriptor(const unsigned char* p
 	hidDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wDescriptorLength", hidDescriptor.wReportLength}, hidDescriptorChild));
 }
 
+/// <summary>
+/// Inteprets unknown descriptor
+/// </summary>
+/// <param name="packet">Pointer to descriptor data</param>
 void ConfigDescriptorsInterpreter::InterpretUnknownDescriptor(const unsigned char* packet)
 {
 	rootItem->AppendChild(new TreeItem(QVector<QVariant>{"UNKNOWN_DESCRIPTOR", "", ""}, rootItem));

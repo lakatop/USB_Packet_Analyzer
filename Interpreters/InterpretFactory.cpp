@@ -1,5 +1,12 @@
 #include "InterpreterFactory.hpp"
 
+/// <summary>
+/// Constructor for InterpretFactory.
+/// </summary>
+/// <param name="rootItem"><see cref="rootItem"/></param>
+/// <param name="item"><see cref="item"/></param>
+/// <param name="additionalDataModel"><see cref="additionalDataModel"/></param>
+/// <param name="dataType"><see cref="dataType"/></param>
 InterpreterFactory::InterpreterFactory(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
     HeaderDataType dataType)
 {
@@ -9,6 +16,10 @@ InterpreterFactory::InterpreterFactory(TreeItem* rootItem, QTableWidgetItem* ite
     this->additionalDataModel = additionalDataModel;
 }
 
+/// <summary>
+/// Based on dataType creates and returns appropriate interpreter
+/// </summary>
+/// <returns>Pointer to appropriate interpreter</returns>
 BaseInterpreter* InterpreterFactory::GetInterpreter()
 {
     switch (dataType)

@@ -13,6 +13,9 @@
 #include <qlistwidget.h>
 #include <qscrollbar.h>
 
+/// <summary>
+/// Representing pop-up window to view more detailed analysis of data.
+/// </summary>
 class DataViewer : public QDialog
 {
 	Q_OBJECT
@@ -29,11 +32,29 @@ private:
 	void AdjustTableSize(QTableView* table, bool hexViewTable);
 
 	Ui::DataViewer ui;
+	/// <summary>
+	/// unique_ptr to byte QTableView model class.
+	/// </summary>
 	std::unique_ptr<DataViewerModel> byteTableModel;
+	/// <summary>
+	/// unique_ptr to hex QTableView model class.
+	/// </summary>
 	std::unique_ptr<DataViewerModel> hexTableModel;
+	/// <summary>
+	/// unique_ptr to QTableView delegate class.
+	/// </summary>
 	std::unique_ptr<DataViewerDelegate> dataTableDelegate;
+	/// <summary>
+	/// unique_ptr to Color Map QTreeView model class.
+	/// </summary>
 	std::unique_ptr<ColorMapModel> colorMapModel;
+	/// <summary>
+	/// unique_ptr to packet header QTreeView model class.
+	/// </summary>
 	std::unique_ptr<USBPcapHeaderModel> usbhModel;
+	/// <summary>
+	/// unique_ptr to additional data QTreeView model class.
+	/// </summary>
 	std::unique_ptr<AdditionalDataModel> additionalDataModel;
 
 private slots:

@@ -4,6 +4,9 @@
 #include <qvector.h>
 #include <qvariant.h>
 
+/// <summary>
+/// Class for representing item in TreeView.
+/// </summary>
 class TreeItem
 {
 public:
@@ -19,8 +22,17 @@ public:
 	int Row() const;
 	TreeItem* ParentItem();
 private:
+	/// <summary>
+	/// shared_ptr to all childs of this item.
+	/// </summary>
 	QVector<std::shared_ptr<TreeItem>> childs;
+	/// <summary>
+	/// Data that will be presented.
+	/// </summary>
 	QVector<QVariant> data;
+	/// <summary>
+	/// Pointer to parent item.
+	/// </summary>
 	TreeItem* parent;
 };
 

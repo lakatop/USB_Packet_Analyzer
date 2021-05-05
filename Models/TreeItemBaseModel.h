@@ -10,6 +10,9 @@
 #include <sstream>
 #include <iomanip>
 
+/// <summary>
+/// Base class for tree item models.
+/// </summary>
 class TreeItemBaseModel : public QAbstractItemModel
 {
 	Q_OBJECT
@@ -31,11 +34,24 @@ public:
 protected:
 	QColor GetDataTypeColor(HeaderDataType dataType) const;
 
+	/// <summary>
+	/// unique_ptr to root tree item.
+	/// </summary>
 	std::unique_ptr<TreeItem> rootItem;
+	/// <summary>
+	/// Pointer to DataHolder instance
+	/// </summary>
 	DataHolder* holder;
 };
 
-
+/// <summary>
+/// Method used to create and return QString which shows individual bits of given value.
+/// </summary>
+/// <typeparam name="T">Type of value for analysis</typeparam>
+/// <param name="start">starting point of showing bits</param>
+/// <param name="size">how many bits should be shown</param>
+/// <param name="number">Number which will be analyzed</param>
+/// <returns>QString of analyzed number which shows its individual bits</returns>
 template <typename T>
 QString TreeItemBaseModel::ShowBits(uint32_t start, size_t size, T number)
 {
