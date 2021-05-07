@@ -56,7 +56,7 @@ Supported_Devices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> k
 /// </summary>
 /// <param name="packetData">QByteArray representing Report Descriptor data</param>
 /// <param name="interfaceIndex">Interface number of device</param>
-void HIDDevices::ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex)
+void HIDDevices::ParseHIDReportDescriptor(QByteArray packetData, USHORT interfaceIndex)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;

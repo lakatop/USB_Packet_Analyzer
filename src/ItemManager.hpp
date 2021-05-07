@@ -35,6 +35,10 @@ public:
 	/// Represents whether QTableWidget is scrolled to the bottom.
 	/// </summary>
 	bool atBottomOfList;
+	/// <summary>
+	/// Represents current index of last item.
+	/// </summary>
+	unsigned long long itemIndex;
 private:
 	ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent);
 	void InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);

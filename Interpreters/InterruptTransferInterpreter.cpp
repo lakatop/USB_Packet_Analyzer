@@ -24,11 +24,16 @@ void InterruptTransferInterpreter::Interpret()
 	{
 		return;
 	}
+
+	if (usbh->dataLength == 0) //nothing transfered
+	{
+		return;
+	}
 	
 	int index = -1;
 	for (int i = 0; i < hidDevices->devices.size(); i++)
 	{
-		if ((hidDevices->devices[i].deviceAddress == usbh->device) && hidDevices->devices[i].obsolete == false)
+		if ((hidDevices->devices[i].deviceAddress == usbh->device) && hidDevices->devices[i].validation > item->row() - 1)
 		{
 			index = i;
 			break;

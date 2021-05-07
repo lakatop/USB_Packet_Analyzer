@@ -380,10 +380,11 @@ typedef struct HIDReportDescriptorInputParse
 /// </summary>
 typedef struct BusDevice
 {
-	BusDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints(), hidDescription() {}
-	BusDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints(), hidDescription() {}
+	BusDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints(), hidDescription(), validation(0) {}
+	BusDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints(), hidDescription(), validation(ULLONG_MAX) {}
 	USHORT deviceAddress;
 	bool obsolete;
+    unsigned long long validation; //number of item index when this device was ejected from bus
 	std::map<BYTE, std::vector<HIDReportDescriptorInputParse>> inputparser; // <endpointNum, parsers> // parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID
 	std::map<BYTE, std::vector<BYTE>> endpoints; //<interfaceNum, endpointsNum> endpoints attached to this interface number
     std::map<BYTE, std::pair<bool, UCHAR>> hidDescription; //<endpointNum, pair<isHID, bInterfaceProtocol>>

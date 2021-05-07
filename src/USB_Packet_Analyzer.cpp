@@ -89,6 +89,15 @@ void USB_Packet_Analyzer::on_StopButton_clicked()
 }
 
 /// <summary>
+/// Called when main window is closed. In that case, we want to quit application.
+/// </summary>
+/// <param name="event">Describes close event</param>
+void USB_Packet_Analyzer::closeEvent(QCloseEvent* event)
+{
+    exit(0);
+}
+
+/// <summary>
 /// Slot which will be called when user click Pause Button
 /// </summary>
 void USB_Packet_Analyzer::on_PauseButton_clicked()
@@ -129,7 +138,7 @@ void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* ite
     QTableWidgetItem* dataItem = ui.tableWidget->item(currentRow, 0);
 
     //using nullptr as parent because otherwise it wont show in task bar
-    dataViewer = QPointer(new DataViewer(dataItem, this->itemManager->GetDataType(dataItem, previousItem), ui.dataHighlightCheckBox->isChecked()));
+    dataViewer = QPointer<DataViewer>(new DataViewer(dataItem, this->itemManager->GetDataType(dataItem, previousItem), ui.dataHighlightCheckBox->isChecked()));
     dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
     connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
     dataViewer->show();

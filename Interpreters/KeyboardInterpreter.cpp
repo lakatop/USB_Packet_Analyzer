@@ -55,7 +55,7 @@ void KeyboardInterpreter::Interpret()
         keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{"RESERVED", "", ""}, keyboardDeviceChild));
         TreeItem* reservedChild = keyboardDeviceChild->Child(keyboardDeviceChild->ChildCount() - 1);
         reservedChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "Reserved", value}, reservedChild));
-        packet += size;
+
 
         uint32_t numberOfKeyScans = ((std::size_t)inputParser.inputValues[2].ReportCount * (std::size_t)inputParser.inputValues[2].ReportSize) /
             (8 * inputParser.inputValues[2].LocalUsageNames.size());

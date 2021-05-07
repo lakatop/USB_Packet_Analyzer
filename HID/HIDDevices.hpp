@@ -12,7 +12,7 @@ class HIDDevices
 {
 public:
 	static HIDDevices* GetHIDDevices();
-	void ParseHIDDescriptor(QByteArray packetData, USHORT interfaceIndex);
+	void ParseHIDReportDescriptor(QByteArray packetData, USHORT interfaceIndex);
 	void CreateDevice(QByteArray packetData);
 	size_t GetHIDDescriptorSize();
 	HIDDescriptor FillUpHIDDescriptor(const unsigned char* packet);	

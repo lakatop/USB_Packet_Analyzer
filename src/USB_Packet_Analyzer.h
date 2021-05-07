@@ -21,6 +21,8 @@ public:
     void Refresh();
     QProgressBar* GetProgressBar();
 
+protected:
+    void closeEvent(QCloseEvent* event);
 private:
     Ui::USB_Packet_AnalyzerClass ui;
     /// <summary>

@@ -30,6 +30,7 @@ ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 	this->atBottomOfList = false;
 	this->representingHIDDescriptor = false;
 	this->representingConfigurationDescriptor = false;
+	this->itemIndex = 0;
 	this->parent = parent;
 	this->tableWidget = tableWidget;
 	this->dataHolder = DataHolder::GetDataHolder();
@@ -82,7 +83,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 				if (liveReading)
 				{
 					tableWidget->resizeColumnsToContents();
-					Sleep(50);
+					//Sleep(50);
 				}
 				else
 				{
@@ -121,10 +122,12 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 		const unsigned char* previousPacket = (unsigned char*)previousLeftoverData.constData();
 		PWINUSB_SETUP_PACKET setupPacket = (PWINUSB_SETUP_PACKET)previousPacket;
 
-		hidDevices->ParseHIDDescriptor(packetData, setupPacket->Index);
+		hidDevices->ParseHIDReportDescriptor(packetData, setupPacket->Index);
 
 		representingHIDDescriptor = false;
 	}
+
+
 
 	FillUpItem(packetData);
 	CheckForSetupPacket(packetData);
@@ -209,7 +212,7 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 {
 	std::string name;
 	int column = 0;
-	name = std::to_string(tableWidget->rowCount() - 1);
+	name = std::to_string(itemIndex++);
 	//inserts Index cell
 	tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
 
@@ -259,6 +262,16 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 	{
 		name = "URB_FUNCTION_ABORT_PIPE";
 		tableWidget->setItem(tableWidget->rowCount() - 1, column++, new QTableWidgetItem(name.c_str()));
+
+		//"invalidate" ejected device
+		for (int i = 0; i < hidDevices->devices.size(); i++)
+		{
+			if (hidDevices->devices[i].deviceAddress == usbh->device)
+			{
+				hidDevices->devices[i].validation = --itemIndex;
+				hidDevices->devices[i].obsolete = true;
+			}
+		}
 	}
 	else
 	{
