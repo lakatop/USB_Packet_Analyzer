@@ -20,9 +20,11 @@ public:
     USB_Packet_Analyzer(QWidget *parent = Q_NULLPTR);
     void Refresh();
     QProgressBar* GetProgressBar();
+    /// <summary>
+    /// Timer for live file reading to call checking method.
+    /// </summary>
+    QTimer* timer;
 
-protected:
-    void closeEvent(QCloseEvent* event);
 private:
     Ui::USB_Packet_AnalyzerClass ui;
     /// <summary>
@@ -47,6 +49,7 @@ private slots:
     void on_StopButton_clicked();
     void on_PauseButton_clicked();
     void on_tableWidget_itemDoubleclicked(QTableWidgetItem* item);
+    void updateLiveFile();
 };
 
 #endif // !USBPACKETANALYZER_HPP

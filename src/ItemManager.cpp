@@ -27,12 +27,12 @@ ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 {
 	this->stopButtonClicked = false;
 	this->pauseButtonClicked = false;
-	this->atBottomOfList = false;
 	this->representingHIDDescriptor = false;
 	this->representingConfigurationDescriptor = false;
 	this->itemIndex = 0;
 	this->parent = parent;
 	this->tableWidget = tableWidget;
+	processingFile = false;
 	this->dataHolder = DataHolder::GetDataHolder();
 	this->hidDevices = HIDDevices::GetHIDDevices();
 }
@@ -48,50 +48,53 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 	{
 		if (fileReader.ReadFileHeader())
 		{
-			while (!stopButtonClicked)
+			if (liveReading)
 			{
-				qint64 value = sizeof(pcap_hdr_t); //global file header size
-				if (!liveReading)
-				{
-					parent->GetProgressBar()->setRange(0, fileReader.FileSize());
-				}
-				while (!fileReader.EndOfFile())
-				{
-					atBottomOfList = false;
-					QByteArray packetData = fileReader.GetPacket();
-					if (!liveReading)
-					{
-						value += packetData.size() + sizeof(pcaprec_hdr_t); //size of packet + pcap packet header
-						parent->GetProgressBar()->setValue(value);
-					}
-					if (!pauseButtonClicked)
-					{
-						tableWidget->setRowCount(tableWidget->rowCount() + 1);
-						ProcessPacket(packetData);
-					}
-				}
-
-				parent->Refresh();
-
-				if (!atBottomOfList)
-				{
-					tableWidget->scrollToBottom();
-				}
-
-				atBottomOfList = true;
-
-				if (liveReading)
-				{
-					tableWidget->resizeColumnsToContents();
-					//Sleep(50);
-				}
-				else
-				{
-					return;
-				}
+				//start timer to 1 sec interval. Then updateLiveFile() will be called every timer tick.
+				parent->timer->start(1000);
 			}
+			ProcessFileTillEnd(liveReading);
+			parent->Refresh();
 		}
 	}
+}
+
+void ItemManager::ProcessFileTillEnd(bool liveReading)
+{
+	qint64 value = sizeof(pcap_hdr_t); //global file header size
+	processingFile = true;
+	if (!liveReading)
+	{
+		parent->GetProgressBar()->setRange(0, fileReader.FileSize());
+	}
+	while (!fileReader.EndOfFile())
+	{
+		if (stopButtonClicked)
+		{
+			return;
+		}
+
+		QByteArray packetData = fileReader.GetPacket();
+		//check for errors while reading file
+		if (packetData.isEmpty())
+		{
+			return;
+		}
+		if (!liveReading)
+		{
+			value += packetData.size() + sizeof(pcaprec_hdr_t); //size of packet + pcap packet header
+			parent->GetProgressBar()->setValue(value);
+		}
+		if (!pauseButtonClicked)
+		{
+			tableWidget->setRowCount(tableWidget->rowCount() + 1);
+			ProcessPacket(packetData);
+		}
+	}
+
+	processingFile = false;
+	tableWidget->scrollToBottom();
+	tableWidget->resizeColumnsToContents();
 }
 
 /// <summary>

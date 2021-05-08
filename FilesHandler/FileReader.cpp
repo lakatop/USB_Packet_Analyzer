@@ -17,6 +17,10 @@ FileReader::~FileReader()
 /// <returns>QByteArray representing one packet</returns>
 QByteArray FileReader::GetPacket()
 {
+	if (!QFile::exists(file.fileName()))
+	{
+		return QByteArray();
+	}
 	QByteArray packetData;
 	//read .pcap packet header data
 	pcaprec_hdr_t packetHeader;

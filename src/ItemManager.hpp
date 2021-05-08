@@ -3,6 +3,8 @@
 
 #include "../FilesHandler/FileReader.hpp"
 #include <qprogressbar.h>
+#include <qfilesystemwatcher.h>
+#include <qtimer.h>
 
 #include "USB_Packet_Analyzer.h"
 #include "../DefinedStructs/ConstDataHolder.hpp"
@@ -22,7 +24,9 @@ public:
 	void ProcessFile(QString filename, bool liveReading);
 	void ProcessPacket(QByteArray packetData);
 	HeaderDataType GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem);
+	void ProcessFileTillEnd(bool liveReading);
 
+	bool processingFile;
 	/// <summary>
 	/// Represents whether Stop Button is clicked.
 	/// </summary>
@@ -32,13 +36,13 @@ public:
 	/// </summary>
 	bool pauseButtonClicked;
 	/// <summary>
-	/// Represents whether QTableWidget is scrolled to the bottom.
-	/// </summary>
-	bool atBottomOfList;
-	/// <summary>
 	/// Represents current index of last item.
 	/// </summary>
 	unsigned long long itemIndex;
+	/// <summary>
+	/// FileReader instance for reading files.
+	/// </summary>
+	FileReader fileReader;
 private:
 	ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent);
 	void InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
@@ -50,10 +54,6 @@ private:
 	/// Stataic pointer to instance of this class.
 	/// </summary>
 	static ItemManager* itemManager;
-	/// <summary>
-	/// FileReader instance for reading files.
-	/// </summary>
-	FileReader fileReader;
 	/// <summary>
 	/// Pointer to tableWidget that represents general packet data
 	/// </summary>

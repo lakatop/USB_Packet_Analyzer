@@ -18,6 +18,7 @@ USB_Packet_Analyzer::USB_Packet_Analyzer(QWidget *parent)
 void USB_Packet_Analyzer::Init()
 {
     this->itemManager = ItemManager::GetItemManager(ui.tableWidget, this);
+    timer = new QTimer(this);
 
     ui.OpenButton->setText("Open");
     ui.StartButton->setText("Start");
@@ -40,6 +41,7 @@ void USB_Packet_Analyzer::Init()
     ui.tableWidget->verticalHeader()->setVisible(false);
     ui.tableWidget->setShowGrid(false);
     connect(ui.tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem*)), this, SLOT(on_tableWidget_itemDoubleclicked(QTableWidgetItem*)));
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateLiveFile()));
 }
 
 /// <summary>
@@ -89,14 +91,18 @@ void USB_Packet_Analyzer::on_StopButton_clicked()
 }
 
 /// <summary>
-/// Called when main window is closed. In that case, we want to quit application.
+/// Gets called by timer when analyzing live capture file
+/// and checks whether there were any changes in file.
+/// If there were any changes -> process them.
 /// </summary>
-/// <param name="event">Describes close event</param>
-void USB_Packet_Analyzer::closeEvent(QCloseEvent* event)
+void USB_Packet_Analyzer::updateLiveFile()
 {
-    exit(0);
+    if (!itemManager->processingFile && !itemManager->fileReader.EndOfFile())
+    {
+        itemManager->ProcessFileTillEnd(true);
+    }
 }
-
+    
 /// <summary>
 /// Slot which will be called when user click Pause Button
 /// </summary>
