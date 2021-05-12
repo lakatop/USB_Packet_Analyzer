@@ -1,0 +1,231 @@
+No event
+ErrorRollOver
+POSTFail
+ErrorUndefined
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+K
+L
+M
+N
+O
+P
+Q
+R
+S
+T
+U
+V
+W
+X
+Y
+Z
+1 a !
+2 a @
+3 a #
+4 a $
+5 a %
+6 a ^
+7 a &
+8 a *
+9 a (
+0 a )
+Return (ENTER)
+ESCAPE
+DELETE (Backspace)
+Tab
+Spacebar
+- a _
+= a +
+[ a {
+] a }
+\ a |
+Non-US # a ~
+; a :
+' a "
+Grave Accent a Tilde
+, a <
+. a >
+/ a ?
+Caps Lock
+F1
+F2
+F3
+F4
+F5
+F6
+F7
+F8
+F9
+F10
+F11
+F12
+PrintScreen
+Scroll Lock
+Pause
+Insert
+Home
+PageUp
+Delete Forward
+End
+PageDown
+RightArrow
+LeftArrow
+DownArrow
+UpArrow
+Keypad Num Lock a Clear
+Keypad /
+Keypad *
+Keypad -
+Keypad +
+Keypad ENTER
+Keypad 1 a End
+Keypad 2 a Down Arrow
+Keypad 3 a PageDn
+Keypad 4 a Left Arrow
+Keypad 5
+Keypad 6 a Right Arrow
+Keypad 7 a Home
+Keypad 8 a Up Arrow
+Keypad 9 a PageUp
+Keypad 0 a Insert
+Keypad . a Delete
+Non-US \ a |
+Application
+Power
+=
+F13
+F14
+F15
+F16
+F17
+F18
+F19
+F20
+F21
+F22
+F23
+F24
+Execute
+Help
+Menu
+Select
+Stop
+Again
+Undo
+Cut
+Copy
+Paste
+Find
+Mute
+Volume Up
+Volume Down
+Caps Lock
+Num Lock
+Scroll Lock
+Keypad Comma
+Keypad Equal Sign
+International1
+International2
+International3
+International4
+International5
+International6
+International7
+International8
+International9
+LANG1
+LANG2
+LANG3
+LANG4
+LANG5
+LANG6
+LANG7
+LANG8
+LANG9
+Alternate Erase
+SysReq/Attention
+Cancel
+Clear
+Prior
+Return
+Separator
+Out
+Oper
+Clear/Again
+CrSel/Props
+ExSel
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Reserved
+Keypad 00
+Keypad 000
+Thousands Separator
+Decimal Separator
+Currency Sub-unit
+Keypad (
+Keypad )
+Keypad {
+Keypad }
+Keypad Tab
+Keypad Backspace
+Keypad A
+Keypad B
+Keypad C
+Keypad D
+Keypad E
+Keypad F
+Keypad XOR
+Keypad ^
+Keypad %
+Keypad <
+Keypad >
+Keypad &
+Keypad &&
+Keypad |
+Keypad ||
+Keypad :
+Keypad #
+Keypad Space
+Keypad @
+Keypad !
+Keypad Memory Store
+Keypad Memory Recall
+Keypad Memory Clear
+Keypad Memory Add
+Keypad Memory Subtract
+Keypad Memory Multiply
+Keypad Memory Divide
+Keypad +/-
+Keypad Clear
+Keypad Clear Entry
+Keypad Binary
+Keypad Octal
+Keypad Decimal
+Keypad Hexadecimal
+Reserved
+Reserved
+Keyboard LeftControl
+Keyboard LeftShift
+Keyboard LeftAlt
+Keyboard Left GUI
+Keyboard RightShift
+Keyboard RightAlt
+Keyboard Right GUI
+Reserved

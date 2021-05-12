@@ -277,6 +277,7 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 			{
 				hidDevices->devices[i].validation = --itemIndex;
 				hidDevices->devices[i].obsolete = true;
+				itemIndex++;
 			}
 		}
 	}

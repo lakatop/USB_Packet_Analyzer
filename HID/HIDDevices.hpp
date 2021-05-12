@@ -19,6 +19,15 @@ public:
 	Supported_Devices GetSupportedDevice(std::pair<uint32_t, uint32_t> key);
 	template<typename T>
 	void CharToNumberConvert(const unsigned char* addr, T& number, int size);
+
+	/// <summary>
+	/// Delete copy constructor due to Singleton pattern
+	/// </summary>
+	HIDDevices(const HIDDevices&) = delete;
+	/// <summary>
+	/// Delete copy assignment due to Singleton pattern
+	/// </summary>
+	HIDDevices& operator=(const HIDDevices&) = delete;
 	
 	/// <summary>
 	/// List of devices that were/are connected to the bus in time of packet sniffering.

@@ -422,6 +422,10 @@ typedef struct InputValues
     /// </summary>
     uint32_t LogicalMaximum;
     /// <summary>
+    /// First bit in Input item representing wheter it is data or constant
+    /// </summary>
+    bool Constant;
+    /// <summary>
     /// Second bit in Input item representing wheter it is variable od array
     /// </summary>
     bool Variable;

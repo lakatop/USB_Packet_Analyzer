@@ -77,22 +77,26 @@ void InterruptTransferInterpreter::Interpret()
 		{
 			MouseInterpreter mouseInterpreter(rootItem, item, additionalDataModel, inputParser);
 			mouseInterpreter.Interpret();
+			break;
 		}
 		case D_KEYBOARD:
 		{
 			KeyboardInterpreter keyboardInterpreter(rootItem, item, additionalDataModel, inputParser);
 			keyboardInterpreter.Interpret();
+			break;
 		}
 		case D_JOYSTICK:
 		{
 			JoystickInterpreter joystickInterpreter(rootItem, item, additionalDataModel, inputParser);
 			joystickInterpreter.Interpret();
+			break;
 		}
 		break;
 		case D_UNDEFINED:
 		{
 			UnknownDeviceInterpreter unknownInterpreter(rootItem, item, additionalDataModel, inputParser);
 			unknownInterpreter.Interpret();
+			break;
 		}
 		break;
 		default:

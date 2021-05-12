@@ -25,6 +25,15 @@ public:
 	std::string GetGenericDesktopUsage(BYTE value);
 
 	/// <summary>
+	/// Delete copy constructor due to Singleton pattern
+	/// </summary>
+	DataHolder(const DataHolder&) = delete;
+	/// <summary>
+	/// Delete copy assignment due to Singleton pattern
+	/// </summary>
+	DataHolder& operator=(const DataHolder&) = delete;
+
+	/// <summary>
 	/// Constant representing bytes on one hexdump row.
 	/// </summary>
 	uint8_t BYTES_ON_ROW;

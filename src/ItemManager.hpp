@@ -26,6 +26,15 @@ public:
 	HeaderDataType GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem);
 	void ProcessFileTillEnd(bool liveReading);
 
+	/// <summary>
+	/// Delete copy constructor due to Singleton pattern
+	/// </summary>
+	ItemManager(const ItemManager&) = delete;
+	/// <summary>
+	/// Delete copy assignment due to Singleton pattern
+	/// </summary>
+	ItemManager& operator=(const ItemManager&) = delete;
+
 	bool processingFile;
 	/// <summary>
 	/// Represents whether Stop Button is clicked.

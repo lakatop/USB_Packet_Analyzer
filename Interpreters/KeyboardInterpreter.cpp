@@ -14,6 +14,7 @@ KeyboardInterpreter::KeyboardInterpreter(TreeItem* rootItem, QTableWidgetItem* i
 	this->inputParser = inputParser;
     this->holder = DataHolder::GetDataHolder();
     this->hidDevices = HIDDevices::GetHIDDevices();
+    SetupUsages();
 }
 
 /// <summary>
@@ -29,61 +30,92 @@ void KeyboardInterpreter::Interpret()
 
     QString hexData;
 
-    if (inputParser.inputValues.size() == 3)    //usually keyboards have 3 (modifier_key_status, reserved and keyscan codes)
+    if (inputParser.inputValues.size() == 0)
     {
-        int size = (inputParser.inputValues[0].ReportCount * inputParser.inputValues[0].ReportSize) / 8;
+        return;
+    }
+    int interpreted = 0;
+    
+    //first byte should be modifier_key_status
+    int size = (inputParser.inputValues[0].ReportCount * inputParser.inputValues[0].ReportSize) / 8;
+    if (size == 1)
+    {
+        keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{"MODIFIER KEY STATUS", "", ""}, keyboardDeviceChild));
+        InterpretModifierKey(keyboardDeviceChild->Child(keyboardDeviceChild->ChildCount() - 1), packet);
+        packet += 1;
+    }
+    else
+    {
+        int64_t value = 0;
+        hidDevices->CharToNumberConvert(packet, value, size);
+        additionalDataModel->CharToHexConvert(&packet, size, hexData);
+        keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, inputParser.inputValues[0].LocalUsageNames[0], value}, keyboardDeviceChild));
+    }
 
-        if (size == 1)
-        {
-            keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{"MODIFIER KEY STATUS", "", ""}, keyboardDeviceChild));
-            InterpretModifierKey(keyboardDeviceChild->Child(keyboardDeviceChild->ChildCount() - 1), packet);
-            packet += 1;
-        }
-        else
-        {
-            int64_t value = 0;
-            hidDevices->CharToNumberConvert(packet, value, size);
-            additionalDataModel->CharToHexConvert(&packet, size, hexData);
-            keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, inputParser.inputValues[0].LocalUsageNames[0] , value}, keyboardDeviceChild));
-        }
+    interpreted += size;
 
+    //check if input consists only of 1B (which is very unlikely)
+    if (inputParser.inputValues.size() == 1)
+    {
+        return;
+    }
 
-        size = (inputParser.inputValues[1].ReportCount * inputParser.inputValues[1].ReportSize) / 8;  //from USB HID specification, this field should be reserved
+    //now for the rest of the input
+    bool isReserved = inputParser.inputValues[1].Constant;
+    if (isReserved) //most keyboards will have second byte reserved
+    {
+        size = (inputParser.inputValues[1].ReportCount * inputParser.inputValues[1].ReportSize) / 8;
         int64_t value = 0;
         hidDevices->CharToNumberConvert(packet, value, size);
         additionalDataModel->CharToHexConvert(&packet, size, hexData);
         keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{"RESERVED", "", ""}, keyboardDeviceChild));
         TreeItem* reservedChild = keyboardDeviceChild->Child(keyboardDeviceChild->ChildCount() - 1);
         reservedChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "Reserved", value}, reservedChild));
+        interpreted += size;
+    }
 
+    //keyboard should either consists of byte-defined keyscans or by bit-defined map
+    bool bitDefined = true;
+    for (int i = (isReserved) ? 2 : 1; i < inputParser.inputValues.size(); i++)
+    {
+        //if every input item has ReportSize == 1, it should be bit-defined
+        if (inputParser.inputValues[i].ReportSize != 1)
+        {
+            bitDefined = false;
+        }
+    }
 
-        uint32_t numberOfKeyScans = ((std::size_t)inputParser.inputValues[2].ReportCount * (std::size_t)inputParser.inputValues[2].ReportSize) /
-            (8 * inputParser.inputValues[2].LocalUsageNames.size());
+    if (bitDefined)
+    {
+        size = inputParser.inputSize - interpreted + 1;
+        for (int i = 0; i < size; i += 8)
+        {
+            byte value = 0;
+            hidDevices->CharToNumberConvert(packet, value, 1);
+            additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+            for (int j = 0; j < 8; j++)
+            {
+                keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
+                {additionalDataModel->ShowBits(j, 1, value), keyboardUsages[i + j], value}, keyboardDeviceChild));
+            }
+        }
+    }
+    else
+    {
+        uint32_t numberOfKeyScans = (isReserved) ? inputParser.inputValues[2].ReportCount :
+            inputParser.inputValues[1].ReportCount;
+
         keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{"KEYS", "", ""}, keyboardDeviceChild));
         TreeItem* keysChild = keyboardDeviceChild->Child(keyboardDeviceChild->ChildCount() - 1);
+
         for (int j = 0; j < numberOfKeyScans; j++)
         {
             int size = inputParser.inputValues[2].ReportSize / 8;
             int value = 0;
             hidDevices->CharToNumberConvert(packet, value, size);
             additionalDataModel->CharToHexConvert(&packet, size, hexData);
-            keysChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, (std::string("Key ") + std::to_string(j)).c_str(), value}, keysChild));
-        }
-    }
-    else  //this is not usual, 
-    {
-        for (int i = 0; i < inputParser.inputValues.size(); i++)
-        {
-            int size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /
-                (8 * inputParser.inputValues[i].LocalUsageNames.size());
-            int64_t value = 0;
-            hidDevices->CharToNumberConvert(packet, value, size);
-            additionalDataModel->CharToHexConvert(&packet, size, hexData);
-            for (int j = 0; j < inputParser.inputValues[i].LocalUsageNames.size(); j++)
-            {
-                keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
-                {hexData, inputParser.inputValues[i].LocalUsageNames[j], value}, keyboardDeviceChild));
-            }
+            keysChild->AppendChild(new TreeItem(QVector<QVariant>{
+                hexData, (std::string("Key ").c_str() + (value<232) ? keyboardUsages[value] : "reserved"), value}, keysChild));
         }
     }
 }
@@ -114,4 +146,22 @@ void KeyboardInterpreter::InterpretModifierKey(TreeItem* child, const unsigned c
     child->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(5, 1, modifierStatus), status5}, child));
     child->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(6, 1, modifierStatus), status6}, child));
     child->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(7, 1, modifierStatus), status7}, child));
+}
+
+void KeyboardInterpreter::SetupUsages()
+{
+    QFile file("./DefinedStructs/KeyboardUsages.txt");
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(&file);
+        while (!stream.atEnd())
+        {
+            keyboardUsages.push_back(stream.readLine());
+        }
+        file.close();
+    }
+    else
+    {
+        auto v = file.errorString();
+    }
 }

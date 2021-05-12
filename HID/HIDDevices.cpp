@@ -113,8 +113,10 @@ void HIDDevices::ParseHIDReportDescriptor(QByteArray packetData, USHORT interfac
 			case MAIN_INPUT:
 			{
 				BYTE input = (*packet);
+				bool constant = ((input & 0x1) == 0x1); // if first byte is unset, then it is constant
 				bool var = ((input & 0x2) == 0x2); // if second bit is set, then it is variable
 				inputValues.Variable = var;
+				inputValues.Constant = constant;
 				inputParse.inputSize += inputValues.ReportCount * inputValues.ReportSize;
 
 				if (inputValues.LocalUsageNames.empty())    //if true, then global usage has been defined and should be used as "usage name"
