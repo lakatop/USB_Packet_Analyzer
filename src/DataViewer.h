@@ -5,11 +5,11 @@
 #include "ui_DataViewer.h"
 #include "../DefinedStructs/PacketExternStructs.hpp"
 #include "../DefinedStructs/ConstDataHolder.hpp"
-#include "../Models/DataViewerModel.h"
+#include "../Models/HexdumpModel.h"
 #include "../Models/ColorMapModel.hpp"
 #include "../Models/USBPcapHeaderModel.hpp"
 #include "../Models/AdditionalDataModel.hpp"
-#include "../Delegates/DataViewerDelegate.h"
+#include "../Delegates/HexdumpDelegate.h"
 #include <qlistwidget.h>
 #include <qscrollbar.h>
 
@@ -35,15 +35,15 @@ private:
 	/// <summary>
 	/// unique_ptr to byte QTableView model class.
 	/// </summary>
-	std::unique_ptr<DataViewerModel> byteTableModel;
+	std::unique_ptr<HexdumpModel> byteTableModel;
 	/// <summary>
 	/// unique_ptr to hex QTableView model class.
 	/// </summary>
-	std::unique_ptr<DataViewerModel> hexTableModel;
+	std::unique_ptr<HexdumpModel> hexTableModel;
 	/// <summary>
 	/// unique_ptr to QTableView delegate class.
 	/// </summary>
-	std::unique_ptr<DataViewerDelegate> dataTableDelegate;
+	std::unique_ptr<HexdumpDelegate> dataTableDelegate;
 	/// <summary>
 	/// unique_ptr to Color Map QTreeView model class.
 	/// </summary>

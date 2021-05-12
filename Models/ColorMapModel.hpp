@@ -20,6 +20,7 @@ public:
 	/// <returns>Empty QVariant</returns>
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override { return QVariant(); };
 private:
+	QColor GetDataTypeColor(HeaderDataType dataType) const;
 	void SetupModelData();
 };
 

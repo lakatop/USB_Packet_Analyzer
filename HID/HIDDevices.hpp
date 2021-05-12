@@ -19,7 +19,10 @@ public:
 	Supported_Devices GetSupportedDevice(std::pair<uint32_t, uint32_t> key);
 	template<typename T>
 	void CharToNumberConvert(const unsigned char* addr, T& number, int size);
-
+	
+	/// <summary>
+	/// List of devices that were/are connected to the bus in time of packet sniffering.
+	/// </summary>
 	std::vector<BusDevice> devices;
 private:
 	HIDDevices();

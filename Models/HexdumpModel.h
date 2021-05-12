@@ -13,13 +13,13 @@
 /// <summary>
 /// Model class for hexdump.
 /// </summary>
-class DataViewerModel : public QAbstractTableModel
+class HexdumpModel : public QAbstractTableModel
 {
 	Q_OBJECT
 
 public:
-	DataViewerModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent = nullptr);
-	~DataViewerModel();
+	HexdumpModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent = nullptr);
+	~HexdumpModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;

@@ -49,9 +49,9 @@ void DataViewer::InitLabels()
 /// <param name="dataHighlight"><see cref="DataViewer()"/></param>
 void DataViewer::InitTables(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight)
 {
-	byteTableModel = std::make_unique<DataViewerModel>(item, false, additionalDataType, this);
-	hexTableModel = std::make_unique<DataViewerModel>(item, true, additionalDataType, this);
-	dataTableDelegate = std::make_unique<DataViewerDelegate>(dataHighlight, this);
+	byteTableModel = std::make_unique<HexdumpModel>(item, false, additionalDataType, this);
+	hexTableModel = std::make_unique<HexdumpModel>(item, true, additionalDataType, this);
+	dataTableDelegate = std::make_unique<HexdumpDelegate>(dataHighlight, this);
 
 	connect(ui.byteTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), ui.hexTableView->verticalScrollBar(), SLOT(setValue(int)));
 	connect(ui.hexTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), ui.byteTableView->verticalScrollBar(), SLOT(setValue(int)));

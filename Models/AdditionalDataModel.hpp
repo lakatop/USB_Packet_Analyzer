@@ -17,7 +17,7 @@ public:
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
 private:
-	void CreateSpecifiedModel();
+	void SetupSpecifiedModelData();
 
 	/// <summary>
 	/// Item which holds data for this model.

@@ -41,6 +41,17 @@ QVariant ColorMapModel::data(const QModelIndex& index, int role) const
 }
 
 /// <summary>
+/// Get color depending on data type.
+/// </summary>
+/// <param name="dataType">Data type whose color we want</param>
+/// <returns>QColor representing specific data type</returns>
+QColor ColorMapModel::GetDataTypeColor(HeaderDataType dataType) const
+{
+    DataTypeColor col = holder->DataColors[dataType];
+    return QColor::fromRgb(col.red, col.green, col.blue, col.alpha);
+}
+
+/// <summary>
 /// Fills Color Map viewer with fixed data
 /// </summary>
 void ColorMapModel::SetupModelData()

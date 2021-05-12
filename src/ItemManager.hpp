@@ -73,7 +73,7 @@ private:
 	/// <summary>
 	/// Whether packet data represents HID Report Descriptor
 	/// </summary>
-	bool representingHIDDescriptor;
+	bool representingHIDReportDescriptor;
 	/// <summary>
 	/// Whetherpacket data represents Configuration Descriptor
 	/// </summary>

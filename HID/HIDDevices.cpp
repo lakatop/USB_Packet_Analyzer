@@ -65,6 +65,8 @@ void HIDDevices::ParseHIDReportDescriptor(QByteArray packetData, USHORT interfac
 	int index = -1;
 	for (int i = 0; i < devices.size(); i++)
 	{
+		//if obsolete is true, we dont need to assign Report Descriptor to this device because it doesnt belong to this device 
+		//since it was already disconnected from bus
 		if (devices[i].deviceAddress == usbh->device && devices[i].obsolete == false)
 		{
 			index = i;
@@ -72,8 +74,10 @@ void HIDDevices::ParseHIDReportDescriptor(QByteArray packetData, USHORT interfac
 		}
 	}
 	
-	//prepare vectors -> inputParsers for all report descriptors which will be parsed out of this packet, ends are all endpoints that will have this parsers assigned
+	//prepare vectors:
+	//inputParsers for all report descriptors which will be parsed out of this packet
 	std::vector<HIDReportDescriptorInputParse> inputParsers;
+	//ends are all endpoints that will have this parsers assigned
 	std::vector<BYTE> ends;
 
 	if (index != -1)

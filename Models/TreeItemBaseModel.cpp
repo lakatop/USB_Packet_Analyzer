@@ -20,18 +20,28 @@ TreeItemBaseModel::TreeItemBaseModel(QObject *parent)
 QModelIndex TreeItemBaseModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent))
+    {
         return QModelIndex();
+    }
 
     TreeItem* parentItem;
 
     if (!parent.isValid())
+    {
         parentItem = rootItem.get();
+    }
     else
+    {
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
+    }
 
     TreeItem* childItem = parentItem->Child(row);
+
     if (childItem)
+    {
         return createIndex(row, column, childItem);
+    }
+
     return QModelIndex();
 }
 
@@ -50,7 +60,9 @@ QModelIndex TreeItemBaseModel::parent(const QModelIndex& index) const
     TreeItem* parentItem = childItem->ParentItem();
 
     if (parentItem == rootItem.get())
+    {
         return QModelIndex();
+    }
 
     return createIndex(parentItem->Row(), 0, parentItem);
 }
@@ -65,9 +77,13 @@ int TreeItemBaseModel::rowCount(const QModelIndex& parent) const
     TreeItem* parentItem;
 
     if (!parent.isValid())
+    {
         parentItem = rootItem.get();
+    }
     else
+    {
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
+    }
 
     return parentItem->ChildCount();
 }
@@ -80,19 +96,11 @@ int TreeItemBaseModel::rowCount(const QModelIndex& parent) const
 int TreeItemBaseModel::columnCount(const QModelIndex& parent) const
 {
     if (parent.isValid())
+    {
         return static_cast<TreeItem*>(parent.internalPointer())->ColumnCount();
-    return rootItem->ColumnCount();
-}
+    }
 
-/// <summary>
-/// Get color depending on data type.
-/// </summary>
-/// <param name="dataType">Data type whose color we want</param>
-/// <returns>QColor representing specific data type</returns>
-QColor TreeItemBaseModel::GetDataTypeColor(HeaderDataType dataType) const
-{
-    DataTypeColor col = holder->DataColors[dataType];
-    return QColor::fromRgb(col.red, col.green, col.blue, col.alpha);
+    return rootItem->ColumnCount();
 }
 
 /// <summary>

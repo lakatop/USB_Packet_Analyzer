@@ -14,7 +14,7 @@ AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, HeaderDataType 
 	this->item = item;
 	this->dataType = dataType;
 	rootItem = std::make_unique<TreeItem>(QVector<QVariant>({ tr("Data"), tr("Meaning"), tr("Value") }));
-    CreateSpecifiedModel();
+    SetupSpecifiedModelData();
 }
 
 /// <summary>
@@ -54,7 +54,7 @@ QVariant AdditionalDataModel::headerData(int section, Qt::Orientation orientatio
 /// <summary>
 /// Thanks to <see cref="InterpreterFactory"/> chooses correct interpreter and interprets additional packet data.
 /// </summary>
-void AdditionalDataModel::CreateSpecifiedModel()
+void AdditionalDataModel::SetupSpecifiedModelData()
 {
     InterpreterFactory factory(rootItem.get(), item, this,dataType);
     std::unique_ptr<BaseInterpreter> interpreter(factory.GetInterpreter());

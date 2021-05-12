@@ -37,6 +37,7 @@ private:
     QString currentFile;
     /// <summary>
     /// QPointer to pop-up DataViewer dialog.
+    /// Using QPointer instead of unique_ptr to better fit into Qt parent-child relations.
     /// </summary>
     QPointer<DataViewer> dataViewer;
 

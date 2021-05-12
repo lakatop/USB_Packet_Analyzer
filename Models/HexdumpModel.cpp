@@ -1,4 +1,4 @@
-#include "DataViewerModel.h"
+#include "HexdumpModel.h"
 
 /// <summary>
 /// Constructor for DataViewerModel.
@@ -7,7 +7,7 @@
 /// <param name="hexView"><see cref="hexView"/></param>
 /// <param name="additionalDataType"><see cref="additionalDataType"/></param>
 /// <param name="parent">Dialog <see cref="DataViewer"/></param>
-DataViewerModel::DataViewerModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent)
+HexdumpModel::HexdumpModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent)
 	: QAbstractTableModel(parent)
 {
 	this->hexView = hexView;
@@ -20,7 +20,7 @@ DataViewerModel::DataViewerModel(QTableWidgetItem* item, bool hexView, HeaderDat
 /// <summary>
 /// Destructor of DataViewerModel.
 /// </summary>
-DataViewerModel::~DataViewerModel()
+HexdumpModel::~HexdumpModel()
 {
 }
 
@@ -29,7 +29,7 @@ DataViewerModel::~DataViewerModel()
 /// </summary>
 /// <param name="parent">Given parent. Not important in this scenario because number of rows is computed from QByteArray length which holds packet data</param>
 /// <returns>Number of hexdump rows</returns>
-int DataViewerModel::rowCount(const QModelIndex& parent) const
+int HexdumpModel::rowCount(const QModelIndex& parent) const
 {
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	int size = leftoverData.size() + sizeof(USBPCAP_BUFFER_PACKET_HEADER);
@@ -46,7 +46,7 @@ int DataViewerModel::rowCount(const QModelIndex& parent) const
 /// </summary>
 /// <param name="parent">Given parent. Not important in this scenario because number of columns is fixed to BYTES_ON_ROW variable</param>
 /// <returns>BYTES_ON_ROW variable</returns>
-int DataViewerModel::columnCount(const QModelIndex& parent) const
+int HexdumpModel::columnCount(const QModelIndex& parent) const
 {
 	return holder->BYTES_ON_ROW; //16B on one line
 }
@@ -58,7 +58,7 @@ int DataViewerModel::columnCount(const QModelIndex& parent) const
 /// <param name="orientation">Defines orientation of header</param>
 /// <param name="role">Defines Qt role</param>
 /// <returns>QVariant with header data</returns>
-QVariant DataViewerModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant HexdumpModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
 	if (orientation == Qt::Vertical && role == Qt::DisplayRole)
 	{
@@ -76,7 +76,7 @@ QVariant DataViewerModel::headerData(int section, Qt::Orientation orientation, i
 /// <param name="index">Index of data</param>
 /// <param name="role">Role of data</param>
 /// <returns>QVariant on specified index and role of <see cref="item"/></returns>
-QVariant DataViewerModel::data(const QModelIndex& index, int role) const
+QVariant HexdumpModel::data(const QModelIndex& index, int role) const
 {
 	//compute size of data
 	QByteArray leftoverData = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
@@ -146,7 +146,7 @@ QVariant DataViewerModel::data(const QModelIndex& index, int role) const
 /// <param name="index">index of data that are being requested</param>
 /// <param name="dataRepresentation"><see cref="additionalDataType"/></param>
 /// <returns>QVariant with specific descriptor/transfer type</returns>
-QVariant DataViewerModel::GetDataRepresentationType(int index, HeaderDataType dataRepresentation) const
+QVariant HexdumpModel::GetDataRepresentationType(int index, HeaderDataType dataRepresentation) const
 {
 	switch (dataRepresentation)
 	{
@@ -236,7 +236,7 @@ QVariant DataViewerModel::GetDataRepresentationType(int index, HeaderDataType da
 /// <param name="hexView"><see cref="hexView"/></param>
 /// <param name="hex">Concrete data which will be presented</param>
 /// <returns>QVariant of data which will be represented in hexdump</returns>
-QVariant DataViewerModel::GetPacketData(bool hexView, int hex) const
+QVariant HexdumpModel::GetPacketData(bool hexView, int hex) const
 {
 	std::stringstream stream;
 	hex = (hex < 0) ? hex + 256 : hex;

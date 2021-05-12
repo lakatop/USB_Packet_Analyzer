@@ -32,7 +32,6 @@ public:
 	QString ShowBits(uint32_t start, size_t size, T number);
 
 protected:
-	QColor GetDataTypeColor(HeaderDataType dataType) const;
 
 	/// <summary>
 	/// unique_ptr to root tree item.

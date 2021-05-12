@@ -27,7 +27,7 @@ ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 {
 	this->stopButtonClicked = false;
 	this->pauseButtonClicked = false;
-	this->representingHIDDescriptor = false;
+	this->representingHIDReportDescriptor = false;
 	this->representingConfigurationDescriptor = false;
 	this->itemIndex = 0;
 	this->parent = parent;
@@ -59,6 +59,10 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 	}
 }
 
+/// <summary>
+/// Contiunes processing file from 
+/// </summary>
+/// <param name="liveReading"></param>
 void ItemManager::ProcessFileTillEnd(bool liveReading)
 {
 	qint64 value = sizeof(pcap_hdr_t); //global file header size
@@ -118,7 +122,7 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 	}
 
 	//parse HID Report Descriptor
-	if (representingHIDDescriptor)
+	if (representingHIDReportDescriptor)
 	{
 		QTableWidgetItem* previousItem = tableWidget->item(tableWidget->rowCount() - 2, 0);
 		QByteArray previousLeftoverData = previousItem->data(dataHolder->TRANSFER_LEFTOVER_DATA).toByteArray();
@@ -127,7 +131,7 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 
 		hidDevices->ParseHIDReportDescriptor(packetData, setupPacket->Index);
 
-		representingHIDDescriptor = false;
+		representingHIDReportDescriptor = false;
 	}
 
 
@@ -196,7 +200,7 @@ void ItemManager::CheckForSetupPacket(QByteArray packetData)
 			BYTE descriptorType = setupPacket->Value >> 8;
 			if (descriptorType == HID_REPORT_DESCRIPTOR)
 			{
-				representingHIDDescriptor = true;
+				representingHIDReportDescriptor = true;
 			}
 			else if (descriptorType == CONFIGURATION_DESCRIPTOR)
 			{
@@ -367,6 +371,7 @@ HeaderDataType ItemManager::GetDataType(QTableWidgetItem* currentItem, QTableWid
 		}
 
 		// device->host and control transfer ... some descriptor is being sent to the host
+
 		if (previousItem == nullptr)
 		{
 			return UNKNOWN_TRANSFER;

@@ -108,7 +108,7 @@ void USB_Packet_Analyzer::updateLiveFile()
 /// </summary>
 void USB_Packet_Analyzer::on_PauseButton_clicked()
 {
-    if (ui.PauseButton->text() == "Pause")
+    if (this->itemManager->pauseButtonClicked == false)
     {
         ui.PauseButton->setText("Continue");
         this->itemManager->pauseButtonClicked = true;
@@ -146,6 +146,8 @@ void USB_Packet_Analyzer::on_tableWidget_itemDoubleclicked(QTableWidgetItem* ite
     //using nullptr as parent because otherwise it wont show in task bar
     dataViewer = QPointer<DataViewer>(new DataViewer(dataItem, this->itemManager->GetDataType(dataItem, previousItem), ui.dataHighlightCheckBox->isChecked()));
     dataViewer->setAttribute(Qt::WidgetAttribute::WA_DeleteOnClose);
+    //since parent of DataViewer is nullptr, this ensures that when USB_Packet_Analyzer instance is about to be destroyed, 
+    //it will delete DataViewer instance and frees memory
     connect(this, &QObject::destroyed, dataViewer.data(), &QObject::deleteLater);
     dataViewer->show();
 }

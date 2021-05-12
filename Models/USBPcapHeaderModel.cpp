@@ -28,9 +28,6 @@ QVariant USBPcapHeaderModel::data(const QModelIndex& index, int role) const
 
     TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
 
-    auto a = index.column();
-    auto b = index.row();
-
     return item->Data(index.column());
 }
 

@@ -295,9 +295,21 @@ enum Supported_Devices { D_KEYBOARD = 1, D_MOUSE, D_JOYSTICK, D_UNDEFINED };
 /// </summary>
 typedef struct DataTypeColor
 {
+    /// <summary>
+    /// red color component
+    /// </summary>
     int red;
+    /// <summary>
+    /// green color component
+    /// </summary>
     int green;
+    /// <summary>
+    /// blue color component
+    /// </summary>
     int blue;
+    /// <summary>
+    /// alpha color component
+    /// </summary>
     int alpha;
 } DataTypeColor;
 
@@ -306,22 +318,51 @@ typedef struct DataTypeColor
 /// </summary>
 struct ReportDescTreeStruct
 {
+    /// <summary>
+    /// Default constructor
+    /// </summary>
     ReportDescTreeStruct() : tag(0), size(0), itemType(0), root(false), childs(), data(NULL) {}
+    /// <summary>
+    /// Parametrized constructor
+    /// </summary>
+    /// <param name="_tag"><see cref="tag"/></param>
+    /// <param name="_size"><see cref="size"/></param>
+    /// <param name="_itemType"><see cref="itemType"/></param>
+    /// <param name="_root"><see cref="root"/></param>
     ReportDescTreeStruct(BYTE _tag, BYTE _size, BYTE _itemType, bool _root) :
         tag(_tag), size(_size), itemType(_itemType), root(_root), childs(), data(NULL)
     {
     }
+    /// <summary>
+    /// Item tag
+    /// </summary>
     BYTE tag;
+    /// <summary>
+    /// Item size
+    /// </summary>
     BYTE size;
+    /// <summary>
+    /// Item type
+    /// </summary>
     BYTE itemType;
+    /// <summary>
+    /// Item data
+    /// </summary>
     QByteArray data;
+    /// <summary>
+    /// Whether this is root node or not.
+    /// </summary>
     bool root;
 
+    /// <summary>
+    /// Vector of childs
+    /// </summary>
     std::vector<std::shared_ptr<ReportDescTreeStruct>> childs;
 };
 
 /// <summary>
 /// Represents HID Descriptor
+/// For specific item description see official USB HID class documentation: https://www.usb.org/document-library/device-class-definition-hid-111
 /// </summary>
 typedef struct HIDDescriptor
 {
@@ -339,20 +380,50 @@ typedef struct HIDDescriptor
 /// </summary>
 typedef struct InputValues
 {
+    /// <summary>
+    /// Default constructor
+    /// </summary>
     InputValues() : GlobalUsagePage(0), ReportSize(0), ReportCount(0), UsageMinimum(0), UsageMaximum(0),
         LogicalMinimum(0), LogicalMaximum(0), Variable(true), LocalUsageNames()
     {
     }
 
-    //uint32 because we are assuming short items, and they can have data up to 4 bytes
+    /// <summary>
+    /// Local item Usage
+    /// uint32 because we are assuming short items, and they can have data up to 4 bytes
+    /// </summary>
     std::vector<uint32_t> LocalUsageNames;
+    /// <summary>
+    /// Global item Usage Page
+    /// </summary>
     uint32_t GlobalUsagePage;
+    /// <summary>
+    /// Report Size item
+    /// </summary>
     uint32_t ReportSize;
+    /// <summary>
+    /// Reprot Count item
+    /// </summary>
     uint32_t ReportCount;
+    /// <summary>
+    /// Local item Usage Minimum
+    /// </summary>
     uint32_t UsageMinimum;
+    /// <summary>
+    /// Local item Usage Maximum
+    /// </summary>
     uint32_t UsageMaximum;
+    /// <summary>
+    /// Global item Logical Minimum
+    /// </summary>
     uint32_t LogicalMinimum;
+    /// <summary>
+    /// Global item Logical Maximum
+    /// </summary>
     uint32_t LogicalMaximum;
+    /// <summary>
+    /// Second bit in Input item representing wheter it is variable od array
+    /// </summary>
     bool Variable;
 }InputValues, * PInputValues;
 
@@ -361,17 +432,37 @@ typedef struct InputValues
 /// </summary>
 typedef struct HIDReportDescriptorInputParse
 {
-    HIDReportDescriptorInputParse() : inputSize(0), reportDefined(false), reportID(0), deviceAddress(0),
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    HIDReportDescriptorInputParse() : inputSize(0), reportDefined(false), reportID(0),
         globalItemUsage(0), localItemUsage(0), inputValues()
     {
     }
 
+    /// <summary>
+    /// Total size of this input in bits
+    /// </summary>
     int inputSize;
-    bool reportDefined;  //true, if input is prepended with its ID
+    /// <summary>
+    /// True if input is prepended with its ID
+    /// </summary>
+    bool reportDefined;
+    /// <summary>
+    /// Report ID item
+    /// </summary>
     uint32_t reportID;
+    /// <summary>
+    /// Global item Usage Page
+    /// </summary>
     uint32_t globalItemUsage;
+    /// <summary>
+    /// Local item Usage
+    /// </summary>
     uint32_t localItemUsage;
-    USHORT deviceAddress;
+    /// <summary>
+    /// Vector of every input item for this specific input.
+    /// </summary>
     std::vector<InputValues> inputValues;
 } HIDReportDescriptorInputParse, * PHIDReportDescriptorInputParse;
 
@@ -380,14 +471,42 @@ typedef struct HIDReportDescriptorInputParse
 /// </summary>
 typedef struct BusDevice
 {
+	/// <summary>
+	/// Default constructor
+	/// </summary>
 	BusDevice() : deviceAddress(0), obsolete(true), inputparser(), endpoints(), hidDescription(), validation(0) {}
+	/// <summary>
+	/// Parametrized constructor
+	/// </summary>
+	/// <param name="deviceAddress"><see cref="deviceAddress"/></param>
 	BusDevice(USHORT deviceAddress) : deviceAddress(deviceAddress), obsolete(false), inputparser(), endpoints(), hidDescription(), validation(ULLONG_MAX) {}
-	USHORT deviceAddress;
+    /// <summary>
+    /// Device address assigned to this device by USB host
+    /// </summary>
+    USHORT deviceAddress;
+	/// <summary>
+	/// True if device was already disconnected from bus
+	/// </summary>
 	bool obsolete;
-    unsigned long long validation; //number of item index when this device was ejected from bus
-	std::map<BYTE, std::vector<HIDReportDescriptorInputParse>> inputparser; // <endpointNum, parsers> // parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID
-	std::map<BYTE, std::vector<BYTE>> endpoints; //<interfaceNum, endpointsNum> endpoints attached to this interface number
-    std::map<BYTE, std::pair<bool, UCHAR>> hidDescription; //<endpointNum, pair<isHID, bInterfaceProtocol>>
+    /// <summary>
+    /// number of item index when this device was ejected from bus
+    /// </summary>
+    unsigned long long validation; 
+	/// <summary>
+	/// <endpointNum, parsers> 
+    /// parsers that parse input from this endpoint. There may be more of them, in that case, they must have ReportID
+	/// </summary>
+	std::map<BYTE, std::vector<HIDReportDescriptorInputParse>> inputparser;
+	/// <summary>
+	/// <interfaceNum, endpointsNum> 
+    /// endpoints attached to this interface number
+	/// </summary>
+	std::map<BYTE, std::vector<BYTE>> endpoints;
+    /// <summary>
+    /// <endpointNum, pair<isHID, bInterfaceProtocol>>
+    /// pair whether this endpoint represents HID class and its interface protocol code
+    /// </summary>
+    std::map<BYTE, std::pair<bool, UCHAR>> hidDescription;
 } EndpointDevice, * PEndpointDevice;
 
 #endif // !EXTERNSTRUCTS_HPP

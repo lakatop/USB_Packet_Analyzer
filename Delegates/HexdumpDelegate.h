@@ -10,13 +10,13 @@
 /// <summary>
 /// Delegate class for hexdump.
 /// </summary>
-class DataViewerDelegate : public QStyledItemDelegate
+class HexdumpDelegate : public QStyledItemDelegate
 {
 	Q_OBJECT
 
 public:
-	DataViewerDelegate(bool dataHighlight, QObject *parent);
-	~DataViewerDelegate();
+	HexdumpDelegate(bool dataHighlight, QObject *parent);
+	~HexdumpDelegate();
 	void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 	QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 private:

@@ -1,11 +1,11 @@
-#include "DataViewerDelegate.h"
+#include "HexdumpDelegate.h"
 
 /// <summary>
 /// Constructor of DataViewerDelegate.
 /// </summary>
 /// <param name="dataHighlight"><see cref="dataHighlight"/></param>
 /// <param name="parent">Dialog <see cref="DataViewer"/></param>
-DataViewerDelegate::DataViewerDelegate(bool dataHighlight, QObject *parent)
+HexdumpDelegate::HexdumpDelegate(bool dataHighlight, QObject *parent)
 	: QStyledItemDelegate(parent)
 {
 	this->dataHighlight = dataHighlight;
@@ -15,7 +15,7 @@ DataViewerDelegate::DataViewerDelegate(bool dataHighlight, QObject *parent)
 /// <summary>
 /// Desctructor of DataViewerDelegate.
 /// </summary>
-DataViewerDelegate::~DataViewerDelegate()
+HexdumpDelegate::~HexdumpDelegate()
 {
 }
 /// <summary>
@@ -24,7 +24,7 @@ DataViewerDelegate::~DataViewerDelegate()
 /// <param name="option">Not used in this scenario, we are returning fixed size</param>
 /// <param name="index">Not used in this scenario, we are returning fixed size</param>
 /// <returns>QSize of cells in hexdump</returns>
-QSize DataViewerDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+QSize HexdumpDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
 	return QSize(30, 30);
 }
@@ -35,7 +35,7 @@ QSize DataViewerDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
 /// <param name="painter">Given painter</param>
 /// <param name="option">Describe the parameters used to draw an item</param>
 /// <param name="index">Index to concrete data we want to draw</param>
-void DataViewerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+void HexdumpDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
 	QVariantList list;
 	painter->save();
@@ -79,7 +79,7 @@ void DataViewerDelegate::paint(QPainter* painter, const QStyleOptionViewItem& op
 /// <param name="painter">Given painter</param>
 /// <param name="option">Describe the parameters used to draw an item</param>
 /// <param name="list">QVariant list containing of HeaderDataType from which we determine color of highlighting</param>
-void DataViewerDelegate::drawDataHighlight(QPainter* painter, const QStyleOptionViewItem& option, const QVariantList& list) const
+void HexdumpDelegate::drawDataHighlight(QPainter* painter, const QStyleOptionViewItem& option, const QVariantList& list) const
 {
 	uint penWidth = 3;
 	QRect rect = option.rect;
@@ -122,7 +122,7 @@ void DataViewerDelegate::drawDataHighlight(QPainter* painter, const QStyleOption
 /// <param name="painter">Given painter</param>
 /// <param name="color">Color used for highliting</param>
 /// <param name="rect">Rectangle which will be highlighted</param>
-void DataViewerDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor& color, QRect& rect) const
+void HexdumpDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor& color, QRect& rect) const
 {
 	uint penWidth = 3;
 	painter->setPen(QPen(QColor::fromRgb(color.red, color.green, color.blue), penWidth));
@@ -135,7 +135,7 @@ void DataViewerDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor
 /// <param name="painter">Given painter</param>
 /// <param name="color">Color used for highliting</param>
 /// <param name="rect">Rectangle which will be highlighted</param>
-void DataViewerDelegate::drawControlHeaderDataHiglight(QPainter* painter, DataTypeColor& color, QRect& rect) const
+void HexdumpDelegate::drawControlHeaderDataHiglight(QPainter* painter, DataTypeColor& color, QRect& rect) const
 {
 	painter->fillRect(rect, QColor(color.red, color.green, color.blue, color.alpha));
 	uint penWidth = 3;
