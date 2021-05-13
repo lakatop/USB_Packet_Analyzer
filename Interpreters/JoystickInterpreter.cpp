@@ -29,6 +29,12 @@ void JoystickInterpreter::Interpret()
     rootItem->AppendChild(new TreeItem(QVector<QVariant>{"JOYSTICK DEVICE", "", ""}, rootItem));
     TreeItem* joystickDeviceChild = rootItem->Child(rootItem->ChildCount() - 1);
 
+    if (inputParser.reportDefined)
+    {
+        additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+        joystickDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "Report ID", inputParser.reportID}, joystickDeviceChild));
+    }
+
     int hatswitch_size = 0;
 
     for (int i = 0; i < inputParser.inputValues.size(); i++)
@@ -51,8 +57,8 @@ void JoystickInterpreter::Interpret()
                 axisChild = joystickDeviceChild->Child(joystickDeviceChild->ChildCount() - 1);
             }
 
-            uint32_t size = inputParser.inputValues[i].ReportSize / 8;
-            for (int j = 0; j < inputParser.inputValues[i].LocalUsageNames.size(); j++)
+            int size = inputParser.inputValues[i].ReportSize / 8;
+            for (int j = 0; j < 4; j++)
             {
                 int value = 0;
                 uint32_t name = inputParser.inputValues[i].LocalUsageNames[j];
@@ -75,7 +81,7 @@ void JoystickInterpreter::Interpret()
         {
             if (inputParser.inputValues[i].LocalUsageNames[0] == HAT_SWITCH)
             {
-                uint32_t size = inputParser.inputValues[i].ReportSize / 8; //this should be 0, as HAT_SWITCH is usually 4bits
+                int size = inputParser.inputValues[i].ReportSize / 8; //this should be 0, as HAT_SWITCH is usually 4bits
                 hatswitch_size += inputParser.inputValues[i].ReportSize;
 
                 BYTE value = *packet;
@@ -85,7 +91,7 @@ void JoystickInterpreter::Interpret()
                 if (size == 0)
                 {
                     hatswitchChild->AppendChild(new TreeItem(QVector<QVariant>{additionalDataModel->ShowBits(8 - hatswitch_size, hatswitch_size, value),
-                        "hat_switch"}, hatswitchChild));
+                        "Hat_switch"}, hatswitchChild));
                 }
                 else
                 {
@@ -93,12 +99,12 @@ void JoystickInterpreter::Interpret()
                     hatswitchChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "Hat_switch", value}, hatswitchChild));
                 }
             }
-            else if (inputParser.inputValues[i].LocalUsageNames[0] == 0x09) //buttons, usually right after hat_switch
+            else if (inputParser.inputValues[i].LocalUsageNames[0] == BUTTON_PAGE) //buttons, usually right after hat_switch
             {
                 int buttonCounter = 0;
                 int buttonNumber = 0;
 
-                if ((hatswitch_size / 8) == 0)  //if hatswitch_size / 8 < 0, then first button bit is starting right after last hat_switch bit, not on position 0
+                if ((hatswitch_size / 8) == 0)  //if hatswitch_size / 8 > 0, then first button bit is starting right after last hat_switch bit, not on position 0
                 {
                     buttonCounter += hatswitch_size;
                 }
@@ -121,8 +127,7 @@ void JoystickInterpreter::Interpret()
             }
             else  //probably something vendor defined
             {
-                uint32_t size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /
-                    (8 * inputParser.inputValues[i].LocalUsageNames.size());
+                int size = (inputParser.inputValues[i].ReportSize * inputParser.inputValues[i].ReportCount) / 8;
                 int value = 0;
                 uint32_t name = inputParser.inputValues[i].LocalUsageNames[0];
                 hidDevices->CharToNumberConvert(packet, value, size);
@@ -132,7 +137,7 @@ void JoystickInterpreter::Interpret()
         }
         else //something unusual
         {
-            uint32_t size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /
+            int size = (inputParser.inputValues[i].ReportSize * inputParser.inputValues[i].ReportCount) /
                 (8 * inputParser.inputValues[i].LocalUsageNames.size());
             for (int j = 0; j < inputParser.inputValues[i].LocalUsageNames.size(); j++)
             {

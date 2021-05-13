@@ -29,6 +29,12 @@ void UnknownDeviceInterpreter::Interpret()
 
 	QString hexData;
 
+	if (inputParser.reportDefined)
+	{
+		additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+		unknownDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "Report ID", inputParser.reportID}, unknownDeviceChild));
+	}
+
 	for (int i = 0; i < inputParser.inputValues.size(); i++)
 	{
 		int size = ((std::size_t)inputParser.inputValues[i].ReportSize * (std::size_t)inputParser.inputValues[i].ReportCount) /

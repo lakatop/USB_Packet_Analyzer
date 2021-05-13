@@ -35,6 +35,13 @@ void KeyboardInterpreter::Interpret()
         return;
     }
     int interpreted = 0;
+
+    if (inputParser.reportDefined)
+    {
+        additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+        keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "Report ID", inputParser.reportID}, keyboardDeviceChild));
+        interpreted += 1;
+    }
     
     //first byte should be modifier_key_status
     int size = (inputParser.inputValues[0].ReportCount * inputParser.inputValues[0].ReportSize) / 8;
@@ -78,8 +85,8 @@ void KeyboardInterpreter::Interpret()
     bool bitDefined = true;
     for (int i = (isReserved) ? 2 : 1; i < inputParser.inputValues.size(); i++)
     {
-        //if every input item has ReportSize == 1, it should be bit-defined
-        if (inputParser.inputValues[i].ReportSize != 1)
+        //if every input item has variable instead of array, it should be bit-defined
+        if (!inputParser.inputValues[i].Variable)
         {
             bitDefined = false;
         }
@@ -96,26 +103,54 @@ void KeyboardInterpreter::Interpret()
             for (int j = 0; j < 8; j++)
             {
                 keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
-                {additionalDataModel->ShowBits(j, 1, value), keyboardUsages[i + j], value}, keyboardDeviceChild));
+                {additionalDataModel->ShowBits(j, 1, value), (i + j < 232) ? keyboardUsages[i + j] : "reserved", value}, keyboardDeviceChild));
             }
         }
     }
     else
     {
-        uint32_t numberOfKeyScans = (isReserved) ? inputParser.inputValues[2].ReportCount :
-            inputParser.inputValues[1].ReportCount;
-
         keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>{"KEYS", "", ""}, keyboardDeviceChild));
         TreeItem* keysChild = keyboardDeviceChild->Child(keyboardDeviceChild->ChildCount() - 1);
+        
+        //we may have input that combines byte-defined keyscans with bit-defined map
+        //in that case keep track of how many bits were already interpreted
+        int bitSize = 0; 
 
-        for (int j = 0; j < numberOfKeyScans; j++)
+        for (int i = (isReserved) ? 2 : 1; i < inputParser.inputValues.size(); i++)
         {
-            int size = inputParser.inputValues[2].ReportSize / 8;
-            int value = 0;
-            hidDevices->CharToNumberConvert(packet, value, size);
-            additionalDataModel->CharToHexConvert(&packet, size, hexData);
-            keysChild->AppendChild(new TreeItem(QVector<QVariant>{
-                hexData, (std::string("Key ").c_str() + (value<232) ? keyboardUsages[value] : "reserved"), value}, keysChild));
+            //should be byte-defined keyscan
+            if (inputParser.inputValues[i].Variable == false)
+            {
+                uint32_t numberOfKeyScans = inputParser.inputValues[i].ReportCount;
+
+                for (int j = 0; j < numberOfKeyScans; j++)
+                {
+                    int size = inputParser.inputValues[i].ReportSize / 8;
+                    int value = 0;
+                    hidDevices->CharToNumberConvert(packet, value, size);
+                    additionalDataModel->CharToHexConvert(&packet, size, hexData);
+                    keysChild->AppendChild(new TreeItem(QVector<QVariant>{
+                        hexData, (std::string("Key ").c_str() + (value < 232) ? keyboardUsages[value] : "reserved"), value}, keysChild));
+                }
+            }
+            else //something unusual - byte-defined keyscans combined with bit-defined map
+            {
+                int size = inputParser.inputValues[i].ReportSize * inputParser.inputValues[i].ReportCount;
+
+                for (int j = 0; j < size; j += 8)
+                {
+                    byte value = 0;
+                    hidDevices->CharToNumberConvert(packet, value, 1);
+                    additionalDataModel->CharToHexConvert(&packet, 1, hexData);
+                    for (int k = 0; k < 8; k++)
+                    {
+                        keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
+                        {additionalDataModel->ShowBits(j, 1, value), (bitSize < 232) ? keyboardUsages[bitSize] : "reserved", value}, keyboardDeviceChild));
+
+                        bitSize++;
+                    }
+                }
+            }
         }
     }
 }
