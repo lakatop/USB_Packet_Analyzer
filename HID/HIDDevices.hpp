@@ -16,7 +16,7 @@ public:
 	void CreateDevice(QByteArray packetData);
 	size_t GetHIDDescriptorSize();
 	HIDDescriptor FillUpHIDDescriptor(const unsigned char* packet);	
-	Supported_Devices GetSupportedDevice(std::pair<uint32_t, uint32_t> key);
+	SupportedDevices GetSupportedDevice(std::pair<uint32_t, uint32_t> key);
 	template<typename T>
 	void CharToNumberConvert(const unsigned char* addr, T& number, int size);
 
@@ -49,7 +49,7 @@ private:
 	/// Map whose key is Global and Local Usage, and value is Supported_Devices enum 
 	/// representing whether this application supports device given by key.
 	/// </summary>
-	std::map<std::pair<uint32_t, uint32_t>, Supported_Devices> deviceMap;
+	std::map<std::pair<uint32_t, uint32_t>, SupportedDevices> deviceMap;
 };
 
 

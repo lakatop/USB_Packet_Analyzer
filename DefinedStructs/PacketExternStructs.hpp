@@ -220,7 +220,7 @@ enum HeaderDataType
 /// <summary>
 /// Representing descriptor types.
 /// </summary>
-enum Descriptor_Types
+enum DescriptorTypes
 {
     DEVICE_DESCRIPTOR = 1, CONFIGURATION_DESCRIPTOR, STRING_DESCRIPTOR, INTERFACE_DESCRIPTOR, ENDPOINT_DESCRIPTOR,
     DEVICE_QUALIFIER, OTHER_SPEED_CONFIGURATION, HID_DESCRIPTOR_ENUM = 0x21, HID_REPORT_DESCRIPTOR = 0x22
@@ -229,7 +229,7 @@ enum Descriptor_Types
 /// <summary>
 /// Representing standard device requests.
 /// </summary>
-enum Setup_Packet_bRequest
+enum SetupPacketbRequest
 {
     GET_STATUS, CLEAR_FEATURE, SET_FEATURE = 3, SET_ADDRESS = 5, GET_DESCRIPTOR, SET_DESCRIPTOR, GET_CONFIGURATION, SET_CONFIGURATION,
     GET_INTERFACE, SET_INTERFACE, SYNCH_FRAME
@@ -238,22 +238,22 @@ enum Setup_Packet_bRequest
 /// <summary>
 /// Represents Setup Packet SET_FEATURE Test Mode Selectors.
 /// </summary>
-enum USB_Test_Selectors { TEST_J = 1, TEST_K, TEST_SE0_NAK, TEST_PACKET, TEST_FORCE_ENABLE };
+enum USBTestSelectors { TEST_J = 1, TEST_K, TEST_SE0_NAK, TEST_PACKET, TEST_FORCE_ENABLE };
 
 /// <summary>
 /// Represents HID Report Descriptor Item type.
 /// </summary>
-enum Report_Desc_Item_Type { MAIN, GLOBAL, LOCAL };
+enum ReportDescItemType { MAIN, GLOBAL, LOCAL };
 
 /// <summary>
 /// Represents HID Report Descriptor Main Item tag.
 /// </summary>
-enum Report_Desc_Main_Tags { MAIN_INPUT = 0x8, OUTPUT = 0x9, COLLECTION = 0xA, FEATURE = 0xB, END_COLLECTION = 0xC };
+enum ReportDescMainTags { MAIN_INPUT = 0x8, OUTPUT = 0x9, COLLECTION = 0xA, FEATURE = 0xB, END_COLLECTION = 0xC };
 
 /// <summary>
 /// Represents HID Report Descriptor Global tag.
 /// </summary>
-enum Report_Desc_Global_Tags
+enum ReportDescGlobalTags
 {
     USAGE_PAGE, LOGICAL_MINIMUM, LOGICAL_MAXIMUM, PHYSICAL_MINIMUM, PHYSICAL_MAXIMUM, UNIT_EXPONENT, UNIT, REPORT_SIZE, REPORT_ID,
     REPORT_COUNT, PUSH, POP
@@ -262,7 +262,7 @@ enum Report_Desc_Global_Tags
 /// <summary>
 /// Represents HID Report Descriptor Local tag.
 /// </summary>
-enum Report_Desc_Local_Tags
+enum ReportDescLocalTags
 {
     USAGE, USAGE_MINIMUM, USAGE_MAXIMUM, DESIGNATOR_INDEX, DESIGNATOR_MINIMUM, DESIGNATOR_MAXIMUM, STRING_INDEX = 0X7,
     STRING_MINIMUM = 0X8, STRING_MAXIMUM = 0X9, DELIMITER = 0XA
@@ -271,22 +271,22 @@ enum Report_Desc_Local_Tags
 /// <summary>
 /// Represents HID Report Descriptor Collection Type.
 /// </summary>
-enum Report_Desc_Collection_Type { PHYSICAL, APPLICATION, LOGICAL, REPORT, NAMED_ARRAY, USAGE_SWITCH, USAGE_MODIFIER };
+enum ReportDescCollectionType { PHYSICAL, APPLICATION, LOGICAL, REPORT, NAMED_ARRAY, USAGE_SWITCH, USAGE_MODIFIER };
 
 /// <summary>
 /// Represents HID Usage Pages.
 /// </summary>
-enum Global_Usage_Pages { GENERIC_DESKTOP_PAGE = 0x01, KEYBOARD_PAGE = 0x07, LED_PAGE, BUTTON_PAGE };
+enum GlobalUsagePages { GENERIC_DESKTOP_PAGE = 0x01, KEYBOARD_PAGE = 0x07, LED_PAGE, BUTTON_PAGE };
 
 /// <summary>
 /// Represents Generic Desktop Usages.
 /// </summary>
-enum Generic_Desktop_Usages { UNDEFINED, POINTER, MOUSE, RESERVED, JOYSTICK, GAMEPAD, KEYBOARD, KEYPAD, X = 0X30, Y, Z, RX, RY, RZ, WHEEL = 0X38, HAT_SWITCH };
+enum GenericDesktopUsages { UNDEFINED, POINTER, MOUSE, RESERVED, JOYSTICK, GAMEPAD, KEYBOARD, KEYPAD, X = 0X30, Y, Z, RX, RY, RZ, WHEEL = 0X38, HAT_SWITCH };
 
 /// <summary>
 /// Represents supported devices by this application.
 /// </summary>
-enum Supported_Devices { D_KEYBOARD = 1, D_MOUSE, D_JOYSTICK, D_UNDEFINED };
+enum SupportedDevices { D_KEYBOARD = 1, D_MOUSE, D_JOYSTICK, D_UNDEFINED };
 
 //STRUCTS
 
@@ -384,7 +384,7 @@ typedef struct InputValues
     /// Default constructor
     /// </summary>
     InputValues() : GlobalUsagePage(0), ReportSize(0), ReportCount(0), UsageMinimum(0), UsageMaximum(0),
-        LogicalMinimum(0), LogicalMaximum(0), Variable(true), LocalUsageNames()
+        LogicalMinimum(0), LogicalMaximum(0), Constant(true), Variable(true), LocalUsageNames()
     {
     }
 

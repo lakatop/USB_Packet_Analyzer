@@ -44,7 +44,7 @@ void InterruptTransferInterpreter::Interpret()
 	{
 		auto inputParser = GetInputParser(index);
 		std::pair<uint32_t, uint32_t> GlobalAndLocalUsagePair = std::make_pair(inputParser.globalItemUsage, inputParser.localItemUsage);
-		Supported_Devices dev = hidDevices->GetSupportedDevice(GlobalAndLocalUsagePair);
+		SupportedDevices dev = hidDevices->GetSupportedDevice(GlobalAndLocalUsagePair);
 
 		auto it = hidDevices->devices[index].hidDescription.find(usbh->endpoint & 0x0F);
 		if (it != hidDevices->devices[index].hidDescription.end())

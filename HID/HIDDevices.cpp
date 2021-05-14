@@ -39,7 +39,7 @@ size_t HIDDevices::GetHIDDescriptorSize()
 /// </summary>
 /// <param name="key">Key to deviceMap</param>
 /// <returns>Supported_Devices enum representing whether this device is supported by this application or not</returns>
-Supported_Devices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> key)
+SupportedDevices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> key)
 {
 	auto deviceMapIterator = deviceMap.find(key);
 	if (deviceMapIterator == deviceMap.end())
