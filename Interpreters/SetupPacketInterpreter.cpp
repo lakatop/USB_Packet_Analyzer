@@ -151,7 +151,7 @@ void SetupPacketInterpreter::Interpret()
 /// <param name="packet">Pointer to wValue data</param>
 /// <param name="setupPacket">Pointer to setup packet which is being interpreted</param>
 /// <param name="setupChild">Tree item to which we are appending items</param>
-void SetupPacketInterpreter::AppendSetupwValue(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
+void SetupPacketInterpreter::AppendSetupwValue(const unsigned char** packet, const PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 2, hexData);
@@ -164,7 +164,7 @@ void SetupPacketInterpreter::AppendSetupwValue(const unsigned char** packet, PWI
 /// <param name="packet">Pointer to wIndex data</param>
 /// <param name="setupPacket">Pointer to setup packet which is being interpreted</param>
 /// <param name="setupChild">Tree item to which we are appending items</param>
-void SetupPacketInterpreter::AppendSetupwIndex(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
+void SetupPacketInterpreter::AppendSetupwIndex(const unsigned char** packet, const PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 2, hexData);
@@ -177,7 +177,7 @@ void SetupPacketInterpreter::AppendSetupwIndex(const unsigned char** packet, PWI
 /// <param name="packet">Pointer to wLength data</param>
 /// <param name="setupPacket">Pointer to setup packet which is being interpreted</param>
 /// <param name="setupChild">Tree item to which we are appending items</param>
-void SetupPacketInterpreter::AppendSetupwLength(const unsigned char** packet, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
+void SetupPacketInterpreter::AppendSetupwLength(const unsigned char** packet, const PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 2, hexData);

@@ -27,9 +27,9 @@ public:
 	virtual QVariant data(const QModelIndex& index, int role) const = 0;
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const = 0;
 
-	void CharToHexConvert(const unsigned char** addr, const unsigned int len, QString& data);
+	void CharToHexConvert(const unsigned char** addr, const unsigned int len, QString& data) const;
 	template <typename T>
-	QString ShowBits(uint32_t start, size_t size, T number);
+	QString ShowBits(const uint32_t start, const size_t size, T number) const;
 
 protected:
 
@@ -52,7 +52,7 @@ protected:
 /// <param name="number">Number which will be analyzed</param>
 /// <returns>QString of analyzed number which shows its individual bits</returns>
 template <typename T>
-QString TreeItemBaseModel::ShowBits(uint32_t start, size_t size, T number)
+QString TreeItemBaseModel::ShowBits(const uint32_t start, const size_t size, T number) const
 {
 	std::stringstream stream;
 	for (int i = 0; i < sizeof(T) * 8; i++)

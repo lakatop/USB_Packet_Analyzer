@@ -18,7 +18,7 @@ public:
 	QByteArray GetPacket();
 	bool ReadFileHeader();
 	bool EndOfFile();
-	bool OpenNewFile(QString filename);
+	bool OpenNewFile(const QString filename);
 	qint64 FileSize();
 private:
 	/// <summary>

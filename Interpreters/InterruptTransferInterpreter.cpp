@@ -110,7 +110,7 @@ void InterruptTransferInterpreter::Interpret()
 /// </summary>
 /// <param name="index">Index of concrete device for which we are finding interpreter</param>
 /// <returns>Concrete HIDReportDescriptorInputParse struct for parsing input, or default HIDReportDescriptorInputParse struct if nothing was found</returns>
-HIDReportDescriptorInputParse InterruptTransferInterpreter::GetInputParser(int index)
+HIDReportDescriptorInputParse InterruptTransferInterpreter::GetInputParser(const int index)
 {
 	HIDReportDescriptorInputParse inputParser;
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->data(holder->USBPCAP_HEADER_DATA).toByteArray().constData();

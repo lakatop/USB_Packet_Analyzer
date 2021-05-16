@@ -18,7 +18,7 @@ class HexdumpModel : public QAbstractTableModel
 	Q_OBJECT
 
 public:
-	HexdumpModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent = nullptr);
+	HexdumpModel(QTableWidgetItem* item, bool hexView, const HeaderDataType additionalDataType, QObject *parent = nullptr);
 	~HexdumpModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -26,8 +26,8 @@ public:
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 private:
-	QVariant GetDataRepresentationType(int index, HeaderDataType dataRepresentation) const;
-	QVariant GetPacketData(bool hexView, int hex) const;
+	QVariant GetDataRepresentationType(const int index, const HeaderDataType dataRepresentation) const;
+	QVariant GetPacketData(const bool hexView, int hex) const;
 
 	/// <summary>
 	/// Whether model should act as model for hexTabeView(true) or byteTableView(false).

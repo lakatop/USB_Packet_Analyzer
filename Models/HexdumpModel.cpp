@@ -7,7 +7,7 @@
 /// <param name="hexView"><see cref="hexView"/></param>
 /// <param name="additionalDataType"><see cref="additionalDataType"/></param>
 /// <param name="parent">Dialog <see cref="DataViewer"/></param>
-HexdumpModel::HexdumpModel(QTableWidgetItem* item, bool hexView, HeaderDataType additionalDataType, QObject *parent)
+HexdumpModel::HexdumpModel(QTableWidgetItem* item, bool hexView, const HeaderDataType additionalDataType, QObject *parent)
 	: QAbstractTableModel(parent)
 {
 	this->hexView = hexView;
@@ -146,7 +146,7 @@ QVariant HexdumpModel::data(const QModelIndex& index, int role) const
 /// <param name="index">index of data that are being requested</param>
 /// <param name="dataRepresentation"><see cref="additionalDataType"/></param>
 /// <returns>QVariant with specific descriptor/transfer type</returns>
-QVariant HexdumpModel::GetDataRepresentationType(int index, HeaderDataType dataRepresentation) const
+QVariant HexdumpModel::GetDataRepresentationType(const int index, const HeaderDataType dataRepresentation) const
 {
 	switch (dataRepresentation)
 	{
@@ -236,7 +236,7 @@ QVariant HexdumpModel::GetDataRepresentationType(int index, HeaderDataType dataR
 /// <param name="hexView"><see cref="hexView"/></param>
 /// <param name="hex">Concrete data which will be presented</param>
 /// <returns>QVariant of data which will be represented in hexdump</returns>
-QVariant HexdumpModel::GetPacketData(bool hexView, int hex) const
+QVariant HexdumpModel::GetPacketData(const bool hexView, int hex) const
 {
 	std::stringstream stream;
 	hex = (hex < 0) ? hex + 256 : hex;

@@ -21,15 +21,15 @@ class DataViewer : public QDialog
 	Q_OBJECT
 
 public:
-	DataViewer(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight, QWidget *parent = Q_NULLPTR);
+	DataViewer(QTableWidgetItem* item, const HeaderDataType additionalDataType, const bool dataHighlight, QWidget *parent = Q_NULLPTR);
 	~DataViewer();
 
 private:
-	void InitTables(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight);
-	void InitTreeViews(QTableWidgetItem* item, HeaderDataType additionalDataType);
-	void InitTableViewer(QTableView* table, bool hexViewTable);
+	void InitTables(QTableWidgetItem* item, const HeaderDataType additionalDataType, const bool dataHighlight);
+	void InitTreeViews(QTableWidgetItem* item, const HeaderDataType additionalDataType);
+	void InitTableViewer(QTableView* table, const bool hexViewTable);
 	void InitLabels();
-	void AdjustTableSize(QTableView* table, bool hexViewTable);
+	void AdjustTableSize(QTableView* table, const bool hexViewTable);
 
 	Ui::DataViewer ui;
 	/// <summary>

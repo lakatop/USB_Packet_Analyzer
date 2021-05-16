@@ -8,7 +8,7 @@
 /// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 /// <param name="inputParser"><see cref="inputParser"/></param>
 MouseInterpreter::MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-    HIDReportDescriptorInputParse inputParser)
+    const HIDReportDescriptorInputParse inputParser)
     :BaseInterpreter(rootItem, item, additionalDataModel)
 {
 	this->inputParser = inputParser;
@@ -72,14 +72,14 @@ void MouseInterpreter::Interpret()
                     if (size < 8)  //padding is usually shorted than 1B, but i still need to move to the next byte
                     {
                         buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{
-                            additionalDataModel->ShowBits(0, 8 - (buttonCounter % 8), *packet), std::string("Button padding").c_str(), buttonValue}, buttonsChild));
+                            additionalDataModel->ShowBits(0, 8 - (buttonCounter % 8), *packet), std::string("Button padding").c_str()}, buttonsChild));
                         packet += 1;
                     }
                     else
                     {
                         //append button padding item to round a byte
                         buttonsChild->AppendChild(new TreeItem(QVector<QVariant>{
-                            additionalDataModel->ShowBits(buttonCounter % 8, 8 - (buttonCounter % 8), buttonValue), std::string("Button padding").c_str(), buttonValue}, buttonsChild));
+                            additionalDataModel->ShowBits(buttonCounter % 8, 8 - (buttonCounter % 8), buttonValue), std::string("Button padding").c_str()}, buttonsChild));
                         
                         //starting from new byte, get size of padding in bits
                         size = size - (8 - (buttonCounter % 8));

@@ -4,7 +4,7 @@
 /// Appends another child to this item.
 /// </summary>
 /// <param name="child">Child which will be appended</param>
-void TreeItem::AppendChild(TreeItem* child)
+void TreeItem::AppendChild(const TreeItem* child)
 {
 	childs.append(std::make_shared<TreeItem>(*child));
 }
@@ -14,7 +14,7 @@ void TreeItem::AppendChild(TreeItem* child)
 /// </summary>
 /// <param name="row">Index to <see cref="childs"/> vector</param>
 /// <returns>TreeItem in <see cref="childs"/> on row index</returns>
-TreeItem* TreeItem::Child(int row)
+TreeItem* TreeItem::Child(const int row)
 {
 	if (row < 0 || row >= childs.size())
 	{
@@ -47,7 +47,7 @@ int TreeItem::ColumnCount() const
 /// </summary>
 /// <param name="column">Index to <see cref="data"/> vector</param>
 /// <returns>QVariant on given column from <see cref="data"/> vector</returns>
-QVariant TreeItem::Data(int column) const
+QVariant TreeItem::Data(const int column) const
 {
 	if (column < 0 || column >= data.size())
 	{

@@ -85,7 +85,7 @@ bool FileReader::EndOfFile()
 /// </summary>
 /// <param name="filename">Name of file which should be opened for read</param>
 /// <returns>Whether opening was successful</returns>
-bool FileReader::OpenNewFile(QString filename)
+bool FileReader::OpenNewFile(const QString filename)
 {
 	if (file.isOpen())
 	{

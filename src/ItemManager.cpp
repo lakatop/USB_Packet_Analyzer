@@ -42,7 +42,7 @@ ItemManager::ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent)
 /// </summary>
 /// <param name="filename">Name of file to be processed</param>
 /// <param name="liveReading">Whether we are processing live capture or not</param>
-void ItemManager::ProcessFile(QString filename, bool liveReading)
+void ItemManager::ProcessFile(const QString filename, const bool liveReading)
 {
 	if (fileReader.OpenNewFile(filename))
 	{
@@ -63,7 +63,7 @@ void ItemManager::ProcessFile(QString filename, bool liveReading)
 /// Contiunes processing file from 
 /// </summary>
 /// <param name="liveReading"></param>
-void ItemManager::ProcessFileTillEnd(bool liveReading)
+void ItemManager::ProcessFileTillEnd(const bool liveReading)
 {
 	qint64 value = sizeof(pcap_hdr_t); //global file header size
 	processingFile = true;
@@ -105,7 +105,7 @@ void ItemManager::ProcessFileTillEnd(bool liveReading)
 /// Process one concrete packet.
 /// </summary>
 /// <param name="packetData">Data that represents one concrete packet</param>
-void ItemManager::ProcessPacket(QByteArray packetData)
+void ItemManager::ProcessPacket(const QByteArray packetData)
 {
 	//create new device
 	if (representingConfigurationDescriptor)
@@ -144,7 +144,7 @@ void ItemManager::ProcessPacket(QByteArray packetData)
 /// Fills up first item in the row with all data needed for later analysis.
 /// </summary>
 /// <param name="packetData">Data that represents one concrete packet</param>
-void ItemManager::FillUpItem(QByteArray packetData)
+void ItemManager::FillUpItem(const QByteArray packetData)
 {
 	const unsigned char* packet = (unsigned char*)packetData.data();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;
@@ -186,9 +186,9 @@ void ItemManager::FillUpItem(QByteArray packetData)
 /// Analyzing Setup Packet and setting up <see cref="representingHIDDescriptor"/> and <see cref="representingConfigurationDescriptor"/>
 /// </summary>
 /// <param name="packetData">Data that represents Setup Packet</param>
-void ItemManager::CheckForSetupPacket(QByteArray packetData)
+void ItemManager::CheckForSetupPacket(const QByteArray packetData)
 {
-	const unsigned char* packet = (unsigned char*)packetData.data();
+	const unsigned char* packet = (unsigned char*)packetData.constData();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;
 
 	if (((usbh->info & 0x01) == 0) && (usbh->transfer == USBPCAP_TRANSFER_CONTROL)) //host->device and control transfer ... additional packet data = setup packet
@@ -215,7 +215,7 @@ void ItemManager::CheckForSetupPacket(QByteArray packetData)
 /// </summary>
 /// <param name="usbh">USB packet header in USBPcap format</param>
 /// <param name="packet">pointer to the start of packet data</param>
-void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet)
+void ItemManager::InsertRow(const PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet)
 {
 	std::string name;
 	int column = 0;
@@ -293,7 +293,7 @@ void ItemManager::InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned c
 /// Colors rows in <see cref="tableWidget"/>
 /// </summary>
 /// <param name="usbh">Header of packet. Determines transfer type</param>
-void ItemManager::ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh)
+void ItemManager::ColorRow(const PUSBPCAP_BUFFER_PACKET_HEADER usbh)
 {
 	if ((usbh->info & 0x01) == 1) //device->host transfer
 	{
@@ -337,7 +337,7 @@ void ItemManager::ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh)
 /// <param name="currentItem">current item that holds data</param>
 /// <param name="previousItem">item that stands tight before <see cref="currentItem"/></param>
 /// <returns></returns>
-HeaderDataType ItemManager::GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem)
+HeaderDataType ItemManager::GetDataType(const QTableWidgetItem* currentItem, const QTableWidgetItem* previousItem)
 {
 	QByteArray usbhArr = currentItem->data(dataHolder->USBPCAP_HEADER_DATA).toByteArray();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)usbhArr.constData();

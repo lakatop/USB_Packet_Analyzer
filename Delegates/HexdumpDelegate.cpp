@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="dataHighlight"><see cref="dataHighlight"/></param>
 /// <param name="parent">Dialog <see cref="DataViewer"/></param>
-HexdumpDelegate::HexdumpDelegate(bool dataHighlight, QObject *parent)
+HexdumpDelegate::HexdumpDelegate(const bool dataHighlight, QObject *parent)
 	: QStyledItemDelegate(parent)
 {
 	this->dataHighlight = dataHighlight;
@@ -122,7 +122,7 @@ void HexdumpDelegate::drawDataHighlight(QPainter* painter, const QStyleOptionVie
 /// <param name="painter">Given painter</param>
 /// <param name="color">Color used for highliting</param>
 /// <param name="rect">Rectangle which will be highlighted</param>
-void HexdumpDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor& color, QRect& rect) const
+void HexdumpDelegate::drawOtherDataHighlight(QPainter* painter, const DataTypeColor& color, const QRect& rect) const
 {
 	uint penWidth = 3;
 	painter->setPen(QPen(QColor::fromRgb(color.red, color.green, color.blue), penWidth));
@@ -135,7 +135,7 @@ void HexdumpDelegate::drawOtherDataHighlight(QPainter* painter, DataTypeColor& c
 /// <param name="painter">Given painter</param>
 /// <param name="color">Color used for highliting</param>
 /// <param name="rect">Rectangle which will be highlighted</param>
-void HexdumpDelegate::drawControlHeaderDataHiglight(QPainter* painter, DataTypeColor& color, QRect& rect) const
+void HexdumpDelegate::drawControlHeaderDataHiglight(QPainter* painter, const DataTypeColor& color, const QRect& rect) const
 {
 	painter->fillRect(rect, QColor(color.red, color.green, color.blue, color.alpha));
 	uint penWidth = 3;

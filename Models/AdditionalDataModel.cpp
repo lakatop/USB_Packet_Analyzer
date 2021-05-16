@@ -8,7 +8,7 @@
 /// <param name="item"><see cref="item"/></param>
 /// <param name="dataType"><see cref="dataType"/></param>
 /// <param name="parent">Dialog <see cref="DataViewer"/></param>
-AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, HeaderDataType dataType, QObject* parent) :
+AdditionalDataModel::AdditionalDataModel(QTableWidgetItem* item, const HeaderDataType dataType, QObject* parent) :
 	TreeItemBaseModel(parent)
 {
 	this->item = item;

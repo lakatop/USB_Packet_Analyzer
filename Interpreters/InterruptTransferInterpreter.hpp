@@ -16,7 +16,7 @@ public:
 	InterruptTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void Interpret() override;
 private:
-	HIDReportDescriptorInputParse GetInputParser(int index);
+	HIDReportDescriptorInputParse GetInputParser(const int index);
 	/// <summary>
 	/// Pointer to DataHolder instance.
 	/// </summary>

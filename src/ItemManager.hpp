@@ -21,10 +21,10 @@ class ItemManager
 {
 public:
 	static ItemManager* GetItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent);
-	void ProcessFile(QString filename, bool liveReading);
-	void ProcessPacket(QByteArray packetData);
-	HeaderDataType GetDataType(QTableWidgetItem* currentItem, QTableWidgetItem* previousItem);
-	void ProcessFileTillEnd(bool liveReading);
+	void ProcessFile(const QString filename, const bool liveReading);
+	void ProcessPacket(const QByteArray packetData);
+	HeaderDataType GetDataType(const QTableWidgetItem* currentItem, const QTableWidgetItem* previousItem);
+	void ProcessFileTillEnd(const bool liveReading);
 
 	/// <summary>
 	/// Delete copy constructor due to Singleton pattern
@@ -54,10 +54,10 @@ public:
 	FileReader fileReader;
 private:
 	ItemManager(QTableWidget* tableWidget, USB_Packet_Analyzer* parent);
-	void InsertRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
-	void FillUpItem(QByteArray packetData);
-	void CheckForSetupPacket(QByteArray packetData);
-	void ColorRow(PUSBPCAP_BUFFER_PACKET_HEADER usbh);
+	void InsertRow(const PUSBPCAP_BUFFER_PACKET_HEADER usbh, const unsigned char* packet);
+	void FillUpItem(const QByteArray packetData);
+	void CheckForSetupPacket(const QByteArray packetData);
+	void ColorRow(const PUSBPCAP_BUFFER_PACKET_HEADER usbh);
 
 	/// <summary>
 	/// Stataic pointer to instance of this class.

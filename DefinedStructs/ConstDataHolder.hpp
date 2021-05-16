@@ -13,16 +13,16 @@ class DataHolder
 public:
 	static DataHolder* GetDataHolder();
 
-	std::string GetTransferType(BYTE transfer);
-	std::string GetDescriptorType(BYTE type);
-	std::string GetSetupPacketRequest(BYTE request);
-	std::string GetUSBTestSelector(BYTE selector);
-	std::string GetReportItemType(BYTE type);
-	std::string GetReportTag(BYTE tag, BYTE type);
-	std::string GetReportCollectionType(BYTE collection);
-	std::string GetGlobalUsagePage(BYTE value);
-	std::string GetUsage(BYTE globalUsage, BYTE value);
-	std::string GetGenericDesktopUsage(BYTE value);
+	std::string GetTransferType(const BYTE transfer);
+	std::string GetDescriptorType(const BYTE type);
+	std::string GetSetupPacketRequest(const BYTE request);
+	std::string GetUSBTestSelector(const BYTE selector);
+	std::string GetReportItemType(const BYTE type);
+	std::string GetReportTag(const BYTE tag, const BYTE type);
+	std::string GetReportCollectionType(const BYTE collection);
+	std::string GetGlobalUsagePage(const BYTE value);
+	std::string GetUsage(const BYTE globalUsage, const BYTE value);
+	std::string GetGenericDesktopUsage(const BYTE value);
 
 	/// <summary>
 	/// Delete copy constructor due to Singleton pattern

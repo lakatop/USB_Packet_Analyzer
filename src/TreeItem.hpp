@@ -14,11 +14,11 @@ public:
 		: data(data_), parent(parent_)
 	{
 	}
-	void AppendChild(TreeItem* child);
-	TreeItem* Child(int row);
+	void AppendChild(const TreeItem* child);
+	TreeItem* Child(const int row);
 	int ChildCount() const;
 	int ColumnCount() const;
-	QVariant Data(int column) const;
+	QVariant Data(const int column) const;
 	int Row() const;
 	TreeItem* ParentItem();
 private:

@@ -12,7 +12,7 @@ class UnknownDeviceInterpreter : public BaseInterpreter
 {
 public:
 	UnknownDeviceInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-		HIDReportDescriptorInputParse inputParser);
+		const HIDReportDescriptorInputParse inputParser);
 	void Interpret() override;
 private:
 	/// <summary>

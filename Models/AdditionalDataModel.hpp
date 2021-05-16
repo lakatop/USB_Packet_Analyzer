@@ -11,7 +11,7 @@
 class AdditionalDataModel : public TreeItemBaseModel
 {
 public:
-	AdditionalDataModel(QTableWidgetItem* item, HeaderDataType dataType, QObject* parent = Q_NULLPTR);
+	AdditionalDataModel(QTableWidgetItem* item, const HeaderDataType dataType, QObject* parent = Q_NULLPTR);
 
 	QVariant data(const QModelIndex& index, int role) const override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;

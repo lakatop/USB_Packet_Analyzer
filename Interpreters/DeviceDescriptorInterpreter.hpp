@@ -18,8 +18,8 @@ private:
 	friend class DeviceQualifierDescriptorInterpreter;
 	DataHolder* holder;
 	template <typename T>
-	static void InterpretControlTransferDeviceDescriptorBase(T* deviceDescriptor, const unsigned char** packet, 
-		TreeItem* descriptorChild, AdditionalDataModel* additionalDataModel);
+	static void InterpretControlTransferDeviceDescriptorBase(const T* deviceDescriptor, const unsigned char** packet, 
+		TreeItem* descriptorChild, const AdditionalDataModel* additionalDataModel);
 };
 
 /// <summary>
@@ -43,8 +43,8 @@ private:
 /// <param name="descriptorChild">Tree item to which we are adding child items</param>
 /// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 template <typename T>
-void DeviceDescriptorInterpreter::InterpretControlTransferDeviceDescriptorBase(T* deviceDescriptor, const unsigned char** packet,
-	TreeItem* descriptorChild, AdditionalDataModel* additionalDataModel)
+void DeviceDescriptorInterpreter::InterpretControlTransferDeviceDescriptorBase(const T* deviceDescriptor, const unsigned char** packet,
+	TreeItem* descriptorChild, const AdditionalDataModel* additionalDataModel)
 {
 	QString hexData;
 	additionalDataModel->CharToHexConvert(packet, 1, hexData);

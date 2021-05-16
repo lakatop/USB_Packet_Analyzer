@@ -8,7 +8,7 @@
 /// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 /// <param name="inputParser"><see cref="inputParser"/></param>
 KeyboardInterpreter::KeyboardInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-    HIDReportDescriptorInputParse inputParser)
+    const HIDReportDescriptorInputParse inputParser)
     :BaseInterpreter(rootItem, item, additionalDataModel)
 {
 	this->inputParser = inputParser;
@@ -103,7 +103,8 @@ void KeyboardInterpreter::Interpret()
             for (int j = 0; j < 8; j++)
             {
                 keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
-                {additionalDataModel->ShowBits(j, 1, value), (i + j < 232) ? keyboardUsages[i + j] : "reserved", value}, keyboardDeviceChild));
+                {additionalDataModel->ShowBits(j, 1, value), (i + j < keyboardUsages.size()) ? keyboardUsages[i + j] : "reserved", value
+            }, keyboardDeviceChild));
             }
         }
     }
@@ -130,7 +131,7 @@ void KeyboardInterpreter::Interpret()
                     hidDevices->CharToNumberConvert(packet, value, size);
                     additionalDataModel->CharToHexConvert(&packet, size, hexData);
                     keysChild->AppendChild(new TreeItem(QVector<QVariant>{
-                        hexData, (std::string("Key ").c_str() + (value < 232) ? keyboardUsages[value] : "reserved"), value}, keysChild));
+                        hexData, (std::string("Key ").c_str() + (value < keyboardUsages.size()) ? keyboardUsages[value] : "reserved"), value}, keysChild));
                 }
             }
             else //something unusual - byte-defined keyscans combined with bit-defined map
@@ -145,7 +146,7 @@ void KeyboardInterpreter::Interpret()
                     for (int k = 0; k < 8; k++)
                     {
                         keyboardDeviceChild->AppendChild(new TreeItem(QVector<QVariant>
-                        {additionalDataModel->ShowBits(j, 1, value), (bitSize < 232) ? keyboardUsages[bitSize] : "reserved", value}, keyboardDeviceChild));
+                        {additionalDataModel->ShowBits(j, 1, value), (bitSize < keyboardUsages.size()) ? keyboardUsages[bitSize] : "reserved", value}, keyboardDeviceChild));
 
                         bitSize++;
                     }
@@ -194,9 +195,5 @@ void KeyboardInterpreter::SetupUsages()
             keyboardUsages.push_back(stream.readLine());
         }
         file.close();
-    }
-    else
-    {
-        auto v = file.errorString();
     }
 }

@@ -109,7 +109,7 @@ int TreeItemBaseModel::columnCount(const QModelIndex& parent) const
 /// <param name="addr">char* to data which we want to convert</param>
 /// <param name="len">Length of data which we want to be converted</param>
 /// <param name="data">QString in which we will insert converted data</param>
-void TreeItemBaseModel::CharToHexConvert(const unsigned char** addr, const unsigned int len, QString& data)
+void TreeItemBaseModel::CharToHexConvert(const unsigned char** addr, const unsigned int len, QString& data) const
 {
     std::stringstream stream;
     data.clear();

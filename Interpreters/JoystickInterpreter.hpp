@@ -12,7 +12,7 @@ class JoystickInterpreter : public BaseInterpreter
 {
 public:
 	JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-		HIDReportDescriptorInputParse inputParser);
+		const HIDReportDescriptorInputParse inputParser);
 	void Interpret() override;
 private:
 	/// <summary>

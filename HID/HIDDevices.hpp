@@ -12,13 +12,13 @@ class HIDDevices
 {
 public:
 	static HIDDevices* GetHIDDevices();
-	void ParseHIDReportDescriptor(QByteArray packetData, USHORT interfaceIndex);
-	void CreateDevice(QByteArray packetData);
+	void ParseHIDReportDescriptor(const QByteArray packetData, const USHORT interfaceIndex);
+	void CreateDevice(const QByteArray packetData);
 	size_t GetHIDDescriptorSize();
 	HIDDescriptor FillUpHIDDescriptor(const unsigned char* packet);	
-	SupportedDevices GetSupportedDevice(std::pair<uint32_t, uint32_t> key);
+	SupportedDevices GetSupportedDevice(const std::pair<uint32_t, uint32_t> key);
 	template<typename T>
-	void CharToNumberConvert(const unsigned char* addr, T& number, int size);
+	void CharToNumberConvert(const unsigned char* addr, T& number, const int size);
 
 	/// <summary>
 	/// Delete copy constructor due to Singleton pattern
@@ -61,7 +61,7 @@ private:
 /// <param name="number">Serves as output parameter for decimal number</param>
 /// <param name="size">Number of chars we want to convert</param>
 template<typename T>
-void HIDDevices::CharToNumberConvert(const unsigned char* addr, T& number, int size)
+void HIDDevices::CharToNumberConvert(const unsigned char* addr, T& number, const int size)
 {
 	for (int i = size; i > 0; i--)
 	{

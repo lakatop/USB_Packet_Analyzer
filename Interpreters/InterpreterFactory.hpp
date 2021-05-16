@@ -19,7 +19,7 @@
 class InterpreterFactory
 {
 public:
-	InterpreterFactory(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,HeaderDataType dataType);
+	InterpreterFactory(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel, const HeaderDataType dataType);
 	BaseInterpreter* GetInterpreter();
 private:
 	/// <summary>

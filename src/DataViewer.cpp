@@ -6,7 +6,7 @@
 /// <param name="additionalDataType">Specific type of data transfer</param>
 /// <param name="dataHighlight">Determines whether data should be highlighted or not</param>
 /// <param name="parent">Parent of this object</param>
-DataViewer::DataViewer(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight, QWidget *parent)
+DataViewer::DataViewer(QTableWidgetItem* item, const HeaderDataType additionalDataType, const bool dataHighlight, QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -47,7 +47,7 @@ void DataViewer::InitLabels()
 /// <param name="item"><see cref="DataViewer()"/></param>
 /// <param name="additionalDataType"><see cref="DataViewer()"/></param>
 /// <param name="dataHighlight"><see cref="DataViewer()"/></param>
-void DataViewer::InitTables(QTableWidgetItem* item, HeaderDataType additionalDataType, bool dataHighlight)
+void DataViewer::InitTables(QTableWidgetItem* item, const HeaderDataType additionalDataType, const bool dataHighlight)
 {
 	byteTableModel = std::make_unique<HexdumpModel>(item, false, additionalDataType, this);
 	hexTableModel = std::make_unique<HexdumpModel>(item, true, additionalDataType, this);
@@ -71,7 +71,7 @@ void DataViewer::InitTables(QTableWidgetItem* item, HeaderDataType additionalDat
 /// </summary>
 /// <param name="item"><see cref="DataViewer()"/></param>
 /// <param name="additionalDataType"><see cref="DataViewer()"/></param>
-void DataViewer::InitTreeViews(QTableWidgetItem* item, HeaderDataType additionalDataType)
+void DataViewer::InitTreeViews(QTableWidgetItem* item, const HeaderDataType additionalDataType)
 {
 	colorMapModel = std::make_unique<ColorMapModel>(this);
 	ui.colorMapTreeView->setModel(colorMapModel.get());
@@ -97,7 +97,7 @@ void DataViewer::InitTreeViews(QTableWidgetItem* item, HeaderDataType additional
 /// </summary>
 /// <param name="table">Table view which properties should be set</param>
 /// <param name="hexViewTable">true if table is hexTableView, false if it is byteTableView</param>
-void DataViewer::InitTableViewer(QTableView* table, bool hexViewTable)
+void DataViewer::InitTableViewer(QTableView* table, const bool hexViewTable)
 {
 	if (hexViewTable)
 	{
@@ -125,7 +125,7 @@ void DataViewer::InitTableViewer(QTableView* table, bool hexViewTable)
 /// </summary>
 /// <param name="table"><see cref="InitTableViewer()"/></param>
 /// <param name="hexViewTable"><see cref="InitTableViewer()"/></param>
-void DataViewer::AdjustTableSize(QTableView* table, bool hexViewTable)
+void DataViewer::AdjustTableSize(QTableView* table, const bool hexViewTable)
 {
 	size_t maxHeight = 0;
 	size_t maxWidth = 0;

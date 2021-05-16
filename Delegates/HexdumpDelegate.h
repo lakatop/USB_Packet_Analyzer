@@ -15,14 +15,14 @@ class HexdumpDelegate : public QStyledItemDelegate
 	Q_OBJECT
 
 public:
-	HexdumpDelegate(bool dataHighlight, QObject *parent);
+	HexdumpDelegate(const bool dataHighlight, QObject *parent);
 	~HexdumpDelegate();
 	void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 	QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override;
 private:
 	void drawDataHighlight(QPainter* painter, const QStyleOptionViewItem& option, const QVariantList& list) const;
-	void drawOtherDataHighlight(QPainter* painter, DataTypeColor& color, QRect& rect) const;
-	void drawControlHeaderDataHiglight(QPainter* painter, DataTypeColor& color, QRect& rect) const;
+	void drawOtherDataHighlight(QPainter* painter, const DataTypeColor& color, const QRect& rect) const;
+	void drawControlHeaderDataHiglight(QPainter* painter, const DataTypeColor& color, const QRect& rect) const;
 
 	/// <summary>
 	/// Whether delegate should color highlight data

@@ -39,7 +39,7 @@ size_t HIDDevices::GetHIDDescriptorSize()
 /// </summary>
 /// <param name="key">Key to deviceMap</param>
 /// <returns>Supported_Devices enum representing whether this device is supported by this application or not</returns>
-SupportedDevices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> key)
+SupportedDevices HIDDevices::GetSupportedDevice(const std::pair<uint32_t, uint32_t> key)
 {
 	auto deviceMapIterator = deviceMap.find(key);
 	if (deviceMapIterator == deviceMap.end())
@@ -56,9 +56,9 @@ SupportedDevices HIDDevices::GetSupportedDevice(std::pair<uint32_t, uint32_t> ke
 /// </summary>
 /// <param name="packetData">QByteArray representing Report Descriptor data</param>
 /// <param name="interfaceIndex">Interface number of device</param>
-void HIDDevices::ParseHIDReportDescriptor(QByteArray packetData, USHORT interfaceIndex)
+void HIDDevices::ParseHIDReportDescriptor(const QByteArray packetData, const USHORT interfaceIndex)
 {
-	const unsigned char* packet = (unsigned char*)packetData.data();
+	const unsigned char* packet = (unsigned char*)packetData.constData();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;
 
 	//find device to put parsers in
@@ -292,9 +292,9 @@ void HIDDevices::ParseHIDReportDescriptor(QByteArray packetData, USHORT interfac
 /// Creating new BusDevice. Called when new Configuration Descriptor was sent to host.
 /// </summary>
 /// <param name="packetData">QByteArray representing data of Control Transfer</param>
-void HIDDevices::CreateDevice(QByteArray packetData)
+void HIDDevices::CreateDevice(const QByteArray packetData)
 {
-	const unsigned char* packet = (unsigned char*)packetData.data();
+	const unsigned char* packet = (unsigned char*)packetData.constData();
 	PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)packet;
 	BusDevice device(usbh->device);
 	packet += usbh->headerLen;

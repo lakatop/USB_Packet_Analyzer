@@ -8,7 +8,7 @@
 /// <param name="additionalDataModel"><see cref="BaseInterpreter.additionalDataModel"/></param>
 /// <param name="inputParser"><see cref="inputParser"/></param>
 JoystickInterpreter::JoystickInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-	HIDReportDescriptorInputParse inputParser)
+    const HIDReportDescriptorInputParse inputParser)
     :BaseInterpreter(rootItem,item,additionalDataModel)
 {
 	this->inputParser = inputParser;

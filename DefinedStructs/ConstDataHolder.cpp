@@ -58,7 +58,7 @@ void DataHolder::FillDataColorsMap()
 /// </summary>
 /// <param name="transfer">USBPcap transfer</param>
 /// <returns>String representation for USBPcap transfer</returns>
-std::string DataHolder::GetTransferType(BYTE transfer)
+std::string DataHolder::GetTransferType(const BYTE transfer)
 {
 	switch (transfer)
 	{
@@ -85,7 +85,7 @@ std::string DataHolder::GetTransferType(BYTE transfer)
 /// </summary>
 /// <param name="type">Descriptor_Types enum</param>
 /// <returns>String representation for Descriptor_Types enum</returns>
-std::string DataHolder::GetDescriptorType(BYTE type)
+std::string DataHolder::GetDescriptorType(const BYTE type)
 {
 	switch (type)
 	{
@@ -135,7 +135,7 @@ std::string DataHolder::GetDescriptorType(BYTE type)
 /// </summary>
 /// <param name="request">Setup_Packet_bRequest enum</param>
 /// <returns>String representation for Setup_Packet_bRequest enum</returns>
-std::string DataHolder::GetSetupPacketRequest(BYTE request)
+std::string DataHolder::GetSetupPacketRequest(const BYTE request)
 {
 	switch (request)
 	{
@@ -193,7 +193,7 @@ std::string DataHolder::GetSetupPacketRequest(BYTE request)
 /// </summary>
 /// <param name="selector">USB_Test_Selectors enum</param>
 /// <returns>String representation for USB_Test_Selectors enum</returns>
-std::string DataHolder::GetUSBTestSelector(BYTE selector)
+std::string DataHolder::GetUSBTestSelector(const BYTE selector)
 {
 	switch (selector)
 	{
@@ -227,7 +227,7 @@ std::string DataHolder::GetUSBTestSelector(BYTE selector)
 /// </summary>
 /// <param name="type">Report_Desc_Item_Type enum</param>
 /// <returns>String representation for Report_Desc_Item_Type enum</returns>
-std::string DataHolder::GetReportItemType(BYTE type)
+std::string DataHolder::GetReportItemType(const BYTE type)
 {
 	switch (type)
 	{
@@ -254,7 +254,7 @@ std::string DataHolder::GetReportItemType(BYTE type)
 /// <param name="tag">Report Descriptor tags</param>
 /// <param name="type">Report_Desc_Item_Type enum</param>
 /// <returns>String representation for Report Descriptor tag enums</returns>
-std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
+std::string DataHolder::GetReportTag(const BYTE tag, const BYTE type)
 {
 	switch (type)
 	{
@@ -346,7 +346,7 @@ std::string DataHolder::GetReportTag(BYTE tag, BYTE type)
 /// </summary>
 /// <param name="collection">Report_Desc_Collection_Type enum</param>
 /// <returns>String representation for Report_Desc_Collection_Type enum</returns>
-std::string DataHolder::GetReportCollectionType(BYTE collection)
+std::string DataHolder::GetReportCollectionType(const BYTE collection)
 {
 	switch (collection)
 	{
@@ -396,7 +396,7 @@ std::string DataHolder::GetReportCollectionType(BYTE collection)
 /// </summary>
 /// <param name="value">Global_Usage_Pages enum</param>
 /// <returns>String representation for Global_Usage_Pages enum</returns>
-std::string DataHolder::GetGlobalUsagePage(BYTE value)
+std::string DataHolder::GetGlobalUsagePage(const BYTE value)
 {
 	switch (value)
 	{
@@ -427,7 +427,7 @@ std::string DataHolder::GetGlobalUsagePage(BYTE value)
 /// <param name="globalUsage">Global_Usage_Pages enum</param>
 /// <param name="value">Usage ID</param>
 /// <returns>String representation for specific usage name specified by global usage and usage ID</returns>
-std::string DataHolder::GetUsage(BYTE globalUsage, BYTE value)
+std::string DataHolder::GetUsage(const BYTE globalUsage, const BYTE value)
 {
 	switch (globalUsage)
 	{
@@ -445,7 +445,7 @@ std::string DataHolder::GetUsage(BYTE globalUsage, BYTE value)
 /// </summary>
 /// <param name="value">Generic_Desktop_Usages enum</param>
 /// <returns>String representation for Generic_Desktop_Usages enum</returns>
-std::string DataHolder::GetGenericDesktopUsage(BYTE value)
+std::string DataHolder::GetGenericDesktopUsage(const BYTE value)
 {
 	switch (value)
 	{

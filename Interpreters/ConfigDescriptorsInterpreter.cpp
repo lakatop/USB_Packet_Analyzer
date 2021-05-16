@@ -87,8 +87,8 @@ void ConfigDescriptorsInterpreter::InterpretConfigDescriptor(const unsigned char
 	configDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bLength", configDescriptor->bLength}, configDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	configDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, (std::string("bDescriptorType ") +
-		std::string((configDescriptor->bDescriptorType == CONFIGURATION_DESCRIPTOR) ? "CONFIGURATION_DESCRIPTOR" :
-			"OTHER_SPEED_CONFIGURATION_DESCRIPTOR")).c_str(), configDescriptor->bDescriptorType}, configDescriptorChild));
+		std::string((configDescriptor->bDescriptorType == CONFIGURATION_DESCRIPTOR) ? "(CONFIGURATION_DESCRIPTOR)" :
+			"(OTHER_SPEED_CONFIGURATION_DESCRIPTOR)")).c_str(), configDescriptor->bDescriptorType}, configDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
 	configDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "wTotalLength", configDescriptor->wTotalLength}, configDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);

@@ -51,7 +51,7 @@ void ReportDescriptorInterpreter::InterpretReportDescriptor(TreeItem* parent, Re
 /// <param name="root">Current node in reportDescriptor</param>
 /// <param name="parsed">Value representing how much data of reportArray has been parsed already</param>
 /// <returns>How much data has been already parsed</returns>
-std::size_t ReportDescriptorInterpreter::ParseReportDescriptor(ReportDescTreeStruct* root, std::size_t parsed)
+std::size_t ReportDescriptorInterpreter::ParseReportDescriptor(ReportDescTreeStruct* root, const std::size_t parsed)
 {
 	if (parsed == reportArray.size())
 	{
@@ -97,7 +97,7 @@ std::size_t ReportDescriptorInterpreter::ParseReportDescriptor(ReportDescTreeStr
 /// <param name="tag">Tag of Report Descriptor item</param>
 /// <param name="data">Data of Report Descriptor item</param>
 /// <param name="child">Tree item to which we are appending items</param>
-void ReportDescriptorInterpreter::InterpretInputOutputFeature(BYTE tag, QByteArray& data, TreeItem* child)
+void ReportDescriptorInterpreter::InterpretInputOutputFeature(const BYTE tag, const QByteArray& data, TreeItem* child)
 {
 	const unsigned char* packet = (unsigned char*)data.constData();
 	USHORT value = (USHORT)*packet;

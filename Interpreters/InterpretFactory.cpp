@@ -8,7 +8,7 @@
 /// <param name="additionalDataModel"><see cref="additionalDataModel"/></param>
 /// <param name="dataType"><see cref="dataType"/></param>
 InterpreterFactory::InterpreterFactory(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-    HeaderDataType dataType)
+    const HeaderDataType dataType)
 {
 	this-> dataType = dataType;
     this->rootItem = rootItem;

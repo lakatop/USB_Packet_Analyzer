@@ -13,9 +13,9 @@ public:
 	SetupPacketInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel);
 	void Interpret() override;
 private:
-	void AppendSetupwValue(const unsigned char** it, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
-	void AppendSetupwIndex(const unsigned char** it, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
-	void AppendSetupwLength(const unsigned char** it, PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
+	void AppendSetupwValue(const unsigned char** it, const PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
+	void AppendSetupwIndex(const unsigned char** it, const PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
+	void AppendSetupwLength(const unsigned char** it, const PWINUSB_SETUP_PACKET setupPacket, TreeItem* setupChild);
 
 	/// <summary>
 	/// Pointer to DataHolder instance.

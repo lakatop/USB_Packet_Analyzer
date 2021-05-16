@@ -12,7 +12,7 @@ class MouseInterpreter : public BaseInterpreter
 {
 public:
 	MouseInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel,
-		HIDReportDescriptorInputParse inputParser);
+		const HIDReportDescriptorInputParse inputParser);
 	void Interpret() override;
 private:
 	/// <summary>
