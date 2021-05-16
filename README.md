@@ -1,5 +1,5 @@
 # USB_Packet_Analyzer
-A simple C++ application for analyzing packets on USB bus.
+A simple C++ application for analyzing packets on USB bus. s
 
 ## Table of contents
   * [Introduction](#introduction)
