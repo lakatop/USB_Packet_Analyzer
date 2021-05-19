@@ -149,7 +149,7 @@ std::string ReportDescriptorInterpreter::InterpretData(ReportDescTreeStruct* rep
 {
 	std::stringstream stream;
 	stream << holder->GetReportTag(reportDescriptor->tag, reportDescriptor->itemType) << ": ";
-	if (reportDescriptor->tag == 0) //usage
+	if (reportDescriptor->tag == USAGE_PAGE) //usage
 	{
 		if (reportDescriptor->itemType == GLOBAL)
 		{
@@ -160,13 +160,16 @@ std::string ReportDescriptorInterpreter::InterpretData(ReportDescTreeStruct* rep
 			stream << holder->GetUsage(globalUsage, *(reportDescriptor->data.constData()));
 		}
 	}
-	else if (reportDescriptor->tag == 0xa) //collection
+	else if (reportDescriptor->tag == COLLECTION) //collection
 	{
 		stream << holder->GetReportCollectionType(*(reportDescriptor->data.constData()));
 	}
 	else
 	{
-		stream << std::hex << std::setw(2) << std::setfill('0') << (int)*(reportDescriptor->data.constData());
+		QString data;
+		const unsigned char* charData = (const unsigned char*)reportDescriptor->data.constData();
+		additionalDataModel->CharToHexConvert(&charData, reportDescriptor->size, data);
+		stream << data.toStdString();
 	}
 
 	return stream.str();
@@ -187,7 +190,7 @@ void ReportDescriptorInterpreter::AppendItem(TreeItem* parent, ReportDescTreeStr
 	{
 		globalUsage = *(reportDescriptor->data.data());
 	}
-	if (reportDescriptor->tag == MAIN_INPUT || reportDescriptor->tag == OUTPUT || reportDescriptor->tag == FEATURE)
+	if (reportDescriptor->itemType == MAIN && (reportDescriptor->tag == MAIN_INPUT || reportDescriptor->tag == OUTPUT || reportDescriptor->tag == FEATURE))
 	{
 		InterpretInputOutputFeature(reportDescriptor->tag, reportDescriptor->data, child);
 	}
