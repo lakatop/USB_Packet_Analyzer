@@ -32,7 +32,7 @@ void DeviceDescriptorInterpreter::Interpret()
 	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
 	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "idProduct", deviceDescriptor->idProduct}, deviceDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 2, hexData);
-	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bcdDevice", deviceDescriptor->bLength}, deviceDescriptorChild));
+	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "bcdDevice", deviceDescriptor->bcdDevice}, deviceDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);
 	deviceDescriptorChild->AppendChild(new TreeItem(QVector<QVariant>{hexData, "iManufacturer", deviceDescriptor->iManufacturer}, deviceDescriptorChild));
 	additionalDataModel->CharToHexConvert(&packet, 1, hexData);

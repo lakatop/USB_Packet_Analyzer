@@ -363,7 +363,9 @@ HIDDescriptor HIDDevices::FillUpHIDDescriptor(const unsigned char* packet)
 	packet += 1;
 	hidDescriptor.bDescriptorType = (UCHAR)(*packet);
 	packet += 1;
-	hidDescriptor.bcdHID = (USHORT)(*packet);
+	hidDescriptor.bcdHID = (UCHAR)(*packet);
+	hidDescriptor.bcdHID *= 16;
+	hidDescriptor.bcdHID += (UCHAR)(*(packet + 1));
 	packet += 2;
 	hidDescriptor.bCountry = (UCHAR)(*packet);
 	packet += 1;
