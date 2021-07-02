@@ -9,6 +9,7 @@ A simple C++ application for analyzing packets on USB bus.
     + [To Do:](#to-do)
   * [Ilustrations](#ilustrations)
   * [Project status](#project-status)
+  * [Current focus](#current-focus)
   * [Sources](#sources)
 
 ## Introduction
@@ -48,6 +49,11 @@ Concrete example of semantic analysis of mouse interrupt transfer data sent to t
 
 ## Project status
 Project is currently still under development.
+
+## Current focus
+Currently focusing on more algorithmic approach of interpreting descriptors so it will be:
+1. Easier adding new descriptors.
+2. Minimizes intervention to code after adding new descriptor.
 
 ## Sources
 Microsoft Corporation: Windows Driver Kit (WDK) on MSDN: https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/_usbref/
