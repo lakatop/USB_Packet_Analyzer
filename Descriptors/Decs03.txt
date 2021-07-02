@@ -1,0 +1,4 @@
+03 STRING DESCRIPTOR
+1 bLength
+1 bDescriptorType
+.. wstring bString

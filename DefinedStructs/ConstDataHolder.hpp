@@ -4,6 +4,7 @@
 #include "PacketExternStructs.hpp"
 #include <string>
 #include <map>
+#include "DescriptorStruct.hpp"
 
 /// <summary>
 /// Class used for holding global variables and for converting data constants to string.
@@ -54,6 +55,10 @@ public:
 	/// Map that associate HeaderDataType to its color highlightion
 	/// </summary>
 	std::map<HeaderDataType, DataTypeColor> DataColors;
+	/// <summary>
+	/// Vector holding all yet known descriptor structs
+	/// </summary>
+	std::vector<std::unique_ptr<DescriptorStruct>> descriptors;
 private:
 	DataHolder();
 	void FillDataColorsMap();
