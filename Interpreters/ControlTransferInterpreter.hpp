@@ -3,6 +3,8 @@
 
 #include "BaseInterpreter.hpp"
 
+#include <algorithm>
+
 class ControlTransferInterpreter : public BaseInterpreter
 {
 public:
@@ -10,6 +12,8 @@ public:
 
 	void Interpret() override;
 private:
+	DescriptorStruct* GetDescriptorStruct(BYTE descriptorType);
+
 	DataHolder* holder;
 };
 

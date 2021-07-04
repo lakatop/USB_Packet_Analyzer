@@ -1,9 +1,12 @@
 #ifndef CONSTDATAHOLDER_HPP
 #define CONSTDATAHOLDER_HPP
 
-#include "PacketExternStructs.hpp"
 #include <string>
 #include <map>
+#include <sstream>
+#include <iomanip>
+#include <filesystem>
+#include "PacketExternStructs.hpp"
 #include "DescriptorStruct.hpp"
 
 /// <summary>
@@ -24,6 +27,8 @@ public:
 	std::string GetGlobalUsagePage(const BYTE value);
 	std::string GetUsage(const BYTE globalUsage, const BYTE value);
 	std::string GetGenericDesktopUsage(const BYTE value);
+
+	DescriptorStruct* TryLoadNewDescriptor(BYTE descType);
 
 	/// <summary>
 	/// Delete copy constructor due to Singleton pattern
@@ -67,6 +72,8 @@ private:
 	/// Instance of this class.
 	/// </summary>
 	static DataHolder* holder;
+
+	std::string DescriptorPath;
 };
 
 #endif // !CONSTDATAHOLDER_HPP
