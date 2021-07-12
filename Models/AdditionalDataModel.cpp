@@ -66,11 +66,13 @@ void AdditionalDataModel::SetupSpecifiedModelData()
     {
         std::unique_ptr<BaseInterpreter> interpreter = std::make_unique<InterruptTransferInterpreter>(rootItem.get(), item, this);
         interpreter->Interpret();
+        break;
     }
     case 2: // control
     {
         std::unique_ptr<BaseInterpreter> interpreter = std::make_unique<ControlTransferInterpreter>(rootItem.get(), item, this);
         interpreter->Interpret();
+        break;
     }
     default:
         break;

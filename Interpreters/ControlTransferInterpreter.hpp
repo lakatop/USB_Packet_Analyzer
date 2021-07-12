@@ -13,6 +13,7 @@ public:
 	void Interpret() override;
 private:
 	DescriptorStruct* GetDescriptorStruct(BYTE descriptorType);
+	void InterpretUnknownDescriptor(const unsigned char* packet);
 
 	DataHolder* holder;
 };

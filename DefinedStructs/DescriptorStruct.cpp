@@ -62,10 +62,12 @@ void DescriptorStruct::FillUpFields()
 					case 1:
 					{
 						fields.emplace_back(std::make_unique<DescriptorField<BYTE>>(ss.str()));
+						break;
 					}
 					case 2:
 					{
 						fields.emplace_back(std::make_unique<DescriptorField<USHORT>>(ss.str()));
+						break;
 					}
 					default:
 						break;
@@ -74,4 +76,14 @@ void DescriptorStruct::FillUpFields()
 			}
 		}
 	}
+}
+
+/// <summary>
+/// Interpret data according to concrete descriptor
+/// </summary>
+/// <param name="rootItem">Root tree item of tree view.</param>
+/// <param name="data">Data to be interpreted</param>
+void DescriptorStruct::InterpretData(TreeItem* rootItem, const unsigned char* data)
+{
+
 }
