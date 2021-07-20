@@ -1,6 +1,7 @@
 #include "DescriptorStruct.hpp"
 #include <sstream>
 
+
 /// <summary>
 /// Fills up fields for this concrete descriptor struct
 /// </summary>
@@ -81,9 +82,17 @@ void DescriptorStruct::FillUpFields()
 /// <summary>
 /// Interpret data according to concrete descriptor
 /// </summary>
-/// <param name="rootItem">Root tree item of tree view.</param>
+/// <param name="rootItem">Root tree item of tree view</param>
 /// <param name="data">Data to be interpreted</param>
-void DescriptorStruct::InterpretData(TreeItem* rootItem, const unsigned char* data)
+/// <param name="additionalDataModel">Pointer to AdditionalDataModel</param>
+void DescriptorStruct::InterpretData(TreeItem* rootItem, const QByteArray& data, AdditionalDataModel* additionalDataModel)
 {
-
+	const char* packet = data.constData();
+	std::size_t dataLeft = data.size();
+	for (int i = 0; i < fields.size(); i++)
+	{
+		std::size_t value = fields[i]->InterpretField(rootItem, (const unsigned char*)packet, dataLeft, additionalDataModel);
+		packet += value;
+		dataLeft -= value;
+	}
 }

@@ -7,7 +7,8 @@
 #include <iomanip>
 #include <filesystem>
 #include "PacketExternStructs.hpp"
-#include "DescriptorStruct.hpp"
+
+class DescriptorStruct;
 
 /// <summary>
 /// Class used for holding global variables and for converting data constants to string.

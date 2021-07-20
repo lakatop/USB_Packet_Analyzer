@@ -1,4 +1,5 @@
 #include "ControlTransferInterpreter.hpp"
+#include "../DefinedStructs/DescriptorStruct.hpp"
 
 
 ControlTransferInterpreter::ControlTransferInterpreter(TreeItem* rootItem, QTableWidgetItem* item, AdditionalDataModel* additionalDataModel) :
@@ -14,7 +15,6 @@ void ControlTransferInterpreter::Interpret()
 {
 	QByteArray data = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	const char* packet = data.constData();
-	BYTE descriptorSize = (BYTE)*packet;
 	BYTE descriptorType = (BYTE) * (packet++);
 	DescriptorStruct* descStruct = GetDescriptorStruct(descriptorType);
 	if (descStruct == nullptr)
@@ -23,7 +23,7 @@ void ControlTransferInterpreter::Interpret()
 	}
 	else
 	{
-		descStruct->InterpretData(rootItem, (const unsigned char*)packet);
+		descStruct->InterpretData(rootItem, data, additionalDataModel);
 	}
 }
 

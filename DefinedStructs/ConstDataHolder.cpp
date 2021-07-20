@@ -1,4 +1,6 @@
 #include "ConstDataHolder.hpp"
+#include "DescriptorStruct.hpp"
+
 
 DataHolder* DataHolder::holder = nullptr;
 
