@@ -28,6 +28,7 @@ public:
 /// <summary>
 /// Structure representing one segment of field which has bit level details
 /// </summary>
+template <typename T>
 struct BitField
 {
 	/// <summary>
@@ -41,7 +42,7 @@ struct BitField
 	/// <summary>
 	/// map holding descriptions to given values
 	/// </summary>
-	std::map<int, std::string> descriptions;
+	std::map<T, std::string> descriptions;
 };
 
 /// <summary>
@@ -57,19 +58,34 @@ public:
 	std::size_t InterpretField(TreeItem* rootItem, const unsigned char* data, std::size_t sizeLeft, 
 		AdditionalDataModel* additionalDataModel) override;
 private:
-	void CharToNumberConvert(const unsigned char* addr)
+	void CharToNumberConvert(const unsigned char* addr) 
 	{
-		value = 0;
-		for (int i = sizeof(T); i > 0; i--)
+		if constexpr (!std::is_same_v<std::string, T> && !std::is_same_v<std::wstring, T>)
 		{
-			value = (value << 8) | addr[i - 1];
+			value = T();
+			for (int i = sizeof(T); i > 0; i--)
+			{
+				value = (value << 8) | addr[i - 1];
+			}
 		}
 	}
 
-	T GetBitFieldValue(BitField& field);
+	void CharToConcreteNumberConvert(const unsigned char* addr, T& value) 
+	{
+		if constexpr (!std::is_same_v<std::string, T> && !std::is_same_v<std::wstring, T>)
+		{
+			value = T();
+			for (int i = sizeof(T); i > 0; i--)
+			{
+				value = (value << 8) | addr[i - 1];
+			}
+		}
+	}
+
+	T GetBitFieldValue(BitField<T>& field);
 
 	std::string description;
-	std::vector<BitField> bitFields;
+	std::vector<BitField<T>> bitFields;
 	T value;
 };
 
@@ -92,7 +108,7 @@ void DescriptorField<T>::FillUpField(std::ifstream& input)
 				return;
 			}
 			std::istringstream ss(line);
-			BitField b;
+			BitField<T> b;
 			ss >> b.start;
 			ss.get(); //separator
 			ss >> b.size;
@@ -110,7 +126,8 @@ void DescriptorField<T>::FillUpField(std::ifstream& input)
 						}
 						//else fill up one bit field with value - description pairs
 						ss = std::istringstream(line);
-						int value = ss.get();
+						T value;
+						CharToConcreteNumberConvert((const unsigned char*)(ss.str().c_str()), value);
 						b.descriptions[value] = ss.str();
 					}
 				}
@@ -143,27 +160,37 @@ std::size_t DescriptorField<T>::InterpretField(TreeItem* rootItem, const unsigne
 		return sizeLeft;
 	}
 
-	//some other data type
-	//convert char* to number and fill value data field
-	CharToNumberConvert(data);
-	additionalDataModel->CharToHexConvert(&data, sizeof(T), hexData);
-	rootItem->AppendChild(new TreeItem(QVector<QVariant>{hexData, description.c_str(), value}, rootItem));
+	//used so we can work with std::stringstream and its operator << (it wouldnt work with wstring)
+	if constexpr (!std::is_same_v<std::wstring, T> && !std::is_same_v<std::string, T>)
+	{
+		//some other data type
+		//convert char* to number and fill value data field
+		CharToNumberConvert(data);
+		additionalDataModel->CharToHexConvert(&data, sizeof(T), hexData);
+		std::stringstream ss;
+		ss << value;
+		rootItem->AppendChild(new TreeItem(QVector<QVariant>{hexData, description.c_str(), ss.str().c_str()}, rootItem));
 
-	//check if it carries some bit defined information
-	//if not, return proccessed size
-	if (bitFields.empty())
-	{
-		return sizeof(T);
-	}
-	//else go through bitFields and interpret them
-	TreeItem* bitFieldParent = rootItem->Child(rootItem->ChildCount() - 1);
-	for (std::size_t i = 0; i < bitFields.size(); i++)
-	{
-		T bitValue = GetBitFieldValue(bitFields[i]);
-		auto fieldDesc = bitFields[i].descriptions[bitValue];
-		bitFieldParent->AppendChild(new TreeItem(QVector<QVariant>{
-				additionalDataModel->ShowBits(bitFields[i].start, bitFields[i].size, value),
-				fieldDesc.c_str(), bitValue}, bitFieldParent));
+		//check if it carries some bit defined information
+		//if not, return proccessed size
+		if (bitFields.empty())
+		{
+			return sizeof(T);
+		}
+		//else go through bitFields and interpret them
+		TreeItem* bitFieldParent = rootItem->Child(rootItem->ChildCount() - 1);
+		for (std::size_t i = 0; i < bitFields.size(); i++)
+		{
+			T bitValue = GetBitFieldValue(bitFields[i]);
+			auto fieldDesc = bitFields[i].descriptions[bitValue];
+			ss.clear();
+			ss << value;
+			std::stringstream ss2;
+			ss2 << bitValue;
+			bitFieldParent->AppendChild(new TreeItem(QVector<QVariant>{
+				additionalDataModel->ShowBits(bitFields[i].start, bitFields[i].size, ss.str().c_str()),
+					fieldDesc.c_str(), ss2.str().c_str()}, bitFieldParent));
+		}
 	}
 }
 
@@ -174,7 +201,7 @@ std::size_t DescriptorField<T>::InterpretField(TreeItem* rootItem, const unsigne
 /// <param name="field">Concrete field</param>
 /// <returns>Value of given bit-field</returns>
 template <typename T>
-T DescriptorField<T>::GetBitFieldValue(BitField& field)
+T DescriptorField<T>::GetBitFieldValue(BitField<T>& field)
 {
 	T bitmask = (1 << field.size) - 1;
 	bitmask = bitmask << field.start;

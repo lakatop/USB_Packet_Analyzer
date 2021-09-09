@@ -15,7 +15,7 @@ void ControlTransferInterpreter::Interpret()
 {
 	QByteArray data = item->data(holder->TRANSFER_LEFTOVER_DATA).toByteArray();
 	const char* packet = data.constData();
-	BYTE descriptorType = (BYTE) * (packet++);
+	BYTE descriptorType = (BYTE) * (++packet);
 	DescriptorStruct* descStruct = GetDescriptorStruct(descriptorType);
 	if (descStruct == nullptr)
 	{

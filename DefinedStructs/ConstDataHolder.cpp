@@ -28,7 +28,7 @@ DataHolder::DataHolder()
 	TRANSFER_LEFTOVER_DATA = Qt::UserRole + 1;
 	TRANSFER_OPTIONAL_HEADER = Qt::UserRole + 2;
 	USBPCAP_HEADER_DATA = Qt::UserRole + 3;
-	DescriptorPath = "./Descriptors/";
+	DescriptorPath = std::filesystem::current_path().string() + "\\Descriptors\\";
 }
 
 /// <summary>
@@ -63,9 +63,10 @@ void DataHolder::FillDataColorsMap()
 /// <returns>Pointer to loaded descriptor if exists, else nullptr</returns>
 DescriptorStruct* DataHolder::TryLoadNewDescriptor(BYTE descType)
 {
-	std::stringstream stream(DescriptorPath);
+	std::stringstream stream(DescriptorPath, std::ios_base::app | std::ios_base::out);
+
 	stream << "Desc";
-	stream << std::setw(2) << std::setfill('0') << descType;
+	stream << std::setw(2) << std::setfill('0') << (int)descType;
 	stream << ".txt";
 
 	if (std::filesystem::exists(stream.str().c_str()))
