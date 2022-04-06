@@ -1,9 +1,14 @@
 #ifndef CONSTDATAHOLDER_HPP
 #define CONSTDATAHOLDER_HPP
 
-#include "PacketExternStructs.hpp"
 #include <string>
 #include <map>
+#include <sstream>
+#include <iomanip>
+#include <filesystem>
+#include "PacketExternStructs.hpp"
+
+class DescriptorStruct;
 
 /// <summary>
 /// Class used for holding global variables and for converting data constants to string.
@@ -23,6 +28,8 @@ public:
 	std::string GetGlobalUsagePage(const BYTE value);
 	std::string GetUsage(const BYTE globalUsage, const BYTE value);
 	std::string GetGenericDesktopUsage(const BYTE value);
+
+	DescriptorStruct* TryLoadNewDescriptor(BYTE descType);
 
 	/// <summary>
 	/// Delete copy constructor due to Singleton pattern
@@ -54,6 +61,10 @@ public:
 	/// Map that associate HeaderDataType to its color highlightion
 	/// </summary>
 	std::map<HeaderDataType, DataTypeColor> DataColors;
+	/// <summary>
+	/// Vector holding all yet known descriptor structs
+	/// </summary>
+	std::vector<std::unique_ptr<DescriptorStruct>> descriptors;
 private:
 	DataHolder();
 	void FillDataColorsMap();
@@ -62,6 +73,8 @@ private:
 	/// Instance of this class.
 	/// </summary>
 	static DataHolder* holder;
+
+	std::string DescriptorPath;
 };
 
 #endif // !CONSTDATAHOLDER_HPP

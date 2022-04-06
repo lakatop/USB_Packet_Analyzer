@@ -55,27 +55,30 @@ template <typename T>
 QString TreeItemBaseModel::ShowBits(const uint32_t start, const size_t size, T number) const
 {
 	std::stringstream stream;
-	for (int i = 0; i < sizeof(T) * 8; i++)
+	if constexpr (!std::is_same_v<std::wstring, T> && !std::is_same_v<std::string, T> && !std::is_same_v<const char*,T>)
 	{
-		if (i != 0 && i % 4 == 0)
+		for (int i = 0; i < sizeof(T) * 8; i++)
 		{
-			stream << ' ';
-		}
-		if (i < start || i >= start + size)
-		{
-			stream << std::setw(2) << std::setfill(' ') << '.';
+			if (i != 0 && i % 4 == 0)
+			{
+				stream << ' ';
+			}
+			if (i < start || i >= start + size)
+			{
+				stream << std::setw(2) << std::setfill(' ') << '.';
+				number = number << 1;
+				continue;
+			}
+			if (number & (0x1 << ((sizeof(T) * 8) - 1)))
+			{
+				stream << '1';
+			}
+			else
+			{
+				stream << '0';
+			}
 			number = number << 1;
-			continue;
 		}
-		if (number & (0x1 << ((sizeof(T) * 8) - 1)))
-		{
-			stream << '1';
-		}
-		else
-		{
-			stream << '0';
-		}
-		number = number << 1;
 	}
 
 	return QString(stream.str().c_str());

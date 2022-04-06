@@ -1,4 +1,6 @@
 #include "ConstDataHolder.hpp"
+#include "DescriptorStruct.hpp"
+
 
 DataHolder* DataHolder::holder = nullptr;
 
@@ -26,6 +28,7 @@ DataHolder::DataHolder()
 	TRANSFER_LEFTOVER_DATA = Qt::UserRole + 1;
 	TRANSFER_OPTIONAL_HEADER = Qt::UserRole + 2;
 	USBPCAP_HEADER_DATA = Qt::UserRole + 3;
+	DescriptorPath = std::filesystem::current_path().string() + "\\Descriptors\\";
 }
 
 /// <summary>
@@ -51,6 +54,28 @@ void DataHolder::FillDataColorsMap()
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(HEADER_DATA, { 255,0,255,255 }));
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(IRP_INFO_TRANSFER, { 179,0,179,255 }));
 	DataColors.insert(std::pair<HeaderDataType, DataTypeColor>(UNKNOWN_TRANSFER, { 0,0,255,255 }));
+}
+
+/// <summary>
+/// Tries to load new descriptor from file if description for given descriptor exists
+/// </summary>
+/// <param name="descType">Type of descriptor we want to get</param>
+/// <returns>Pointer to loaded descriptor if exists, else nullptr</returns>
+DescriptorStruct* DataHolder::TryLoadNewDescriptor(BYTE descType)
+{
+	std::stringstream stream(DescriptorPath, std::ios_base::app | std::ios_base::out);
+
+	stream << "Desc";
+	stream << std::setw(2) << std::setfill('0') << (int)descType;
+	stream << ".txt";
+
+	if (std::filesystem::exists(stream.str().c_str()))
+	{
+		descriptors.emplace_back(std::make_unique<DescriptorStruct>(stream.str().c_str(), descType));
+		return descriptors[descriptors.size() - 1].get();
+	}
+
+	return nullptr;
 }
 
 /// <summary>

@@ -22,6 +22,23 @@ InterpreterFactory::InterpreterFactory(TreeItem* rootItem, QTableWidgetItem* ite
 /// <returns>Pointer to appropriate interpreter</returns>
 BaseInterpreter* InterpreterFactory::GetInterpreter()
 {
+    PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->
+        data(DataHolder::GetDataHolder()->USBPCAP_HEADER_DATA).toByteArray().constData();
+    UCHAR transferType = usbh->transfer;
+    switch (transferType)
+    {
+    case 1: //interrupt
+    {
+        return new InterruptTransferInterpreter(rootItem, item, additionalDataModel);
+    }
+    case 2: // control
+    {
+
+    }
+    default:
+        break;
+    }
+
     switch (dataType)
     {
     case INTERR_TRANSFER:

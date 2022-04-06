@@ -1,6 +1,7 @@
 #include "AdditionalDataModel.hpp"
 
-#include "../Interpreters/InterpreterFactory.hpp"
+#include "../Interpreters/InterruptTransferInterpreter.hpp"
+#include "../Interpreters/ControlTransferInterpreter.hpp"
 
 /// <summary>
 /// Constructor of AdditionaldataModel.
@@ -56,10 +57,24 @@ QVariant AdditionalDataModel::headerData(int section, Qt::Orientation orientatio
 /// </summary>
 void AdditionalDataModel::SetupSpecifiedModelData()
 {
-    InterpreterFactory factory(rootItem.get(), item, this,dataType);
-    std::unique_ptr<BaseInterpreter> interpreter(factory.GetInterpreter());
-    if (interpreter != nullptr)
+    PUSBPCAP_BUFFER_PACKET_HEADER usbh = (PUSBPCAP_BUFFER_PACKET_HEADER)item->
+        data(DataHolder::GetDataHolder()->USBPCAP_HEADER_DATA).toByteArray().constData();
+    UCHAR transferType = usbh->transfer;
+    switch (transferType)
     {
+    case 1: //interrupt
+    {
+        std::unique_ptr<BaseInterpreter> interpreter = std::make_unique<InterruptTransferInterpreter>(rootItem.get(), item, this);
         interpreter->Interpret();
+        break;
+    }
+    case 2: // control
+    {
+        std::unique_ptr<BaseInterpreter> interpreter = std::make_unique<ControlTransferInterpreter>(rootItem.get(), item, this);
+        interpreter->Interpret();
+        break;
+    }
+    default:
+        break;
     }
 }
